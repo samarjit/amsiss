@@ -1,0 +1,62 @@
+#logo {
+height:115px;
+margin:0 auto;
+width:100%;
+}
+
+#logo h1  {
+color:#618C04;
+text-decoration:none;
+font-family:helvetica;
+}
+#header {
+height:36px;
+margin:0 auto;
+width:940px;
+}
+#menu {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(images/img02.jpg) no-repeat scroll left top;
+float:left;
+height:43px;
+width:680px;
+}
+
+#menu a {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(images/img02.gif) no-repeat scroll left top;
+color:#FFFFFF;
+display:block;
+float:left;
+font-family:Arial,Helvetica,sans-serif;
+font-size:12px;
+font-weight:bold;
+height:30px;
+margin:0;
+padding:13px 30px 0;
+text-align:center;
+text-decoration:none;
+text-transform:capitalize;
+}
+#menu li {
+display:block;
+float:left;
+}
+*|*:link {
+color:#0000EE;
+}
+
+body {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:#FFFFFF url(images/img01.gif) repeat-x scroll left top;
+color:#8A8A8A;
+font-size:12px;
+margin:0;
+padding:0;
+}
