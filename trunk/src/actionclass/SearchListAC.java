@@ -1,4 +1,4 @@
-package search;
+package actionclass;
 
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.CachedRowSet;
 
 import org.apache.struts2.ServletActionContext;
+
+import pojo.ListAttribute;
+
 
 import com.opensymphony.xwork2.ActionSupport;
 

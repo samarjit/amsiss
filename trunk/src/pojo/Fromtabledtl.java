@@ -1,4 +1,4 @@
-package view;
+package pojo;
 
 public class Fromtabledtl {
 	private String panel_name ;

@@ -1,4 +1,4 @@
-package search;
+package pojo;
 
 public class ListAttribute{
 	//lblname,fname,idname,dbcol,datatype,classname,prkey

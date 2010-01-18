@@ -8,7 +8,10 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
-import search.ListAttribute;
+import pojo.ListAttribute;
+
+
+
 import dbconn.DBConnector;
 
 public class CrudDAO {
