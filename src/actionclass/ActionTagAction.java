@@ -1,4 +1,4 @@
-package view;
+package actionclass;
 
 import org.apache.struts2.ServletActionContext;
 

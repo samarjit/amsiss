@@ -6,7 +6,7 @@
 <constant name="struts.devMode" value="true"></constant>
  
 	<package name="login" namespace="/" extends="struts-default">
-		<action name="login" class="view.login">
+		<action name="login" class="view.LoginAC">
 			<result name="success">/pages/dashboard.jsp</result>
 			<result name="error">/pages/error.jsp</result>
 	

@@ -1,4 +1,4 @@
-package view;
+package pojo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

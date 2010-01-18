@@ -1,4 +1,4 @@
-package view;
+package actionclass;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.Iterator;
 import dao.WorkflowDAO;
 import dto.UserDTO;
 
-public class login extends ActionSupport implements ServletRequestAware{
+public class LoginAC extends ActionSupport implements ServletRequestAware{
 	private void log(String s){
 		System.out.println(s);
 	}

@@ -1,4 +1,4 @@
-package search;
+package crud;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
+
+import pojo.ListAttribute;
 
 import businesslogic.BaseBL;
 
