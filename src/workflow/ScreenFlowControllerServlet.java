@@ -55,7 +55,10 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 					userid = request.getParameter("userid");
 					usr.setRoleid(lin.getUserRole(userid));
 					usr.setUsername(lin.getUserName(userid));
-					
+					usr.setUserid(userid);
+					debug("roleid:"+usr.getRoleid());
+					debug("UserId:"+usr.getUserid());
+					debug("User Name:"+usr.getUsername());
 					session.setAttribute("userSessionData", usr);
 				}
 			}

@@ -29,7 +29,7 @@ public class WorkflowAC extends ActionSupport implements SessionAware, RequestAw
 	}
 private String forwardtourl;
 private Map<String, Object> session;
-private Map<String, Object> request;
+//private Map<String, Object> request;
 private WorkflowBean wflBean;
 private String redirecturl;
 private String screenName;
@@ -99,7 +99,7 @@ public String execute1(){
 	UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
 	String url=""; 
 	try {
-		if (request.get("create") != null) {
+		if (create != null) {
 			if (activityname != null && !"".equals(activityname)) {
 				ApplicationDTO appdto = new ApplicationDTO();
 				debug(0, "activityname:" + activityname);
@@ -118,7 +118,7 @@ public String execute1(){
 //				appdto.setWflid(wflid);
 //				session.put("applicationDTO", appdto);
 			}
-		} else if (request.get("action") != null) {
+		} else if (action != null) {
 			//uses appid, wflid, doString
 //			ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
 //			if (appdto == null)
@@ -160,7 +160,7 @@ public String execute1(){
 //			appdto.setWflid(wflid);
 //			appdto.setWflactions(hmActions);
 //			session.put("applicationDTO", appdto);
-		} else if (request.get("navigateto") != null) {
+		} else if (navigateto != null) {
 //			ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
 //			HashMap<String, Integer> hmactions = appdto.getWflactions();
 			String pageName = navigateto;
@@ -199,7 +199,7 @@ public String execute1(){
 		worflowid = Long.parseLong(wflid);
 		
 		try {
-			if (request.get("create") != null) {
+			if (create != null) {
 				if (activityname != null && !"".equals(activityname)) {
 					ApplicationDTO appdto = new ApplicationDTO();
 					debug(0, "activityname:" + activityname);
@@ -218,7 +218,7 @@ public String execute1(){
 					appdto.setWflid(worflowid);
 					session.put("applicationDTO", appdto);
 				}
-			} else if (request.get("action") != null) {
+			} else if (action != null) {
 				//uses appid, wflid, doString
 				ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
 				if (appdto == null)
@@ -260,7 +260,7 @@ public String execute1(){
 				appdto.setWflid(worflowid);
 				appdto.setWflactions(hmActions);
 				session.put("applicationDTO", appdto);
-			} else if (request.get("navigateto") != null) {
+			} else if (navigateto != null) {
 				ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
 				HashMap<String, Integer> hmactions = appdto.getWflactions();
 				String pageName = navigateto;
@@ -329,7 +329,7 @@ public String execute1(){
 
 	@Override
 	public void setRequest(Map<String, Object> req) {
-		request = req;
+	//	request = req;
 	}
 
 	@Override

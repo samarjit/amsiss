@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process-definition  xmlns:p="urn:jbpm.org:jpdl-3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:jbpm.org:jpdl-3.2 urn:jbpm.org:jpdl-3.2 ">
+
+
+
+	<start-state name="RFQCreate">
+		<transition to="SendRFQ"></transition>
+	</start-state>
+
+
+	<task-node name="CompareQuotation">
+		<transition to="CreateRRF"></transition>
+	</task-node>
+
+	<task-node name="SendRFQ">
+		<transition to="CompareQuotation"></transition>
+	</task-node>
+
+	<task-node name="CreateRRF">
+		<transition to="CreatePO"></transition>
+	</task-node>
+
+	<task-node name="CreatePO">
+		<transition to="SendPO"></transition>
+	</task-node>
+
+	<task-node name="CreateDN">
+		<transition to="Allocate"></transition>
+	</task-node>
+
+	<task-node name="SendPO">
+		<transition to="CreateDN"></transition>
+	</task-node>
+
+	<task-node name="Allocate">
+		<transition to="end-state1"></transition>
+	</task-node>
+
+
+	<end-state name="end-state1"></end-state>
+
+
+</process-definition>

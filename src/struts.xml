@@ -29,6 +29,16 @@
 							<param name="location">${redirecturl}</param>
 						</result>
 		</action>
+		<action name="scrworkflow" class="workflow.WorkflowAC" method="execute1">
+			<result name="success">/pages/workflowcompleted.jsp</result>
+			<result  name="template1" type="redirectAction">
+							<param name="actionName">template1</param> 
+			                <param name="screenName">${screenName}</param>
+			            </result>
+			<result name="flowcontroller" type="redirect">
+							<param name="location">${redirecturl}</param>
+						</result>
+		</action>
 	</package>
 	
 	<package name="default2" namespace="/" extends="struts-default">
