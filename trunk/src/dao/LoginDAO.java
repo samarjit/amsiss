@@ -19,6 +19,7 @@ public class LoginDAO {
 		String userRole = null;
 		try {
 			crs = db.executeQuery(SQL);
+			if(crs.next())
 			userRole  = crs.getString("ROLEID");
 		} catch (SQLException e) {
 			debug(5,"ROLE NOT FOUND:"+e.getMessage());
@@ -37,15 +38,16 @@ public class LoginDAO {
 	}
 
 	public String getUserName(String userId) {
-		String SQL = "select username from AMS_EMPLOYEE where EMPID = '" + userId+"'";
+		String SQL = "select EMPNAME from AMS_EMPLOYEE where EMPID = '" + userId+"'";
 		CachedRowSet crs  = null;
 		DBConnector db = new DBConnector();
 		String userName = null;
 		try {
 			crs = db.executeQuery(SQL);
-			userName  = crs.getString("ROLEID");
+			if(crs.next())
+			userName  = crs.getString("EMPNAME");
 		} catch (SQLException e) {
-			debug(5,"ROLE NOT FOUND:"+e.getMessage());
+			debug(5,"EMPNAME NOT FOUND:"+e.getMessage());
 		}finally{
 			if(crs != null){
 				try {

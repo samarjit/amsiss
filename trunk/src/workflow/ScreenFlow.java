@@ -342,7 +342,7 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ScreenFlow scf = new ScreenFlow();
 		scf.init();
-		System.out.println("NextAction:"+scf.getNextActions("newwfl", ""));
+		System.out.println("NextAction:"+scf.getNextActions("scrrfqwfl", ""));
 		System.out.println("Current Screen Name:"+scf.getActionScreenName("newwfl", "start-state1"));
 		System.out.println("BusinessLogic:"+scf.getBusinessLogic("loginflow", ""));
 		String className = scf.getBusinessLogic("loginflow", "start");
