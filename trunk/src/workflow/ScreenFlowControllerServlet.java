@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import pojo.Login;
+
 import dto.UserDTO;
 
 import businesslogic.BaseBL;
@@ -38,17 +40,22 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 		String pageaction = request.getParameter("currentaction");
 		String flowName = request.getParameter("screenflowname");
 		String businessLogic = scrfl.getBusinessLogic(flowName,pageaction);
+		String userid= null;
 		Class aclass = null;
 		String url = "";
 		try {
 			UserDTO usr = new UserDTO();
 			HttpSession session = request.getSession(true);
 			if(session.getAttribute("userSessionData") ==null){
-				if( request.getParameter("username") == null ){
+				if( request.getParameter("userid") == null ){
 					  
 					 System.out.println("Error loggin in");
 				}else{
-					usr.setUserid(request.getParameter("username"));
+					Login lin = new Login();
+					userid = request.getParameter("userid");
+					usr.setRoleid(lin.getUserRole(userid));
+					usr.setUsername(lin.getUserName(userid));
+					
 					session.setAttribute("userSessionData", usr);
 				}
 			}

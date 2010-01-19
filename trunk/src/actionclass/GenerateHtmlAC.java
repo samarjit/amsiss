@@ -25,8 +25,8 @@ private String jsname;
 private String panelFieldsWhereClause;
 
 private void debug( int priority,String s){
-//	if(priority > 0)
-//	System.out.println("GenerateHtml:"+s);
+	if(priority > 0)
+	System.out.println("GenerateHtml:"+s);
 }
 private void debug(String s){
 //	System.out.println("GenerateHtml:"+s);
