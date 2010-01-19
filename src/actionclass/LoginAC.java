@@ -10,11 +10,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
+import pojo.Login;
+
 import com.opensymphony.workflow.Workflow;
 import com.opensymphony.workflow.basic.BasicWorkflow;
 import com.opensymphony.xwork2.ActionSupport;
 
 import java.util.Iterator;
+
+import dao.LoginDAO;
 import dao.WorkflowDAO;
 import dto.UserDTO;
 
@@ -58,12 +62,15 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 		ArrayList<String> arwflId= null;
 		HttpSession session = request.getSession(true);
 		
-		if( request.getParameter("username") == null ){
-			 addActionError("Enter username!");
+		if( request.getParameter("userid") == null ){
+			 addActionError("Enter User ID!");
 			return ERROR;
 		}else{
-			usr.setUserid(username);
+			usr.setUserid(userid);
 			session.setAttribute("userSessionData", usr);
+			Login lin = new Login();
+			usr.setRoleid(lin.getUserRole(userid));
+			usr.setUsername(lin.getUserName(userid));
 			
 			WorkflowDAO wflDAO = new WorkflowDAO();
 			HashMap<String, ArrayList<String>> hmwflsess = wflDAO.getAvailableAction(usr.getUserid(),null);
@@ -91,6 +98,8 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 				}
 			} catch (Exception e) {
 				log("login:"+e.getMessage());
+				addActionError("Login failed try again!");
+				return ERROR;
 			}
 			System.out.println(htmlStr);
 		}
