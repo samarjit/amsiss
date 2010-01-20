@@ -146,7 +146,7 @@ public class Createhtml {
 				if("TEXTBOX".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' />";
+					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" />";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("LABEL".equalsIgnoreCase(htmlelm)){
@@ -171,7 +171,7 @@ public class Createhtml {
 				if("TEXTAREA".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<TEXTAREA name='"+fname+"' id='"+idname+"'  ></TEXTAREA>";
+					elmStr = "<TEXTAREA name='"+fname+"' id='"+idname+"' "+validation+" ></TEXTAREA>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("BUTTON".equalsIgnoreCase(htmlelm)){
