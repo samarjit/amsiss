@@ -20,7 +20,7 @@
 <s:url var="updateurl" value="/updatedata.action" />
 <s:url var="deleteurl" value="/deletedata.action" />
 
-
+<%String ctxpath=request.getContextPath(); %>
 <script language="javascript" >
 var retriveurlpart='<s:property value="%{#retriveurl}"/>';
 var inserturlpart='<s:property value="%{#inserturl}"/>';
@@ -28,11 +28,12 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>';
 var updateurlpart='<s:property value="%{#updateurl}"/>';
 var deleteurlpart='<s:property value="%{#deleteurl}"/>';
 var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
+var ctxpath = "<%= ctxpath %>";
 </script>
 
 </head>
 <body onload="populate()">
-<%String ctxpath=request.getContextPath(); %>
+
 <%@ include file="pages/header.jsp" %>
 <div id="page">
 <!-- The following part is filled using template and DB -->
@@ -82,6 +83,16 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 </tr>
 </table>
 
+
+<table> 
+<tr>
+<td>
+<div id="retreivedetailschilddiv" style="display:none">
+
+</div>
+</td>
+</tr>
+</table> 
 <script>
 function toggle(objthis){
 	if(document.getElementById("retreivedetailsdiv").style.display == "none"){

@@ -169,7 +169,10 @@ public class Createhtml {
 					
 				}
 				if("TEXTAREA".equalsIgnoreCase(htmlelm)){
-					
+					elmStr = lblname;
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					elmStr = "<TEXTAREA name='"+fname+"' id='"+idname+"'  ></TEXTAREA>";
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("BUTTON".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
