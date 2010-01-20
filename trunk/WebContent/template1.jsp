@@ -40,7 +40,7 @@ var ctxpath = "<%= ctxpath %>";
 <table> 
 <tr>
 <td>
-<div id=panelsdiv > 
+<div id="panelsdiv" > 
 <s:property value="dataPanel" escape="false"/>
  <!-- Using Iterator -->
  <s:iterator  value="extraFields" >
@@ -87,8 +87,15 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 <table> 
 <tr>
 <td>
-<div id="retreivedetailschilddiv" style="display:none">
-
+<div id="retreivedetailschilddiv" >
+<s:set var="scn" value="%{#parameters.screenName}" />
+<s:property value="#scn" />
+<s:if test='#scn == "frmRFQ"'>
+hello
+</s:if>
+<%if("frmRFQ".equals(request.getParameter("screenName"))){ %>
+<jsp:include page="pages/rfqvendor.jsp" />
+<%} %>
 </div>
 </td>
 </tr>

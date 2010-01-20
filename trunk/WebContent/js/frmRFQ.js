@@ -73,6 +73,7 @@ function requestCallBack(p){
 	disable_fields();
 	fnAdjustTableWidth();
 	populateVendors();
+	createVendorDropdownAjax();
 }
 
 function fnAdjustTableWidth() {
@@ -270,10 +271,10 @@ function updateData(obj){
 				{
 					// alert(fields[k].id);
 					
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id){
+					if(jQuery(listTable.rows[0].cells[i]).find("div").text().split(',')[2] == fields.id){
 						
 						//alert(jQuery(listTable.rows[0].cells[i]).text())
-						if(!(jQuery(listTable.rows[0].cells[i]).text().split(',')[6]  == 'Y')) {
+						if(!(jQuery(listTable.rows[0].cells[i]).find("div").text().split(',')[6]  == 'Y')) {
 
 							
 
@@ -282,8 +283,8 @@ function updateData(obj){
 					}
 
 					//for date
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id){
-						if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE')) {
+					if(jQuery(listTable.rows[0].cells[i]).find("div").text().split(',')[2] == fields.id){
+						if((jQuery(listTable.rows[0].cells[i]).find("div").text().split(',')[4] == 'DATE')) {
 
 
 							fields.disabled = true;
@@ -372,13 +373,54 @@ function submitScreenFlowactivity(){
 	}
 
 function populateVendors(){
-	var url = ctxpath+"vendormap?"+"rfqid="+document.getElementById("rfqid").value;
-	alert(url);
+	var url = ctxpath+"/vendormap.action?command=selectall"+"&rfqid="+document.getElementById("rfqid").value+"";
+	//alert(url);
 	sendAjaxGet(url, popvendorcallback);
 }
-function popvendorcallback(){
+function popvendorcallback(parm){
+	jQuery(document.getElementById("vendorlist")).html(parm);
+}
+function insertVendor(parm){
+	var url = ctxpath+"/vendormap.action?command=insert"+"&rfqid="+document.getElementById("rfqid").value
+	+"&vendorid="+document.getElementById("rfqvendorlist").value;
+	//alert(url);
+	sendAjaxGet(url, popvendorcallback);
+}
+function fnMapVendors(parm){
 	
 }
-function fnMapVendors(){
+
+function createVendorDropdownAjax(){
+	var url = ctxpath+"/vendormap.action?command=vendorlist"+"&department="+document.getElementById("department").value+"";
+	sendAjaxGet(url, createVendorDropdownCallback);
+}
+function createVendorDropdownCallback(parm){
+
+	try {
+		
+	var xmlDoc;
+		if (window.DOMParser)
+		  {
+		  parser=new DOMParser();
+		  xmlDoc=parser.parseFromString(parm,"text/xml");
+		  }
+		else // Internet Explorer
+		  {
+		  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+		  xmlDoc.async="false";
+		  xmlDoc.loadXML(parm);
+		  } 
+
+		var elm = xmlDoc.getElementsByTagName("tr");
+		document.getElementById("rfqvendorlist").options.length =0 ;
+		for (var i=0; i<elm.length; i++) {
+		document.getElementById("rfqvendorlist").options[i]= new Option();
+		document.getElementById("rfqvendorlist").options[i].value = elm[i].childNodes[0].childNodes[0].nodeValue;
+		document.getElementById("rfqvendorlist").options[i].text = elm[i].childNodes[1].childNodes[0].nodeValue;
+		}
+	} catch (e) {
+		alert(e);
+		// TODO: handle exception
+	}	
 	
 }
