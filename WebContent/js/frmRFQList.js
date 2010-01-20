@@ -3,15 +3,16 @@
 function search(){
 	 
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
-	if(document.getElementById("sempid"))
-		url=url+'&sempid='+document.getElementById("sempid").value;
-	if(document.getElementById("sempname"))
-		url=url+'&sempname='+document.getElementById("sempname").value;
-	if(document.getElementById("srequestid"))
-		url=url+'&srequestid='+document.getElementById("srequestid").value;
-	if(document.getElementById("requesttype"))
-		url=url+'&requesttype='+document.getElementById("requesttype").value;
-				
+	if(document.getElementById("rfqid"))
+		url=url+'&rfqid='+document.getElementById("rfqid").value;
+	if(document.getElementById("itemdesc"))
+		url=url+'&itemdesc='+document.getElementById("itemdesc").value;
+	if(document.getElementById("department"))
+		url=url+'&department='+document.getElementById("department").value;
+	if(document.getElementById("vendor"))
+		url=url+'&vendor='+document.getElementById("vendor").value;
+	if(document.getElementById("status"))
+		url=url+'&status='+document.getElementById("status").value;			
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
@@ -158,7 +159,7 @@ function viewdetails(){
 		 
 		 
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
-		document.getElementById("formwhere").screenName.value = "frmRequest";
+		document.getElementById("formwhere").screenName.value = "frmRFQ";
 		document.getElementById("formwhere").submit();
 	}
 	else {

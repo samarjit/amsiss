@@ -207,8 +207,14 @@ public class CrudDAO {
 	        			joiner = " AND ";
 	        		}
 	        		
-	        		if(exactMatch) strWhereQuery +=joiner+dbcol+" like '"+val+"'";
-	        		else strWhereQuery +=joiner+dbcol+" like '%"+val+"%'";
+	        		if(exactMatch) {
+	        			if(!val.equalsIgnoreCase(""))
+	        			strWhereQuery +=joiner+dbcol+" like '"+val+"'";
+	        		}
+	        		else{
+	        			if(!val.equalsIgnoreCase(""))
+	        			strWhereQuery +=joiner+dbcol+" like '%"+val+"%'";
+	        		}
 	        	}//if crs.next()
 	        	crs.close();
 			} catch (SQLException e) {

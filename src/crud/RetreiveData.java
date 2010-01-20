@@ -68,7 +68,7 @@ public class RetreiveData  {
 				try {
 					//replace referenced whereClause
 					sg  = replaceRefWhereClause(sg,tempData);
-					 
+					debug(1,"Retrieve query:" + sg);
 					crs = cd.executeRetrieveQuery(sg);
 					htmlTemp = "";
 					boolean firstItr = true;
@@ -98,6 +98,7 @@ public class RetreiveData  {
 										+ "</div>" + ls.getLblname() + "</th>";
 							}
 							htmlTemp += "<td id=" + fname + "> " + data + "</td>";
+							tempPanelData.put(fname, data);
 						}
 						if (firstItr) {
 							tableHeader += "</tr>";
@@ -106,7 +107,7 @@ public class RetreiveData  {
 						htmlTemp += "</tr>";
 						
 						
-						tempPanelData.put(fname, data);
+						
 						debug(0,htmlTemp);
 					} //while crs.next()
 					tempData.put(panelName, tempPanelData);
@@ -135,7 +136,7 @@ public class RetreiveData  {
 	}
 	
 	private String replaceRefWhereClause(String sg,HashMap<String, HashMap<String, String>> tempData) {
-		debug(0,"in replace where parts");
+		debug(1,"in replace where parts tempData hashmap:"+tempData);
 		Pattern pattern = Pattern.compile("\\{(.*?)\\}");
         Matcher matcher  = pattern.matcher(sg);
         String resultStr = new String(sg);
@@ -146,6 +147,8 @@ public class RetreiveData  {
 			String parts[] = str.split("\\.");
 			if(parts.length > 1){
 			HashMap<String,String> hm = tempData.get(parts[0]);
+			System.out.println(parts[0]);
+			System.out.println(parts[1]);
 			String val = hm.get(parts[1]);
 			StringBuffer charseq=new StringBuffer(g);
 			resultStr =  resultStr.replace(charseq, val);

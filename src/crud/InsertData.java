@@ -46,6 +46,7 @@ public class InsertData {
 			String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
 			if(sg != null && !("".equals(sg))){
 				try {
+					debug(1, "Inset Query:"+sg);
 					insertResult  = cd.executeInsertQuery(sg);
 					debug(1,"inserted successfully");
 				} catch (Exception e) {
@@ -84,7 +85,7 @@ public class InsertData {
 		debug(0,"table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && qryPart1 !=null && qryPart1.size() > 0  && qryPart1.get("valuestr") != null){
-			insertQry ="INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")"; 
+			insertQry ="INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")";
 		}else {
 			debug(0, "Incomplete query was:"+"INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")");
 		}

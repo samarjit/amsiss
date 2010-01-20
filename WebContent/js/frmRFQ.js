@@ -46,24 +46,65 @@ function requestCallBack(p){
 				if (panelsTable[l].id == 'buttonPanel')
 					continue;
 				if(detailTable[i].id == panelsTable[l].id)
-				{
-					var input = panelsTable[l].getElementsByTagName("input");
-					//alert(input.length);
-
-					for( var m = 0 ; m < input.length; m++)
-					{
-						if(input[m].id == comStr)
-						{
-							//alert(comStr +"   "+comVal +"   " +panelsTable[l].id + " " + detailTable[i].id);
-							input[m].value = comVal;
-						}
-					}
+				{ 
+/*					var input = panelsTable[l].getElementsByTagName("input");*/
+					var query = jQuery(panelsTable[l]).find(" :input");
+					var elem = 	jQuery(query);
+				
+					jQuery.each(elem, function(index, item) {
+						
+					 	if(item.id == comStr){
+						 jQuery(item).val(comVal);
+					 	}
+					});
+//					for( var m = 0 ; m < input.length; m++)
+//					{
+//						if(input[m].id == comStr)
+//						{
+//							//alert(comStr +"   "+comVal +"   " +panelsTable[l].id + " " + detailTable[i].id);
+//							input[m].value = comVal;
+//						}
+//					}
 				}
 			}
 		}
 	}
 	
 	disable_fields();
+	fnAdjustTableWidth();
+	populateVendors();
+}
+
+function fnAdjustTableWidth() {
+	var tdwidthar = new Array();
+	var query = jQuery("#panelsdiv  table:first ").find("tr").eq(0).find("td ");
+
+
+	var elem = 	jQuery(query);
+
+	jQuery.each(query, function(index, item) {
+		tdwidthar[index]  = jQuery(item).width();
+	});
+
+	var j = 0 ;
+	var maxtd = tdwidthar.length;
+
+
+	var tblar = document.getElementById("panelsdiv").getElementsByTagName("table") ;
+	for (var i=0; i<tblar.length; i++) {
+		query = jQuery(tblar[i]).find("tr").eq(0).find("td");
+		elem = 	jQuery(query);
+
+		jQuery.each(query, function(index, item) {
+			jQuery(item).width(tdwidthar[j]);
+			j++;
+			if(maxtd == j)j=0;
+
+		});
+
+	}
+
+
 
 }
 
@@ -74,14 +115,19 @@ function disable_fields(){
 		
 	//	alert("panels "+ panelsTable[i].id);
 		if (panelsTable[i].id == 'panelFields'){
-			
-		fields = panelsTable[i].getElementsByTagName("input");
-		//	alert("inside panel panels " + fields.length);
-			for(var k = 0; k<fields.length; k++){
-			//	alert("inside panel panels " + fields[k].id);
-				fields[k].disabled = true;
-			
-			}
+//			
+//		fields = panelsTable[i].getElementsByTagName("input");
+//			for(var k = 0; k<fields.length; k++){
+//			
+//				fields[k].disabled = true;
+//			
+//			}
+			var query = jQuery(panelsTable[i]).find(" :input");
+			var elem = 	jQuery(query);
+		
+			jQuery.each(elem, function(index, item) {
+				item.disabled = true;
+			});
 		
 		}
 	}
@@ -104,7 +150,7 @@ function reqSave() {
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	
 	if(screenMode == "insert"){
-	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
+	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";
 	prompt("url",url);	
 	url = url+ "&insertKeyValue="+ prepareInsertData();
 	//prompt("url",url);
@@ -115,7 +161,7 @@ function reqSave() {
 	
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
-		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
+		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRFQ";
 		prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 
@@ -179,7 +225,7 @@ function prepareInsertData() {
 		//alert(dataTable.length);		
 		for (var i=0; i<dataTable.length; i++) {
 				
-			var query = "#panelsdiv #" + dataTable[i].id + " input";
+			var query = "#panelsdiv #" + dataTable[i].id + " :input";
 			var requestar = new Array();
 			//alert(query);
 			var elem = 	jQuery(query); 
@@ -195,7 +241,7 @@ function prepareInsertData() {
 		var k = new Object();
 		k.json = pclass
 		var myJSONText = JSON.stringify(k, replacer,"");
-		//alert(myJSONText );	
+		alert(myJSONText );	
 		return myJSONText;			
 }
 
@@ -203,53 +249,60 @@ function prepareInsertData() {
 function updateData(obj){
 	//obj.disabled = true;
 	screenMode = "modify";
-		//There will be only one table in search screen 'search div'
-		//document.requestFrm.submit();
-		listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
+	//There will be only one table in search screen 'search div'
+	//document.requestFrm.submit();
+	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
-panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 
-for(var m =0; m<panelsTable.length;m++){
-	
-	if (panelsTable[m].id == 'panelFields'){
-		
-	fields = panelsTable[m].getElementsByTagName("input");
-		//alert("inside update panel panels " + fields.length);
-		for(var k = 0; k<fields.length; k++){
-		//	alert("inside panel panels " + fields[k].id);
-			for (i = 0; i <listTable.rows[0].cells.length ; i++ )
-			{
-				// alert(fields[k].id);
-				// alert(jQuery(listTable.rows[0].cells[i]).text());
-				if(!(jQuery(listTable.rows[0].cells[i]).text().split(',')[6]  == 'Y')) {
+	for(var m =0; m<panelsTable.length;m++){
+
+		if (panelsTable[m].id == 'panelFields'){
+
+				fields = panelsTable[m].getElementsByTagName("input");
+			var query = jQuery(panelsTable[m]).find(" :input");
+			var elem = 	jQuery(query);
+			//alert("inside update panel panels " + fields.length);
+			// for(var k = 0; k<fields.length; k++){
+			jQuery.each(elem,function(k,fields){
+				//alert("inside panel panels " + fields.id);
+				for (i = 0; i <listTable.rows[0].cells.length ; i++ )
+				{
+					// alert(fields[k].id);
 					
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[3] == fields[k].id){
+					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id){
 						
-						fields[k].disabled = false;
+						//alert(jQuery(listTable.rows[0].cells[i]).text())
+						if(!(jQuery(listTable.rows[0].cells[i]).text().split(',')[6]  == 'Y')) {
+
+							
+
+							fields.disabled = false;
+						}
+					}
+
+					//for date
+					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id){
+						if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE')) {
+
+
+							fields.disabled = true;
+						}
+					} 
 				}
-			}
-				
-				//for date
-				if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE')) {
-					
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[3] == fields[k].id){
-						fields[k].disabled = true;
-				}
-			} 
-			
-		
+
+			});
+
 		}
-	
 	}
-}
-			
-			
-		
+
+
+
 }
 
 
 
-	}
+	 
 
 function makeWhereClause(){
 	 
@@ -317,3 +370,15 @@ function submitScreenFlowactivity(){
 	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 		
 	}
+
+function populateVendors(){
+	var url = ctxpath+"vendormap?"+"rfqid="+document.getElementById("rfqid").value;
+	alert(url);
+	sendAjaxGet(url, popvendorcallback);
+}
+function popvendorcallback(){
+	
+}
+function fnMapVendors(){
+	
+}

@@ -86,6 +86,8 @@ public class SearchListAC extends ActionSupport {
 	        		if(!"".equals(searchQueryWhere)){
 	        			joiner = " AND ";
 	        		}
+	        		
+	        		if(!val.equalsIgnoreCase(""))
 	        		searchQueryWhere +=joiner+dbcol+" like '%"+val+"%'";
 	        	}
 	        	crs.close();
