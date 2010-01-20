@@ -31,6 +31,7 @@ Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
 <li><a href="template1.action?screenName=frmRequestList">Request</a></li>
 <li><a href="template1.action?screenName=frmRFQList">RFQ</a> </li>
 <li><a href="template1.action?screenName=frmQuotationList">Quotation</a></li>
+<li><a href="template1.action?screenName=frmRRFList">RRF</a></li>
 <li><a href="logout.action">Logout</a></li>
 </ul>
 <br/>
