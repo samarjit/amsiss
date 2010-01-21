@@ -214,10 +214,9 @@ public class CrudDAO {
 	        		else{
 	        			if(!val.equalsIgnoreCase(""))
 	        			strWhereQuery +=joiner+dbcol+" like '%"+val+"%'";
-	        		}
-	        	}//if crs.next()
+	        		}//if crs.next()
 	        	crs.close();
-			} catch (SQLException e) {
+			}} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			 catch (Exception e) {
@@ -433,6 +432,28 @@ public class CrudDAO {
 		
 			
 		return businesslogicname;
+	}
+	
+	public String getNewAppId() {
+		DBConnector db = new DBConnector();
+		CachedRowSet crs = null;
+		String SQL = "select seqappid.nextval appid from dual ";
+		String appid=""; 
+		try {
+				crs = db.executeQuery(SQL);
+				while(crs.next()){
+					appid=  crs.getString("appid");
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try{
+				if(crs!=null)crs.close();
+			}catch(SQLException e){
+				debug(0, e.getMessage());
+			}
+		}
+		return appid;
 	}
 
 }
