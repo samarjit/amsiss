@@ -24,7 +24,7 @@ public class InsertData {
 	 * @param args
 	 */
 	
-	public String doInsert(String screenName, String insertClause){
+	public String doInsert(String screenName, String insertClause, String autogenId){
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
 		String scrName=screenName;
@@ -46,8 +46,8 @@ public class InsertData {
 			String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
 			if(sg != null && !("".equals(sg))){
 				try {
-					debug(1, "Inset Query:"+sg);
-					insertResult  = cd.executeInsertQuery(sg);
+					String query = sg.replaceAll("seqid", autogenId);
+					insertResult  = cd.executeInsertQuery(query);
 					debug(1,"inserted successfully");
 				} catch (Exception e) {
 					debug(5,"Failed in insert");
@@ -85,10 +85,17 @@ public class InsertData {
 		debug(0,"table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && qryPart1 !=null && qryPart1.size() > 0  && qryPart1.get("valuestr") != null){
-			insertQry ="INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")";
+			insertQry ="INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")"; 
 		}else {
 			debug(0, "Incomplete query was:"+"INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")");
 		}
 		return insertQry;
 	}
+	
+	public String getNewAppId() {
+		CrudDAO cd = new CrudDAO();
+		return cd.getNewAppId() ;
+	
+	}
+	
 }
