@@ -149,6 +149,12 @@ public class Createhtml {
 					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" />";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
+				if("HIDDEN".equalsIgnoreCase(htmlelm)){
+					//elmStr = lblname;
+					//htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					elmStr = "<input type=\"hidden\" name='"+fname+"' id='"+idname+"' value='' />";
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+				}
 				if("LABEL".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
