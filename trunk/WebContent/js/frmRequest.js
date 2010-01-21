@@ -98,15 +98,17 @@ function reqSubmit() {
 }
 
 function reqSave() {
+	
+	
 	//alert("in save ");	
 	alert(inserturlpart);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	
 	if(screenMode == "insert"){
-	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=true";
+	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
 	prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData();
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=true";
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
@@ -125,7 +127,6 @@ function reqSave() {
 
 		sendAjaxGet(url, saveCallBack);
 		}
-	
 		
 }
 
@@ -185,12 +186,12 @@ function prepareInsertData() {
 			var elem = 	jQuery(query); 
 			var j = 0;
 			jQuery.each(elem, function(index, item) {	
-				//alert(j);
 				
 				var val = item.id;
 				
 				if(item.type=="hidden" && val.substring(val.length-2,val.length)=='id'){
 					item.value = "seqid";}
+
 				requestar[j] = new KeyValue(item.id, item.value);				
 				j++;						
 			});
@@ -200,7 +201,7 @@ function prepareInsertData() {
 		var k = new Object();
 		k.json = pclass
 		var myJSONText = JSON.stringify(k, replacer,"");
-		//alert(myJSONText );	
+		alert(myJSONText );	
 		return myJSONText;			
 }
 
@@ -312,6 +313,7 @@ function submitactivity(){
 
 function submitScreenFlowactivity(){
 	alert("here in submit activity")
+	location.href ="workflow.action?activityname=CR&create=true";
 	alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
 	alert(applicationid);
