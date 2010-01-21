@@ -7,11 +7,12 @@
 <script>
 function fnCreateActivity(ac) { 
 	var ctxpath = '<%=request.getContextPath() %>';
+	var url = ctxpath+'/template1.action?';
 	var url1=ctxpath+'/workflow.action?';
 	var url2=ctxpath+'/scrworkflow.action?';
 	var url="";
 	if(ac== 'CR'){
-	url =url1 + "activityname=CR&create=true";
+	url =url + "ScreenName=frmRequest";
 	}else if(ac=='CRFQ'){
 	url =url2+ "activityname=CRFQ&create=true";	
 	}
@@ -19,6 +20,7 @@ function fnCreateActivity(ac) {
 //document.getElementById("frmmenu").action = url;
 location.href=url;
 }
+
 </script>
 Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
         DateFormat.MEDIUM, DateFormat.SHORT).format(new Date()) %>
