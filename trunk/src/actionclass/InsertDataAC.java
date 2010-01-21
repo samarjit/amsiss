@@ -22,8 +22,26 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 	private String insertKeyValue;
 	private String screenName;
 	private HttpServletRequest servletRequest;
+	private String invokewfl = "false";
+	private String redirectUrl = null;
 	
-    public InputStream getInputStream() {
+    public String getInvokewfl() {
+		return invokewfl;
+	}
+
+	public void setInvokewfl(String invokewfl) {
+		this.invokewfl = invokewfl;
+	}
+
+	public String getRedirectUrl() {
+		return redirectUrl;
+	}
+
+	public void setRedirectUrl(String redirectUrl) {
+		this.redirectUrl = redirectUrl;
+	}
+
+	public InputStream getInputStream() {
         return inputStream;
     }
     
@@ -51,13 +69,15 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
     	//panelFields1WhereClause = request1.getParameter("panelFields1WhereClause");
     	insertKeyValue = request1.getParameter("insertKeyValue");
     	screenName = request1.getParameter("screenName");
+    	invokewfl = request1.getParameter("invokewfl");
     	
     	System.out.println("InserKeyValue = " + insertKeyValue);
     	System.out.println("Screen Name  = " + screenName);
     	
     	String resultHtml = "No Data found";
+    	String autogenId =insert.getNewAppId();
     	if(insertKeyValue != null || (!"".equals(insertKeyValue)))
-    		resultHtml  = insert.doInsert(screenName, insertKeyValue);
+    		resultHtml  = insert.doInsert(screenName, insertKeyValue, autogenId);
     		//resultHtml  = "hii i cant write now.. ";
     	
         System.out.println(insertKeyValue);
@@ -65,8 +85,14 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
         inputStream = new StringBufferInputStream(resultHtml);
     	//inputStream = new StringBufferInputStream("in view details");
         System.out.println("in view details");
-        
-        //clearing the where clause after use
+        if(invokewfl.equals("true")){
+        	if(screenName.equals("frmRequest")){
+        	redirectUrl = request1.getContextPath()+"/workflow.action?appid="+autogenId+"&activityname=CR&create=true";
+        	return "workflow";
+        	
+        }}else{
         return SUCCESS;
+        }
+       return NONE;
 	}
 }
