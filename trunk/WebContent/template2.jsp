@@ -22,7 +22,7 @@
 var urlpart='<s:property value="%{#url}"/>';
 var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 </script>
-<body>
+<body onload="search()">
 <%@ include file="pages/header.jsp" %>
 <div id="page">
  
