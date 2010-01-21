@@ -104,7 +104,7 @@ function reqSave() {
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	
 	if(screenMode == "insert"){
-	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=true";
 	prompt("url",url);	
 	url = url+ "&insertKeyValue="+ prepareInsertData();
 	//prompt("url",url);
@@ -186,6 +186,11 @@ function prepareInsertData() {
 			var j = 0;
 			jQuery.each(elem, function(index, item) {	
 				//alert(j);
+				
+				var val = item.id;
+				
+				if(item.type=="hidden" && val.substring(val.length-2,val.length)=='id'){
+					item.value = "seqid";}
 				requestar[j] = new KeyValue(item.id, item.value);				
 				j++;						
 			});
