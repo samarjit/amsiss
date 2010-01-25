@@ -2,9 +2,12 @@ package actionclass;
 
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import pojo.VendorMap;
@@ -13,7 +16,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class VendorMapAC extends ActionSupport{
 	public void debug(int priority, String s){
-		s+="VendorMapAC:"+s;
+		s="VendorMapAC:"+s;
 		if(priority >0)
 		System.out.println(s);
 	}
@@ -94,6 +97,14 @@ public String execute(){
 		resultHtml = selectAll();
 	}else if(command.equals("vendorlist")){
 		resultHtml = getVendorList();
+	}else if(command.equals("enableemail")){
+		resultHtml = getVendorList();
+	}else if(command.equals("enableprint")){
+		resultHtml = getVendorList();
+	}else if(command.equals("sendemail")){
+		resultHtml = getVendorList();
+	}else if(command.equals("sendprint")){
+		resultHtml = getVendorList();
 	}
 	
 	inputStream = new StringBufferInputStream(resultHtml);
@@ -103,25 +114,53 @@ public String execute(){
 
 private String insert(){
 	VendorMap vendor = new VendorMap();
-	return vendor.insert(rfqid,vendorid,typenotify,suggestdelvtime);
-	 
+	debug(1,"type notify:"+typenotify+"suggestdelvtime:"+suggestdelvtime);
+	String str = vendor.insert(rfqid,vendorid,typenotify,suggestdelvtime);
+	if("SUCCESS".equals(str)){
+		return selectAll();
+	}else{
+		return "ERROR:Record Insert failed";
+	}
 }
 
 private String delete(){
-	return null;
+	VendorMap vendor = new VendorMap();
+	debug(1,"delete: rfqid"+rfqid+"vendorid:"+vendorid);
+	String str = vendor.delete(rfqid,vendorid);
+	if("SUCCESS".equals(str)){
+		return selectAll();
+	}else{
+		return "ERROR:Record Delete failed";
+	}
 }
 
 private String initialMap(){
-	return null;
+	VendorMap vendor = new VendorMap();
+	debug(1,"initialMap: rfqid"+rfqid+"department:"+department+"type notify:"+typenotify+"suggestdelvtime:"+suggestdelvtime);
+	String str = vendor.initialMap(rfqid,department,typenotify,suggestdelvtime);
+	if("SUCCESS".equals(str)){
+		return selectAll();
+	}else{
+		return "ERROR:Initial Mapping failed";
+	}
 }
 private String selectAll(){
-	return "selecting all";
+	VendorMap vendor = new VendorMap();
+	ArrayList<HashMap<String,String>>  ar = vendor.setlectAll(rfqid);
+	String retval = (new JSONArray(ar)).toString();
+	debug(1,"selectAll:"+retval);
+	return retval;
+ 
 }
 
+/**
+ * Used to fill in dependent dropdown based on department selected 
+ * @return
+ */
 private String getVendorList(){
 	VendorMap vendor = new VendorMap();
 	String retStr = "";
-	 Map vlist = vendor.getVendorList();
+	 Map vlist = vendor.getVendorList(department);
 	 JSONObject jobj = new JSONObject(vlist);
 	 debug(1,jobj.toString());
 	 Iterator itr = vlist.keySet().iterator();

@@ -2,15 +2,26 @@ package dbconn;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
 import javax.sql.rowset.CachedRowSet;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import com.sun.rowset.CachedRowSetImpl;
+
+import dto.PerpstmtDTOArray;
+import dto.PrepstmtDTO;
 
 
 public class DBConnector { 
@@ -123,6 +134,126 @@ public int executeUpdate(String qry) throws SQLException{
 	}catch(SQLException  e){
 		e.printStackTrace(); 
 		throw e;
+	}
+	finally
+    {
+        if (conn != null)
+        {
+            try
+            {
+                conn.close ();
+                //log ("Database connection terminated");
+            }
+            catch (Exception e) { /* ignore close errors */ }
+        }
+    }
+	return retval;
+}
+
+public CachedRowSet executePreparedQuery(String qry,PerpstmtDTOArray arPrepstmt) throws SQLException{
+	CachedRowSetImpl crs = null;
+	Connection conn =null;
+	try {
+		
+		conn = getConnection();
+		PreparedStatement  stmt = conn.prepareStatement(qry); 
+        Iterator itr = arPrepstmt.getArdto().iterator();
+        int count = 1;
+        while(itr.hasNext()){
+        	PrepstmtDTO pd = (PrepstmtDTO)itr.next();
+        	if(pd.getType() == PrepstmtDTO.DataType.DATE){
+        		Date newDate = new Date( ( new SimpleDateFormat("DD/MM/yyyy")).parse(pd.getData()).getTime());
+        		stmt.setDate(count,  newDate);
+        	}else if(pd.getType() == PrepstmtDTO.DataType.DOUBLE){
+        		String in = pd.getData();
+        		if(in == null || "".equals(in))in = "0.0D";
+        		stmt.setDouble(count, Double.parseDouble(in));    		
+			}else if(pd.getType() == PrepstmtDTO.DataType.FLOAT){
+				String in = pd.getData();
+				if(in == null || "".equals(in))in = "0.0f";
+				stmt.setFloat(count, Float.parseFloat(in));
+			}else if(pd.getType() == PrepstmtDTO.DataType.INT){
+				String in = pd.getData();
+				if(in == null || "".equals(in))in = "0";
+				stmt.setInt(count, Integer.parseInt(in));
+			}else if(pd.getType() == PrepstmtDTO.DataType.STRING){
+				stmt.setString(count, pd.getData());
+			}
+        	count ++;
+        }
+		log(qry);
+        ResultSet rs =  stmt.executeQuery();
+        
+         
+        crs = new CachedRowSetImpl();
+        crs.populate(rs); 
+        rs.close(); 
+        stmt.close();
+        
+         
+	} catch (SQLException e) {
+		e.printStackTrace();
+		throw e;
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
+	finally
+    {
+        if (conn != null)
+        {
+            try
+            {
+                conn.close ();
+                conn =null;
+               log ("Database connection terminated");
+            }
+            catch (Exception e) {
+            e.printStackTrace();	
+            /* ignore close errors */ }
+        }
+    }
+	
+	return crs;
+}
+
+public int executePreparedUpdate(String qry,PerpstmtDTOArray arPrepstmt) throws SQLException{
+	Connection conn =null;
+	int retval =0;
+	try {
+		
+		conn = getConnection();
+		PreparedStatement  stmt = conn.prepareStatement(qry); 
+        Iterator itr = arPrepstmt.getArdto().iterator();
+        int count = 1;
+        while(itr.hasNext()){
+        	PrepstmtDTO pd = (PrepstmtDTO)itr.next();
+        	if(pd.getType() == PrepstmtDTO.DataType.DATE){
+        		Date newDate = new Date( ( new SimpleDateFormat("DD/MM/yyyy")).parse(pd.getData()).getTime());
+        		stmt.setDate(count,  newDate);
+        	}else if(pd.getType() == PrepstmtDTO.DataType.DOUBLE){
+        		String in = pd.getData();
+        		if(in == null || "".equals(in))in = "0.0D";
+        		stmt.setDouble(count, Double.parseDouble(in));    		
+			}else if(pd.getType() == PrepstmtDTO.DataType.FLOAT){
+				String in = pd.getData();
+				if(in == null || "".equals(in))in = "0.0f";
+				stmt.setFloat(count, Float.parseFloat(in));
+			}else if(pd.getType() == PrepstmtDTO.DataType.INT){
+				String in = pd.getData();
+				if(in == null || "".equals(in))in = "0";
+				stmt.setInt(count, Integer.parseInt(in));
+			}else if(pd.getType() == PrepstmtDTO.DataType.STRING){
+				stmt.setString(count, pd.getData());
+			}
+        	count ++;
+        }
+         
+		retval  = stmt.executeUpdate();
+	}catch(SQLException  e){
+		e.printStackTrace(); 
+		throw e;
+	} catch (ParseException e) {
+		e.printStackTrace();
 	}
 	finally
     {

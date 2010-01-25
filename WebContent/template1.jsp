@@ -33,7 +33,8 @@ var ctxpath = "<%= ctxpath %>";
 
 </head>
 <body onload="populate()">
-
+<s:actionerror/>
+<s:actionmessage/>
 <%@ include file="pages/header.jsp" %>
 <div id="page">
 <!-- The following part is filled using template and DB -->
@@ -88,32 +89,32 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 <tr>
 <td>
 <div id="retreivedetailschilddiv" >
-<s:set var="scn" value="%{#parameters.screenName}" />
-<s:property value="#scn" />
-<s:if test='#scn == "frmRFQ"'>
-hello
-</s:if>
-<%if("frmRFQ".equals(request.getParameter("screenName"))){ %>
+<s:set var="scn" value="%{screenName}" />
+<s:property value="#scn"/> 
+<s:if test='#scn eq "frmRFQ"'>
 <jsp:include page="pages/rfqvendor.jsp" />
-<%} %>
-</div>
+</s:if>
+<%--if("frmRFQ".equals(request.getParameter("screenName"))){ %>
+<jsp:include page="pages/rfqvendor.jsp" />
+<%} --%>
+</div> <!-- close retreivedetailschilddiv -->
 </td>
 </tr>
 </table> 
 <script>
-function toggle(objthis){
+function changestate(){
 	if(document.getElementById("retreivedetailsdiv").style.display == "none"){
 		document.getElementById("retreivedetailsdiv").style.display = "block";
-		objthis.innerHTML = "-";
+		 objthis.innerHTML = "-";
 	}else{
 		document.getElementById("retreivedetailsdiv").style.display = "none";
-		objthis.innerHTML = "+";
+		 objthis.innerHTML = "+";
 	}
 }
 </script>
-<button onclick="toggle(this)">+</button>
+<button onclick="changestate(this)">+</button>
 <div id="retreivedetailsdiv" style="display:none">
-</div>
+</div> <!-- close retreivedetailsdiv -->
 </div> <!-- id = page -->
 </body>
 </html>

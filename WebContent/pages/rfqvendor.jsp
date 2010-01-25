@@ -7,17 +7,17 @@ Vendor List:
 	<option>vendor 2</option>
 </select>
 Type of Notification
-<input type="text" name="typenotify" />,
+<select id="typenotify" name="typenotify">
+<option value="0#x">Email</option>
+	<option value="X#0">Print</option>
+	<option value="0#0">Email and Print</option>
+</select>
+
 Suggested Delivery Time
-<input type="text" name="suggestdelvtime" /> 
+<input type="text" name="suggestdelvtime" id="suggestdelvtime" /> 
 <button onclick="insertVendor();">Add</button>
 <br /> 
 <s:property value="vendorList" />
-  <!-- s:select label="Select Day" 
-    name="vendorList" 
-    headerKey="1"
-    headerValue="-- Please Select --"
-    list="vendorList" 
-    / -->
+
 <div id="vendorlist">
-</div>
+</div> <!-- close vendorlist -->

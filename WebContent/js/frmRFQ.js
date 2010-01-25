@@ -73,7 +73,9 @@ function requestCallBack(p){
 	disable_fields();
 	fnAdjustTableWidth();
 	populateVendors();
+	
 	createVendorDropdownAjax();
+	
 }
 
 function fnAdjustTableWidth() {
@@ -374,42 +376,114 @@ function submitScreenFlowactivity(){
 
 function populateVendors(){
 	var url = ctxpath+"/vendormap.action?command=selectall"+"&rfqid="+document.getElementById("rfqid").value+"";
+	//alert("populating:"+url);
+	sendAjaxGet(url, popvendorcallback);
+}
+function deleteVendor(vendorid){
+	var url = ctxpath+"/vendormap.action?command=delete"+"&rfqid="+document.getElementById("rfqid").value  +
+			"&vendorid="+vendorid;
 	//alert(url);
 	sendAjaxGet(url, popvendorcallback);
 }
+
+
+/**
+ * This method is called by cmd:selectall initial populate vendors and delete and insert mapall
+ */
 function popvendorcallback(parm){
+	if(/^ERROR/.test(parm)){
+		alert(parm.substring(6));
+		return;
+	}
 	jQuery(document.getElementById("vendorlist")).html(parm);
+	try {
+	//alert("creating dynamic table");	
+	var jsonob = eval(parm);
+	var strTable = "<table ><tr><th>Vendor ID</th>" +
+			"<th>Vendor Name</th>" +
+			"<th>Type of notfication</th>" +
+			"<th>Individual Status</th>" +
+			"<th>Vendor Rating</th>" +
+			"<th>Suggested Delivery Time</th>" +
+			"<th>Delete Record</th></tr>";
+	for ( var i = 0; i < jsonob.length; i++) {
+		var obj = jsonob[i];
+		strTable +="<tr><td>"+obj.vendor_id+"</td>";
+		strTable +="<td>"+obj.vendor_name+"</td>";
+		var type = obj.TYPE_NOTIFY.split("#");
+		strTable +="<td>";
+		if(type[0]!=null && isNumeric(type[0])){
+			strTable +="<input type='checkbox' checked='checked' onclick='enableEmail(0,\""+obj.vendor_id+"\")'/><a href='javascript:emailRFQ(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/email.gif' alt='print' />"+"</a>"+type[0];	
+		}else{
+			strTable +="<input type='checkbox' onclick='enableEmail(1,\""+obj.vendor_id+"\")'/><img src='"+ctxpath+"/css/images/email.gif' alt='email' />_";
+		}
+		if(type[1] != null && isNumeric(type[1])){
+			strTable +="<input type='checkbox' checked='checked' onclick='enablePrint(0,\""+obj.vendor_id+"\")'/><a href='javascript:printRFQ(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />"+"</a>"+type[1];	
+		}else{
+			strTable +="<input type='checkbox' onclick='enablePrint(1,\""+obj.vendor_id+"\")'/><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />_";
+		}
+		strTable +="</td>";
+		strTable +="<td>"+obj.INDV_STATUS+"</td>";
+		strTable +="<td>"+obj.vendor_rating+"</td>";
+		strTable +="<td>"+obj.SUGGEST_DLV_TIME+"</td>";
+		strTable +="<td><a href='javascript:deleteVendor(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/delete.png' alt='delete' />"+"</a></td></tr>";
+	}
+	strTable +="</table>";
+	jQuery(document.getElementById("vendorlist")).html(strTable);
+	} catch (e) {
+		alert(e);
+	}
+	
 }
+
+function enableEmail(status){
+	var url = ctxpath+"/vendormap.action?command=enableemail"+"&rfqid="+document.getElementById("rfqid").value  +
+	"&vendorid="+vendorid+"&status="+status;
+	sendAjaxGet(url, popvendorcallback);
+}
+function enablePrint(status){
+	var url = ctxpath+"/vendormap.action?command=enableprint"+"&rfqid="+document.getElementById("rfqid").value  +
+	"&vendorid="+vendorid+"&status="+status;
+	sendAjaxGet(url, popvendorcallback);
+}
+function sendEmail(){
+	var url = ctxpath+"/vendormap.action?command=sendemail"+"&rfqid="+document.getElementById("rfqid").value  +
+	"&vendorid="+vendorid;
+	sendAjaxGet(url, popvendorcallback);
+}
+
+function sendPrint(){
+	var url = ctxpath+"/vendormap.action?command=sendprint"+"&rfqid="+document.getElementById("rfqid").value  +
+	"&vendorid="+vendorid;
+	sendAjaxGet(url, popvendorcallback);
+}
+
 function insertVendor(parm){
 	var url = ctxpath+"/vendormap.action?command=insert"+"&rfqid="+document.getElementById("rfqid").value
-	+"&vendorid="+document.getElementById("rfqvendorlist").value;
+	+"&vendorid="+document.getElementById("rfqvendorlist").value+"&typenotify="+
+	escape($F("typenotify"))+"&suggestdelvtime="+$F("suggestdelvtime");
+	
 	//alert(url);
 	sendAjaxGet(url, popvendorcallback);
 }
-function fnMapVendors(parm){
-	
+function fnMapVendors(){
+	var url = ctxpath+"/vendormap.action?command=initialmap"+"&rfqid="+$F("rfqid")+
+	"&typenotify="+escape("0#X")+"&suggestdelvtime=10&department="+$F("department");
+	 
+	alert(url);
+	sendAjaxGet(url, popvendorcallback);
 }
 
 function createVendorDropdownAjax(){
 	var url = ctxpath+"/vendormap.action?command=vendorlist"+"&department="+document.getElementById("department").value+"";
+	//alert("dropdown gtting called");
 	sendAjaxGet(url, createVendorDropdownCallback);
 }
 function createVendorDropdownCallback(parm){
 
 	try {
-		
-	var xmlDoc;
-		if (window.DOMParser)
-		  {
-		  parser=new DOMParser();
-		  xmlDoc=parser.parseFromString(parm,"text/xml");
-		  }
-		else // Internet Explorer
-		  {
-		  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-		  xmlDoc.async="false";
-		  xmlDoc.loadXML(parm);
-		  } 
+
+	var xmlDoc = parseXMLDocFromString(parm); 
 
 		var elm = xmlDoc.getElementsByTagName("tr");
 		document.getElementById("rfqvendorlist").options.length =0 ;

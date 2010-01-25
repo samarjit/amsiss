@@ -33,7 +33,7 @@ function sendAjaxPost(strURL,data,callbak){
 
 
 function sendAjaxGet(strURL,callbak){ 
-	xmlhttpPost();
+	/*xmlhttpPost();
 	if(strURL == null)
 	strURL="searchlist.action";
 	 
@@ -41,12 +41,18 @@ function sendAjaxGet(strURL,callbak){
 	
 	if(strURL.indexOf("?") >-1)strURL+="&rnum="+rnum;
 	else strURL+="?rnum="+rnum;
-	
+	*/
 	 if(typeof( callbak) !="undefined" )mycallback = callbak;
-	self.xmlHttpReq.open('GET', strURL, true);
+	/*self.xmlHttpReq.open('GET', strURL, true);
 	self.xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	self.xmlHttpReq.onreadystatechange = doworkcallback;
-	self.xmlHttpReq.send();
+	self.xmlHttpReq.send();*/
+	jQuery.ajax({
+		   type: "GET",
+		   url: strURL,
+		   success:  callbak
+
+		 });
 }
 
 function doworkcallback() {
@@ -56,5 +62,29 @@ function doworkcallback() {
 }
 
 function mycallback(val){
-	 alert(val );
+	 alert("Using default Ajax callback function:"+ val );
 }
+
+function parseXMLDocFromString(parm){
+	var xmlDoc;
+	if (window.DOMParser)
+	  {
+	  parser=new DOMParser();
+	  xmlDoc=parser.parseFromString(parm,"text/xml");
+	  }
+	else // Internet Explorer
+	  {
+	  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+	  xmlDoc.async="false";
+	  xmlDoc.loadXML(parm);
+	  }
+	return xmlDoc;
+}
+
+function isNumeric(form_value) 
+{ 
+    if (form_value.match(/^\d+$/) == null) 
+        return false; 
+    else 
+        return true; 
+} 
