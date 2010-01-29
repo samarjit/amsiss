@@ -29,9 +29,15 @@ private String typenotify;
 private String suggestdelvtime;
 private Map vendorList;
 private String department;
-
-
+private String indvstatus;
+private String rfqstatus;
  
+public String getIndvstatus() {
+	return indvstatus;
+}
+public void setIndvstatus(String indvstatus) {
+	this.indvstatus = indvstatus;
+}
 public String getDepartment() {
 	return department;
 }
@@ -86,6 +92,7 @@ public InputStream getInputStream() {
 public String execute(){
 	
 	String resultHtml = null;
+	rfqstatus = "";
 	debug(1,command);
 	if(command.equals("insert")){
 		resultHtml = insert();
@@ -97,14 +104,14 @@ public String execute(){
 		resultHtml = selectAll();
 	}else if(command.equals("vendorlist")){
 		resultHtml = getVendorList();
-	}else if(command.equals("enableemail")){
-		resultHtml = getVendorList();
+	}else if(command.equals("updatetypenotify")){
+		resultHtml = updateTypeNotify();
 	}else if(command.equals("enableprint")){
-		resultHtml = getVendorList();
+		resultHtml = updateTypeNotify();
 	}else if(command.equals("sendemail")){
-		resultHtml = getVendorList();
+		resultHtml = updateTypeNotify();
 	}else if(command.equals("sendprint")){
-		resultHtml = getVendorList();
+		resultHtml = updateTypeNotify();
 	}
 	
 	inputStream = new StringBufferInputStream(resultHtml);
@@ -112,6 +119,19 @@ public String execute(){
 	return SUCCESS;
 }
 
+private String updateTypeNotify() {
+	VendorMap vendor = new VendorMap();
+	
+	String str = vendor.updateTypeNotify(rfqid,vendorid,typenotify,indvstatus);
+	if("SUCCESS".equals(str)){
+		return selectAll();
+	}else if(str.indexOf("RFQSTATUSUPDATE") >-1 ){
+		rfqstatus = str.substring(16);
+		return selectAll();
+	}else {
+		return "{\"ERROR\":\"Record Insert failed\"}";
+	}
+}
 private String insert(){
 	VendorMap vendor = new VendorMap();
 	debug(1,"type notify:"+typenotify+"suggestdelvtime:"+suggestdelvtime);
@@ -119,7 +139,7 @@ private String insert(){
 	if("SUCCESS".equals(str)){
 		return selectAll();
 	}else{
-		return "ERROR:Record Insert failed";
+		return "{\"ERROR\":\"Record Insert failed\"}";
 	}
 }
 
@@ -130,7 +150,7 @@ private String delete(){
 	if("SUCCESS".equals(str)){
 		return selectAll();
 	}else{
-		return "ERROR:Record Delete failed";
+		return "{\"ERROR\":\"Record Delete failed\"}";
 	}
 }
 
@@ -141,13 +161,22 @@ private String initialMap(){
 	if("SUCCESS".equals(str)){
 		return selectAll();
 	}else{
-		return "ERROR:Initial Mapping failed";
+		return "{\"ERROR\":\"Initial Mapping failed\"}";
 	}
 }
 private String selectAll(){
 	VendorMap vendor = new VendorMap();
 	ArrayList<HashMap<String,String>>  ar = vendor.setlectAll(rfqid);
-	String retval = (new JSONArray(ar)).toString();
+	JSONObject jobj = new JSONObject();
+	try {
+		jobj.put("SELECTDATA", ar);
+		jobj.put("ERROR", "");
+		jobj.put("RFQSTATUSUPDATE", rfqstatus);
+		rfqstatus = "";
+	} catch (Exception e) {
+		debug(5,"Return JSON creation error");
+	}
+	String retval = (jobj).toString();
 	debug(1,"selectAll:"+retval);
 	return retval;
  

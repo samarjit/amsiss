@@ -9,6 +9,7 @@ HashMap  processRequest(Map buslogHm);
 HashMap activitySubmit(Map hm);
 HashMap preRetreiveProcessBL(Map buslogHm);
 HashMap postRetreiveProcessBL(Map buslogHm);
+HashMap jsrpcProcessBL(Map buslogHm, String rpcid);
  
 
 }

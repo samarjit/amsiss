@@ -8,9 +8,9 @@ Vendor List:
 </select>
 Type of Notification
 <select id="typenotify" name="typenotify">
-<option value="0#x">Email</option>
-	<option value="X#0">Print</option>
-	<option value="0#0">Email and Print</option>
+<option value="E~0~X~0">Email</option>
+	<option value="X~0~P~0">Print</option>
+	<option value="E~0~P~0">Email and Print</option>
 </select>
 
 Suggested Delivery Time
@@ -18,6 +18,6 @@ Suggested Delivery Time
 <button onclick="insertVendor();">Add</button>
 <br /> 
 <s:property value="vendorList" />
-
+<br />
 <div id="vendorlist">
 </div> <!-- close vendorlist -->

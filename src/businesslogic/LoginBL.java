@@ -41,4 +41,10 @@ public class LoginBL implements BaseBL {
 		return null;
 	}
 
+	@Override
+	public HashMap jsrpcProcessBL(Map buslogHm, String rpcid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -13,7 +13,7 @@ import dao.CrudDAO;
 
 public class UpdateData {
 	private void debug(int priority, String s){
-		if(priority > 1){
+		if(priority > 0){
 			System.out.println("UpdateData:"+s);
 		}
 	}
@@ -29,7 +29,9 @@ public class UpdateData {
 		HashMap metadata = null;
 		String scrName=screenName;
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
+		debug(1,whereclause);
 		HashMap<String, String> hmWhere = Utility.extractWhereClause(whereclause);
+		debug(1,hmWhere.toString());
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
