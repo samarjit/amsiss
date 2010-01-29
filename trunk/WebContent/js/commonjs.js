@@ -83,7 +83,7 @@ function parseXMLDocFromString(parm){
 
 function isNumeric(form_value) 
 { 
-    if (form_value.match(/^\d+$/) == null) 
+    if (/^\d+$/.test(form_value) == false) 
         return false; 
     else 
         return true; 

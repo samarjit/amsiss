@@ -34,4 +34,10 @@ public class RequestBL implements BaseBL{
 		return null;
 	}
 
+	@Override
+	public HashMap jsrpcProcessBL(Map buslogHm, String rpcid) {
+		debug(1,"js RPC Business logic rpcid:"+rpcid);
+		return (HashMap) buslogHm;
+	}
+
 }

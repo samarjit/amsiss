@@ -47,4 +47,10 @@ public class VendorMap {
 		return vdao.initialMap(rfqid,department,typenotify,suggestdelvtime);
 	}
 
+	public String updateTypeNotify(String rfqid, String vendorid,
+			String typenotify , String indvstatus) {
+		VendorMapDAO vdao = new VendorMapDAO();
+		return vdao.updateTypeNotify(rfqid,vendorid,typenotify, indvstatus);
+	}
+
 }

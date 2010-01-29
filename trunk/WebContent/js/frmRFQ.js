@@ -12,9 +12,13 @@ function populate()
 	//alert("In populate");
 }
 var screenMode = "insert";
-
+function $F(p){
+	if(document.getElementById(p))
+	return document.getElementById(p).value;
+	return "";
+}
 function clearWhereClause(){
-	document.getElementById("panelFieldsWhereClause").Value = "";
+	document.getElementById("panelFieldsWhereClause").value = "";
 }
 
 function requestCallBack(p){
@@ -398,34 +402,54 @@ function popvendorcallback(parm){
 	jQuery(document.getElementById("vendorlist")).html(parm);
 	try {
 	//alert("creating dynamic table");	
-	var jsonob = eval(parm);
+	var jsonob  = JSON.parse(parm);
+	var jsonobdata =  jsonob.SELECTDATA;
+	var error  = jsonob.ERROR;
+	var rfqStatus = jsonob.RFQSTATUSUPDATE;
+	if(rfqStatus != "" && typeof( rfqStatus) != 'undefined')
+		jQuery("#rfqstatus").val(rfqStatus);
+		
+	if(error != "" && typeof(error )!= 'undefined')	{
+	alert("here");	alert(error);
+		return;
+	}
+	
+	
 	var strTable = "<table ><tr><th>Vendor ID</th>" +
 			"<th>Vendor Name</th>" +
 			"<th>Type of notfication</th>" +
 			"<th>Individual Status</th>" +
 			"<th>Vendor Rating</th>" +
 			"<th>Suggested Delivery Time</th>" +
+			"<th>Vendor Email</th>" +
 			"<th>Delete Record</th></tr>";
-	for ( var i = 0; i < jsonob.length; i++) {
-		var obj = jsonob[i];
+	for ( var i = 0; i < jsonobdata.length; i++) {
+		var obj = jsonobdata[i];
 		strTable +="<tr><td>"+obj.vendor_id+"</td>";
 		strTable +="<td>"+obj.vendor_name+"</td>";
-		var type = obj.TYPE_NOTIFY.split("#");
+		var type = obj.TYPE_NOTIFY.split("~");
 		strTable +="<td>";
-		if(type[0]!=null && isNumeric(type[0])){
-			strTable +="<input type='checkbox' checked='checked' onclick='enableEmail(0,\""+obj.vendor_id+"\")'/><a href='javascript:emailRFQ(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/email.gif' alt='print' />"+"</a>"+type[0];	
-		}else{
-			strTable +="<input type='checkbox' onclick='enableEmail(1,\""+obj.vendor_id+"\")'/><img src='"+ctxpath+"/css/images/email.gif' alt='email' />_";
+		if(type.length == 4){
+			if(type[0]=='E' && isNumeric(type[1])){
+				strTable +="<input type='checkbox' checked='checked' onclick='enableEmail(0,\""+obj.vendor_id+"\")'/>" +
+						"<a href='javascript:sendEmail(\""+obj.vendor_id+"\")' >" +
+						"<img src='"+ctxpath+"/css/images/email.gif' alt='email' />"+"</a>"+type[1];	
+			}else{
+				strTable +="<input type='checkbox' onclick='enableEmail(1,\""+obj.vendor_id+"\")'/>" +
+						"<img src='"+ctxpath+"/css/images/email.gif' alt='email' />"+type[1];
+			}
+			if(type[2] == 'P' && isNumeric(type[3])){
+				strTable +="<input type='checkbox' checked='checked' onclick='enablePrint(0,\""+obj.vendor_id+"\")'/><a href='javascript:sendPrint(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />"+"</a>"+type[3];	
+			}else{
+				strTable +="<input type='checkbox' onclick='enablePrint(1,\""+obj.vendor_id+"\")'/><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />"+type[3];
+			}
 		}
-		if(type[1] != null && isNumeric(type[1])){
-			strTable +="<input type='checkbox' checked='checked' onclick='enablePrint(0,\""+obj.vendor_id+"\")'/><a href='javascript:printRFQ(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />"+"</a>"+type[1];	
-		}else{
-			strTable +="<input type='checkbox' onclick='enablePrint(1,\""+obj.vendor_id+"\")'/><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />_";
-		}
+		strTable +="<input type='hidden' id='"+$F("rfqid")+"$#"+obj.vendor_id+"' value='"+obj.TYPE_NOTIFY+"' />";
 		strTable +="</td>";
 		strTable +="<td>"+obj.INDV_STATUS+"</td>";
 		strTable +="<td>"+obj.vendor_rating+"</td>";
 		strTable +="<td>"+obj.SUGGEST_DLV_TIME+"</td>";
+		strTable +="<td>"+obj.vendor_email+"</td>";
 		strTable +="<td><a href='javascript:deleteVendor(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/delete.png' alt='delete' />"+"</a></td></tr>";
 	}
 	strTable +="</table>";
@@ -436,25 +460,132 @@ function popvendorcallback(parm){
 	
 }
 
-function enableEmail(status){
-	var url = ctxpath+"/vendormap.action?command=enableemail"+"&rfqid="+document.getElementById("rfqid").value  +
+function calculateIndvStatus(url, type){ 
+	try { 
+		var ststus = 'NotAttended';
+		var res1 = true,res2 = true, docare = false;
+		if(type[0]=='E'){
+			if (isNumeric(type[1]) && parseInt(type[1]) > 0 ) {
+				 res1= true;
+				 
+			} else {
+				res1= false;
+			}
+		docare  = true;
+		}
+		
+		if(type[2]=='P'){
+			if(isNumeric(type[3])	&& parseInt(type[3]) > 0){
+				 res2= true;  
+			} else {
+				res2= false;
+			}
+		docare  = docare || true;
+		}
+		if(docare && res1 && res2 ){
+			url += "&indvstatus=Attended";
+		} else {
+			url += "&indvstatus=NotAttended";
+		}
+		 
+	} catch (e) {
+		alert(e);
+	}
+	return url;
+}
+function enableEmail(status,vendorid){
+	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
 	"&vendorid="+vendorid+"&status="+status;
+	//get the hidden field's value corresponding to each row
+	var str = $F($F("rfqid")+"$#"+vendorid);
+	type  = str.split("~");
+	if(status == 0){
+		type[0]='x';
+	}	
+	else if(status == 1){
+		if(!isNumeric(type[3]))type[3]="0";
+		type[0]='E';
+	}
+	
+	url = calculateIndvStatus(url, type);
+	url+="&typenotify="+type.join("~");
+
 	sendAjaxGet(url, popvendorcallback);
 }
-function enablePrint(status){
-	var url = ctxpath+"/vendormap.action?command=enableprint"+"&rfqid="+document.getElementById("rfqid").value  +
+function enablePrint(status,vendorid){
+	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
 	"&vendorid="+vendorid+"&status="+status;
-	sendAjaxGet(url, popvendorcallback);
-}
-function sendEmail(){
-	var url = ctxpath+"/vendormap.action?command=sendemail"+"&rfqid="+document.getElementById("rfqid").value  +
-	"&vendorid="+vendorid;
+	//get the hidden field's value corresponding to each row
+	var str = $F($F("rfqid")+"$#"+vendorid);
+	type  = str.split("~");
+	if(status == 0){
+		type[2]='x';
+		
+	}	
+	else if(status == 1){
+		if(!isNumeric(type[3]))type[3]="0";
+		type[2]='P';
+	}else{
+		return;
+	}
+	
+	
+	url = calculateIndvStatus(url, type);
+	url+="&typenotify="+type.join("~");
+	
 	sendAjaxGet(url, popvendorcallback);
 }
 
-function sendPrint(){
-	var url = ctxpath+"/vendormap.action?command=sendprint"+"&rfqid="+document.getElementById("rfqid").value  +
-	"&vendorid="+vendorid;
+var childwindow;
+function sendEmail(vendorid){
+  childwindow = window.open("rfqsendemail.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=600, height=300");
+}
+function populateEmailPage(parm){
+ childwindow.populateCallbackValues($F("rfqid"),$F("itemtype"),$F("itemdesc"),$F("quantity"));
+ 
+}
+var childwindow2;
+function sendPrint(vendorid){
+ childwindow2 = window.open("rfqsendprint.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=600, height=300");
+}
+function populatePrintPage(parm){
+	 childwindow2.populateCallbackValues($F("rfqid"),$F("itemtype"),$F("itemdesc"),$F("quantity"));
+	 
+}
+
+function rfqemailSent(vendorid){
+	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
+	"&vendorid="+vendorid+"&status="+status;
+	//get the hidden field's value corresponding to each row
+	var str = $F($F("rfqid")+"$#"+vendorid);
+	type  = str.split("~");
+	if(isNumeric(type[1])){
+		type[1]=parseInt(type[1] )+1 ;
+	}else{
+		return;
+	}
+	
+	url = calculateIndvStatus(url, type);
+	url+="&typenotify="+type.join("~");
+		
+	sendAjaxGet(url, popvendorcallback);
+}
+
+function rfqPrinted(vendorid){
+	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
+	"&vendorid="+vendorid+"&status="+status;
+	//get the hidden field's value corresponding to each row
+	var str = $F($F("rfqid")+"$#"+vendorid);
+	type  = str.split("~");
+	if(isNumeric(type[3])){
+		type[3]=parseInt(type[3]) +1 ;
+	}else{
+		return;
+	}
+	
+	url = calculateIndvStatus(url, type);
+	url+="&typenotify="+type.join("~");
+		
 	sendAjaxGet(url, popvendorcallback);
 }
 
@@ -468,7 +599,7 @@ function insertVendor(parm){
 }
 function fnMapVendors(){
 	var url = ctxpath+"/vendormap.action?command=initialmap"+"&rfqid="+$F("rfqid")+
-	"&typenotify="+escape("0#X")+"&suggestdelvtime=10&department="+$F("department");
+	"&typenotify="+escape("E~0~x~0")+"&suggestdelvtime=10&department="+$F("department");
 	 
 	alert(url);
 	sendAjaxGet(url, popvendorcallback);

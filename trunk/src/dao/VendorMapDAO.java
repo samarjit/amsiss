@@ -109,7 +109,7 @@ public class VendorMapDAO {
 
 	public ArrayList<HashMap<String, String>> selectAll(String rfqid) {
 		CachedRowSet crs = null;
-		String SQL = "select vendor_id, vendor_name,b.TYPE_NOTIFY,b.INDV_STATUS,b.SUGGEST_DLV_TIME, vendor_rating, vendor_status from AMS_VENDOR a, AMS_RFQ_VENDOR_MAP b  where a.VENDOR_ID = b.VENDORID ";
+		String SQL = "select vendor_id, vendor_name,b.TYPE_NOTIFY,b.INDV_STATUS,b.SUGGEST_DLV_TIME, vendor_rating,vendor_email, vendor_status from AMS_VENDOR a, AMS_RFQ_VENDOR_MAP b  where a.VENDOR_ID = b.VENDORID ";
 		HashMap<String,String> vlist = null;//new HashMap<String, String>();
 		ArrayList<HashMap<String,String>> arvlist = new ArrayList<HashMap<String,String>>();
 		try {
@@ -124,7 +124,9 @@ public class VendorMapDAO {
 				vlist.put("INDV_STATUS",crs.getString("INDV_STATUS"));
 				vlist.put("SUGGEST_DLV_TIME",crs.getString("SUGGEST_DLV_TIME"));
 				vlist.put("vendor_rating",crs.getString("vendor_rating"));
+				vlist.put("vendor_email",crs.getString("vendor_email"));
 				vlist.put("vendor_status",crs.getString("vendor_status"));
+				
 				arvlist.add(vlist);
 			}
 		} catch (Exception e) {
@@ -226,6 +228,94 @@ public class VendorMapDAO {
 				}
 			}
 		}
+		return retStr;
+	}
+
+	public String updateTypeNotify(String rfqid, String vendorid,
+			String typenotify,String indvstatus) {
+		CachedRowSet crs = null;
+		String retStr = "SUCCESS";
+		String SQL = "update ams_rfq_vendor_map set TYPE_NOTIFY=?" ;
+				SQL += ", INDV_STATUS=? " ;
+				SQL += "where rfqid =? and vendorid=? ";
+
+		try {
+			DBConnector db = new DBConnector();
+			
+			PerpstmtDTOArray prepar =  new PerpstmtDTOArray();
+			prepar.add(DataType.STRING, typenotify);
+			prepar.add(DataType.STRING, indvstatus);
+			prepar.add(DataType.STRING, rfqid);
+			prepar.add(DataType.STRING, vendorid);
+			
+			debug(1,prepar.toString(SQL));
+			db.executePreparedUpdate(SQL, prepar);
+			
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			retStr = "FAILED";
+		} finally {
+			if (crs != null) {
+				try {
+					crs.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		
+		///To check if all vendors of RFQ has been processed
+		String SQL2 = "select  count( indv_status) num  from ams_rfq_vendor_map where indv_status=? and rfqid = ? ";
+		CachedRowSet crs2 = null;
+		CachedRowSet crs3 = null;
+		String rfqstatus = "CREATE";
+		try {
+			DBConnector db = new DBConnector();
+			PerpstmtDTOArray prepar =  new PerpstmtDTOArray();
+			prepar.add(DataType.STRING, "Attended");
+			prepar.add(DataType.STRING, rfqid);
+			crs2 = db.executePreparedQuery(SQL2,prepar);
+			if(crs2.next()){
+				String count = crs2.getString("num");
+				if(count !=null && Integer.parseInt(count) > 0 ){
+					PerpstmtDTOArray prepar2 =  new PerpstmtDTOArray();
+					prepar2.add(DataType.STRING, "NotAttended");
+					prepar2.add(DataType.STRING, rfqid);
+					crs3 = db.executePreparedQuery(SQL2,prepar2);
+					if(crs3.next()){
+						String count2 = crs3.getString("num");
+						if(count2 !=null && Integer.parseInt(count2) == 0 ){
+							//There are conditions of attended but none are left unattended update RFQ staus
+							rfqstatus = "SEND";
+							
+						}else{ //Records still with NotAttended
+							rfqstatus = "CREATE";
+						}
+					}
+				}else{ //no record with Attended
+					rfqstatus = "CREATE";
+				}
+			}
+			String SQL3 = "update AMS_RFQ set RFQ_STATUS=? where rfq_id= ? ";
+			PerpstmtDTOArray prepar3 =  new PerpstmtDTOArray();
+			prepar3.add(DataType.STRING, rfqstatus);
+			prepar3.add(DataType.STRING, rfqid);
+			db.executePreparedUpdate(SQL3,prepar3);
+			retStr = "RFQSTATUSUPDATE:"+rfqstatus;
+		} catch (Exception e) {
+			e.printStackTrace();
+			retStr = "FAILED:RFQ Insert failed";
+		} finally {
+			if (crs2 != null) {
+				try {
+					crs2.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		debug(1,retStr);
 		return retStr;
 	}
 	
