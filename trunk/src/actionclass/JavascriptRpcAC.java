@@ -61,14 +61,14 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware{
 				Map buslogHm = new HashMap();
 
 				Map map = parameters;//servletRequest.getParameterMap();
-				Iterator iter = map.entrySet().iterator();
-				while (iter.hasNext()) {
-					Entry n = (Entry) iter.next();
-					String key = n.getKey().toString();
-					String values[] = (String[]) n.getValue();
-					buslogHm.put(key, values);
-				}
-				
+//				Iterator iter = map.entrySet().iterator();
+//				while (iter.hasNext()) {
+//					Entry n = (Entry) iter.next();
+//					String key = n.getKey().toString();
+//					String values[] = (String[]) n.getValue();
+//					buslogHm.put(key, values);
+//				}
+				buslogHm = map;
 				retBLhm = basebl.jsrpcProcessBL(buslogHm, rpcid);
 			}else{
 				retBLhm.put("error", "Method not found");
@@ -89,6 +89,7 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware{
 		HashMap hm =  jsrpcProcessBL(  screenName);
 		JSONObject jobj = new JSONObject(hm);
 		resultHtml = jobj.toString();
+		debug(1,"json result:"+resultHtml);
 		inputStream = new StringBufferInputStream(resultHtml );
 		return SUCCESS;
 	}
