@@ -538,7 +538,7 @@ function enablePrint(status,vendorid){
 
 var childwindow;
 function sendEmail(vendorid){
-  childwindow = window.open("rfqsendemail.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=600, height=300");
+  childwindow = window.open("rfqsendemail.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500");
 }
 function populateEmailPage(parm){
  childwindow.populateCallbackValues($F("rfqid"),$F("itemtype"),$F("itemdesc"),$F("quantity"));
@@ -546,7 +546,7 @@ function populateEmailPage(parm){
 }
 var childwindow2;
 function sendPrint(vendorid){
- childwindow2 = window.open("rfqsendprint.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=600, height=300");
+ childwindow2 = window.open("rfqsendprint.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500");
 }
 function populatePrintPage(parm){
 	 childwindow2.populateCallbackValues($F("rfqid"),$F("itemtype"),$F("itemdesc"),$F("quantity"));
