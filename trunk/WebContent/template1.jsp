@@ -28,6 +28,7 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>';
 var updateurlpart='<s:property value="%{#updateurl}"/>';
 var deleteurlpart='<s:property value="%{#deleteurl}"/>';
 var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
+var screenMode= '<s:property value="%{#parameters.screenMode}"/>';
 var ctxpath = "<%= ctxpath %>";
 </script>
 
