@@ -125,10 +125,11 @@ function replacer(key, value) {
 }
 
 
-function viewdetails(){
+function viewdetails(btnname){
  
 	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
+	//alert(btnname.id);
 	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
 
@@ -154,12 +155,22 @@ function viewdetails(){
 		var k = new Object();
 		k.json = requestar;
 		var myJSONText = JSON.stringify(k, replacer,"");
-		
+		//alert(myJSONText);
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
-		 
-		 
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
-		document.getElementById("formwhere").screenName.value = "frmRFQ";
+		
+		if(btnname.id == 'capturequotation'){			
+			//alert("in Create rrf");
+			document.getElementById("formwhere").screenName.value = "frmQuotation";	
+			document.getElementById("screenMode").value= "capturequotation";
+			//document.getElementById("formwhere").submit();
+		}
+		else {
+			//alert("in view details");			
+			document.getElementById("formwhere").screenName.value = "frmRFQ";	
+			//document.getElementById("formwhere").submit();
+		}
+		
 		document.getElementById("formwhere").submit();
 	}
 	else {
