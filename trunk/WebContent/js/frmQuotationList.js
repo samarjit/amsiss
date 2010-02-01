@@ -126,41 +126,54 @@ function replacer(key, value) {
 }
 
 
-function viewdetails(){
+function viewdetails(btnname){
  
-	// alert("in make url,selectedIdx:"+selectedIdx);
-	//There will be only one table in search screen 'search div'
-	
+	//alert("in make url,selectedIdx:"+selectedIdx);
+	//alert(btnname.id);
+	//There will be only one table in search screen 'search div'	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
-
+	
 	whereClause = "panelFields1WhereClause=";
 	if(listTable != null && selectedIdx != -1){
 		//poplate wher clause url
 		var j=0;
 		requestar = new Array();
+		//alert(listTable.rows[0].cells.length);
 		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
 		{  
 			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
+			//alert(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]);
 			if(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
 				name = jQuery("#searchdiv").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
 				name = jQuery.trim(name);
 				value = jQuery("#searchdiv").find(" table tbody tr").eq(selectedIdx).find(" td").eq(i).text();
 				value = jQuery.trim(value);
-				whereClause = whereClause + name + "!" + value + "~#";
-				requestar[j] = new KeyValue(name, value);				
+				whereClause = whereClause + name + "!" + value + "~#";				
+				requestar[j] = new KeyValue(name, value);		
 				j++;		
 				//alert(jQuery("#searchdiv table th:eq("+i+") div").text());
 			}
 		}
 		var k = new Object();
 		k.json = requestar;
-		var myJSONText = JSON.stringify(k, replacer,"");
 		
+		var myJSONText = JSON.stringify(k, replacer,"");
+		//alert("requestar"+requestar);
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
-		 
-		 
+		
+		//alert(whereClause);
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
-		document.getElementById("formwhere").screenName.value = "frmQuotation";
+		if(btnname.id=='createrrf'){			
+			//alert("in Create rrf");
+			document.getElementById("formwhere").screenName.value = "frmRRF";	
+			document.getElementById("screenMode").value= "createrrf";
+			//document.getElementById("formwhere").submit();
+		}
+		else {
+			//alert("in view details");
+			document.getElementById("formwhere").screenName.value = "frmQuotation";
+			//document.getElementById("formwhere").submit();
+		}
 		document.getElementById("formwhere").submit();
 	}
 	else {
@@ -172,7 +185,9 @@ function viewdetails(){
 
 //create url with where clause
 function clearWhereClause(){
+	//alert("QuotationList:clearWhereClause");
 	document.getElementById("panelFieldsWhereClause").value="";
 }
+
 
 
