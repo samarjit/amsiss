@@ -36,7 +36,7 @@ public class DeleteData {
 		CachedRowSet crs = null;
 		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
-		while (itrPanel.hasNext())
+		if(itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
 			debug(0, "******** calling creteDeleteQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
@@ -67,7 +67,7 @@ public class DeleteData {
 		String joiner = " WHERE ";
 		
 		CrudDAO cd = new CrudDAO();
-		 
+		
 		//String qryPart1 = cd.createRetrieveQueryPart1(metadata,scrname,panelName);
 		String tableName =  cd.findTableByPanels(scrname,panelName);
 		String splWhereClause = cd.findSplWhereClsOfPanels(scrname,panelName);
