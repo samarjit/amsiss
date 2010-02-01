@@ -24,6 +24,9 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 	private HttpServletRequest servletRequest;
 	private String invokewfl = "false";
 	private String redirectUrl = null;
+	private String activityname = "";
+	private boolean create = false;
+	
 	
     public String getInvokewfl() {
 		return invokewfl;
@@ -86,13 +89,12 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
     	//inputStream = new StringBufferInputStream("in view details");
         System.out.println("in view details");
         if(invokewfl.equals("true")){
-        	if(screenName.equals("frmRequest")){
-        	redirectUrl = request1.getContextPath()+"/workflow.action?appid="+autogenId+"&activityname=CR&create=true";
+        	
+        	redirectUrl = request1.getContextPath()+"/workflow.action?appid="+autogenId+"&activityname="+activityname+"&create="+create;
         	return "workflow";
         	
-        }}else{
+        }else{
         return SUCCESS;
         }
-       return NONE;
 	}
 }
