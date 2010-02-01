@@ -131,7 +131,8 @@ function viewdetails(){
 	//There will be only one table in search screen 'search div'
 	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
-
+	screenMode = "viewdetails";
+	
 	whereClause = "panelFields1WhereClause=";
 	if(listTable != null && selectedIdx != -1){
 		//poplate wher clause url
@@ -159,6 +160,7 @@ function viewdetails(){
 		 
 		 
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
+		document.getElementById("screenMode").Value=screenMode;
 		document.getElementById("formwhere").screenName.value = "frmRRF";
 		document.getElementById("formwhere").submit();
 	}
