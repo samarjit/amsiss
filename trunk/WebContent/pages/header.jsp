@@ -11,11 +11,12 @@ function fnCreateActivity(ac) {
 	var url1=ctxpath+'/workflow.action?';
 	var url2=ctxpath+'/scrworkflow.action?';
 	if(ac== 'CR'){
-	url =url + "ScreenName=frmRequest";
+	
+	url =url + "screenName=frmRequest";
 	}else if(ac=='CRFQ'){
 	url =url2+ "activityname=CRFQ&create=true";	
 	}
-	alert(url);
+//	alert(url);
 //document.getElementById("frmmenu").action = url;
 location.href=url;
 }
