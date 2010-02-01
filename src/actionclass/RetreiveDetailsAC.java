@@ -9,17 +9,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import businesslogic.BaseBL;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import crud.RetreiveData;
 
 import dao.CrudDAO;
+import dto.UserDTO;
 
 public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAware{
 
@@ -27,6 +30,7 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 	private String whereClause;
 	private HttpServletRequest servletRequest;
 	private String screenName = null;
+	private HashMap retBLhm = null;
 	
     public String getScreenName() {
 		return screenName;
@@ -51,7 +55,7 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 	 
 	
 	public String execute() throws Exception {
-    	
+		System.out.println("AAAAAAAAAAAA");
     	HashMap metadata = new HashMap();
     	RetreiveData retrive = new RetreiveData();
     	
@@ -64,11 +68,16 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
     	
     	//panelFields1WhereClause = request1.getParameter("panelFields1WhereClause");
     	URLDecoder decoder =  new URLDecoder();
+    	
     	whereClause = decoder.decode(request1.getParameter("whereClause"));
     	
     	debug(0,whereClause);
     	
     	preRetreiveProcessBL(screenName);
+    	
+    	//RequestBL is used here for creating query for create Request Screen
+
+
     	String resultHtml = "No Data found";
     	if(whereClause != null || (!"".equals(whereClause)))
     		resultHtml  = retrive.doRetrieveData(screenName,whereClause);
@@ -96,13 +105,24 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 				Map map = servletRequest.getParameterMap();
 				Iterator iter = map.entrySet().iterator();
 				while (iter.hasNext()) {
+					
 					Entry n = (Entry) iter.next();
 					String key = n.getKey().toString();
+					System.out.println("key "+key);
 					String values[] = (String[]) n.getValue();
 					buslogHm.put(key, values);
 				}
-				HashMap retBLhm = null;
+ 					
+					HttpSession session = servletRequest.getSession();
+					UserDTO usr = (UserDTO) (session.getAttribute("userSessionData"));
+					String id = usr.getUserid();
+					System.out.println("ID"+id);
+					buslogHm.put("userDTO", usr);
+				
+				 
+			
 				retBLhm = basebl.preRetreiveProcessBL(buslogHm);
+			
 			}
 		} catch (Exception e) {
 			debug(1,"Businesslogic not found");
@@ -131,7 +151,7 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 					String values[] = (String[]) n.getValue();
 					buslogHm.put(key, values);
 				}
-				HashMap retBLhm = null;
+				
 				retBLhm = basebl.postRetreiveProcessBL(buslogHm);
 			}
 		} catch (Exception e) {
