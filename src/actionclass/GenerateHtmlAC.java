@@ -20,9 +20,12 @@ private String topPanel;
 private HashMap extraFields;
 private String screenName;
 private String errorMessage; 
+
+
 private String cssname;
 private String jsname;
 private String panelFieldsWhereClause;
+private String screenMode;
 
 private void debug( int priority,String s){
 	if(priority > 0)
@@ -34,6 +37,13 @@ private void debug(String s){
 
 public String getPanelFieldsWhereClause() {
 	return panelFieldsWhereClause;
+}
+
+public String getScreenMode() {
+	return screenMode;
+}
+public void setScreenMode(String screenMode) {
+	this.screenMode = screenMode;
 }
 
 public void setPanelFieldsWhereClause(String panelFieldsWhereClause) {
