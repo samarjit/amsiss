@@ -13,7 +13,7 @@ h1, h2, h3 {
 color:#618C04;
 font-weight:normal;
 margin:0;
-text-transform:uppercase;
+text-transform:capitalize;
 }
 h1 {
 font-size:44px;
@@ -93,6 +93,7 @@ padding:0;
 #menu li {
 display:block;
 float:left;
+text-align:center;
 }
 #menu a {
 -moz-background-clip:border;
@@ -105,9 +106,9 @@ float:left;
 font-family:Arial,Helvetica,sans-serif;
 font-size:12px;
 font-weight:bold;
-height:30px;
+height:37px;
 margin:0;
-padding:13px 30px 0;
+padding:5px 15px 0;
 text-align:center;
 text-decoration:none;
 text-transform:capitalize;
@@ -179,7 +180,7 @@ color:#618C04;
 font-weight:normal;
 line-height:normal;
 margin:0;
-text-transform:lowercase;
+text-transform:none;
 }
 #logo p {
 color:#A8A8A8;
@@ -429,6 +430,6 @@ text-transform:uppercase;
  }	
  
  #page TABLE TD{
- padding:0px;
+ paddin:0px;
  vertical-align: top; 
  }
