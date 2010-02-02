@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import pojo.GenerateMenu;
 import pojo.Login;
 
 import dto.UserDTO;
@@ -49,8 +50,10 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 			if(session.getAttribute("userSessionData") ==null){
 				if( request.getParameter("userid") == null ){
 					  
-					 System.out.println("Error loggin in");
+					 System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Error loggin in");
 				}else{
+					System.out.println("****************************************************Error loggin in");
+
 					Login lin = new Login();
 					userid = request.getParameter("userid");
 					usr.setRoleid(lin.getUserRole(userid));
@@ -60,6 +63,11 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 					debug("UserId:"+usr.getUserid());
 					debug("User Name:"+usr.getUsername());
 					session.setAttribute("userSessionData", usr);
+					GenerateMenu gen = new GenerateMenu();
+					StringBuffer buf = gen.retrieveMenu(usr.getRoleid());
+					System.out.println("roleeeeee "+usr.getRoleid());
+					String menu = buf.toString();
+					session.setAttribute("menu", menu);
 				}
 			}
 			if (businessLogic != null && !"".equals(businessLogic)) {
