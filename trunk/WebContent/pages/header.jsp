@@ -1,7 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>   
-<%@ page import="java.util.Date,java.text.DateFormat" %>       
+<%@ page import="java.util.Date,java.text.DateFormat" %>     
+<html>  
+<head>
+
+</head>
+<body>
 <div id="logo">    
 <h1>Asset Management System</h1>
 <script>
@@ -28,14 +33,9 @@ Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
 <hr/>
 <div id="header">
 <div id="menu">
+${sessionScope.menu}
 
-<ul>
-<li><a href="template1.action?screenName=frmRequestList">Request</a></li>
-<li><a href="template1.action?screenName=frmRFQList">RFQ</a> </li>
-<li><a href="template1.action?screenName=frmQuotationList">Quotation</a></li>
-<li><a href="template1.action?screenName=frmRRFList">RRF</a></li>
-<li><a href="logout.action">Logout</a></li>
-</ul>
+
 <br/>
 </div>
 </div>
@@ -46,3 +46,5 @@ Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
 <div style="display:block">
 <jsp:include page="/pages/actionbutton.jsp"></jsp:include>
 </div>
+</body>
+</html>
