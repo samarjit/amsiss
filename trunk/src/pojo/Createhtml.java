@@ -25,9 +25,12 @@ public class Createhtml {
 	private String validation ;
 	private String classname;
 	private String htmlelm;
+	private String elem_attributes = "";
+	private String attributes = "";
 	private String BUTTONPANEL = "buttonPanel";
 	private int  COL1ENTRY1  = 1; 
 	private int  COL2ENTRY1  = 2; 
+	
 	
 	public List<String> getPanels(String screenName){
 		String SQL = 
@@ -67,6 +70,7 @@ public class Createhtml {
 		String panelCssClassName = "";
 		HTable htable =null;
 		DBConnector db = new DBConnector();
+		
 		//1: two rows per entry for label field type, 2: for one column per entry
 		int panelType = COL2ENTRY1; 
 		
@@ -92,8 +96,8 @@ public class Createhtml {
 		
 		String SQL = 
 			"SELECT scr_Name, panel_name, lblname, fname, idname, datatype," +
-					" dbcol, validation, strquery , nrow, ncol,classname,htmlelm FROM  panel_fields where scr_name='"+screenName+"' AND panel_name='"+panelName+"' order by orderNo";
-		//System.out.println(SQL);
+					" dbcol, validation, strquery , nrow, ncol,classname,htmlelm,elem_attrib FROM  panel_fields where scr_name='"+screenName+"' AND panel_name='"+panelName+"' order by orderNo";
+		System.out.println(SQL);
 		
 		try {
 			CachedRowSet crs = db.executeQuery(SQL);
@@ -127,32 +131,54 @@ public class Createhtml {
 			
 			htable.setCssClassName(panelCssClassName);
 			while(crs.next()){
-				
-			
+				attributes = "";
 				datatype = crs.getString("datatype");
 				dbcol = crs.getString("dbcol");
 				fname = crs.getString("fname");
+				System.out.println("fname "+fname);
 				idname = crs.getString("idname");
 				lblname = crs.getString("lblname");
 				ncol = crs.getString("ncol");
 				nrow = crs.getString("nrow");
 				panel_name = crs.getString("panel_name");
-				strquery = crs.getString("strquery");
 				scr_Name = crs.getString("scr_Name");
 				validation = crs.getString("validation");
 				classname = crs.getString("classname");
 				htmlelm = crs.getString("htmlelm");
+				strquery = crs.getString("strquery");
+				elem_attributes = crs.getString("elem_attrib");
+				System.out.println("strquery "+strquery);
+				
+				if(elem_attributes==null){
+					elem_attributes = "";
+				}
+				
+				if(validation==null){
+					validation = "";
+				}
+				
+				
+				if(!elem_attributes.equals("")){
+				 attributes = elem_attributes.replaceAll("~", " ");
+				}
+
 				//System.out.println(panel_name+" :" + nrow + " "+ncol);
 				if("TEXTBOX".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" />";
+					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" />";
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+				}
+				if("DROPDOWN".equalsIgnoreCase(htmlelm)){
+					elmStr = lblname;
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+"><option value=\"select\">Select</option></select>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("HIDDEN".equalsIgnoreCase(htmlelm)){
 					//elmStr = lblname;
 					//htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<input type=\"hidden\" name='"+fname+"' id='"+idname+"' value='' />";
+					elmStr = "<input type=\"hidden\" name='"+fname+"' id='"+idname+"' value=''  "+validation+" "+attributes+" />";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("LABEL".equalsIgnoreCase(htmlelm)){
@@ -185,7 +211,7 @@ public class Createhtml {
 				//	htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, "");
 				//	elmStr = "<input type=\"button\" name='"+fname+"' id='"+idname+"' value='"+lblname+"'  "+validation+" />";
 				//	elmStr = "<div class=\"clear\" "+validation+"><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'     ><SPAN>"+lblname+"</SPAN></a></div>";
-					elmStr = "<button "+validation+" class=\"button\" name='"+fname+"' id='"+idname+"'     >"+lblname+"</button>";
+					elmStr = "<button "+validation+" class=\"button\" name='"+fname+"' id='"+idname+"' "+attributes+">"+lblname+"</button>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol), elmStr);
 				}
 			
