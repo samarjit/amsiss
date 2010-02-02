@@ -135,7 +135,7 @@ public class CrudDAO {
 					ls.setPrkey(crs.getString("prkey"));
 					colquery = crs.getString("strquery");
 					metadata.put(crs.getString("fname"), ls) ;
-					if(colquery !=null && colquery.length() > 1){
+					if(false && colquery !=null && colquery.length() > 1){
 						searchQuery +="("+colquery+") "+crs.getString("fname")+",";
 					}else{
 						String datatype = crs.getString("datatype");

@@ -172,7 +172,25 @@ public class Createhtml {
 				if("DROPDOWN".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+"><option value=\"select\">Select</option></select>";
+					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+"><option value=\"select\">Select</option>";
+					CachedRowSet crs1 = null;
+					try {
+						 
+						crs1 = db.executeQuery(strquery);
+						while(crs1.next()){
+							elmStr+=	"<option value=\""+crs1.getString("VAL")+"\">"+crs1.getString("DES")+"</option>";
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+						if (crs1 != null) {
+							try {
+								crs1.close();
+							} catch (Exception e) {
+							}
+						}
+					} 
+					elmStr+= "</select>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("HIDDEN".equalsIgnoreCase(htmlelm)){
