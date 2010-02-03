@@ -34,68 +34,6 @@ function cleanUp() {
 	}
 }
 
-/*////////////////////////
-document.onclick = function(e){
-	var targ;
-	selectedIdx = -1;
-	cleanUp();
-
-	if (!e)
-	  {
-	  var e=window.event;
-	  }
-	if (e.target)
-	  {
-	  targ=e.target;
-	  }
-	else if (e.srcElement)
-	  {
-	  targ=e.srcElement;
-	  }
-	if (targ.nodeType==3) // defeat Safari bug
-	  {
-	  targ = targ.parentNode;
-	  }
-	var tname;
-	tname=targ.tagName;
-	var obj  = targ;
-	if(obj.tagName)
-	while( obj  != null && obj.tagName != "TR" && obj.tagName != "BODY"   ){
-	obj = obj.parentNode;
-	}
-	var flag = false;
-	var objtest = obj;
-	while( objtest  != null && objtest.tagName != "BODY"   ){
-	if(objtest.id == "searchdiv")flag=true;
-	objtest = objtest.parentNode;
-
-	}
-
-	if(obj != null && (obj.tagName == "tr" || obj.tagName == "TR" )  && flag ){
-//	  if(!(jQuery(obj).find("th").is("th")) ) {
-//	  selectedIdx  = obj.rowIndex;
-//	  obj.style.backgroundColor= "#a0b0a0";
-//	  alert("inside jquery");
-//	  }
-	  
-
-//	 prototype 
-//	var nodes = $A(obj.getElementsByTagName("TH"));
-//
-//			nodes.each(function(node){
-//					alert(node.nodeName + ': ' + node.innerHTML);
-//				});
-//	 
-	var arTH = obj.getElementsByTagName("TH");
-	 if(arTH.length == 0 ){
-		 selectedIdx  = obj.rowIndex;
-	  obj.style.backgroundColor= "#C5FF60";
-	 }
-
-	}
-
-	}
-*/
 function addSelectEvents(){
  
 	var srchdv = document.getElementById("searchdiv").getElementsByTagName("TR");
@@ -148,7 +86,15 @@ function viewdetails(btnname){
 				name = jQuery.trim(name);
 				value = jQuery("#searchdiv").find(" table tbody tr").eq(selectedIdx).find(" td").eq(i).text();
 				value = jQuery.trim(value);
-				whereClause = whereClause + name + "!" + value + "~#";				
+				whereClause = whereClause + name + "!" + value + "~#";	
+				//alert(name);
+				//alert(value);
+				//alert(btnname.id);
+				if(name == 'qtstatus' && value == 'RRFCREATED' && btnname.id=='createrrf' ){
+					alert("RRF Already created..");
+					return false;
+				}
+				//exit();
 				requestar[j] = new KeyValue(name, value);		
 				j++;		
 				//alert(jQuery("#searchdiv table th:eq("+i+") div").text());
@@ -164,7 +110,7 @@ function viewdetails(btnname){
 		//alert(whereClause);
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
 		if(btnname.id=='createrrf'){			
-			//alert("in Create rrf");
+			
 			document.getElementById("formwhere").screenName.value = "frmRRF";	
 			document.getElementById("screenMode").value= "createrrf";
 			//document.getElementById("formwhere").submit();
