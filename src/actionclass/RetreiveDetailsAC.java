@@ -55,7 +55,6 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 	 
 	
 	public String execute() throws Exception {
-		System.out.println("AAAAAAAAAAAA");
     	HashMap metadata = new HashMap();
     	RetreiveData retrive = new RetreiveData();
     	
@@ -108,7 +107,6 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 					
 					Entry n = (Entry) iter.next();
 					String key = n.getKey().toString();
-					System.out.println("key "+key);
 					String values[] = (String[]) n.getValue();
 					buslogHm.put(key, values);
 				}
