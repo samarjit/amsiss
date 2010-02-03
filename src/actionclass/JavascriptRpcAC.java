@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.struts2.interceptor.ParameterAware;
+import org.apache.struts2.interceptor.SessionAware;
 import org.json.JSONObject;
 
 import businesslogic.BaseBL;
@@ -15,8 +16,15 @@ import businesslogic.BaseBL;
 import com.opensymphony.xwork2.ActionSupport;
 
 import dao.CrudDAO;
+import dto.UserDTO;
 
-public class JavascriptRpcAC extends ActionSupport implements  ParameterAware{
+/**
+ * Mandatory Fields: rpcid and screenName - for getting BLs, 
+ * Rest of the required request parameters 
+ * @author Samarjit
+ *
+ */
+public class JavascriptRpcAC extends ActionSupport implements  ParameterAware,SessionAware{
 	private void debug( int priority,String s){
 		if(priority > 0)
 		System.out.println("JavascriptRpcAC:"+s);
@@ -26,7 +34,7 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware{
 	private String screenName = null;
 	private Map parameters;
 	private String rpcid;
-	
+	private Map session;
 	
     public String getRpcid() {
 		return rpcid;
@@ -69,6 +77,10 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware{
 //					buslogHm.put(key, values);
 //				}
 				buslogHm = map;
+				UserDTO usr = (UserDTO) (session.get("userSessionData"));
+				String id = usr.getUserid();
+				System.out.println("ID"+id);
+				buslogHm.put("userDTO", usr);
 				retBLhm = basebl.jsrpcProcessBL(buslogHm, rpcid);
 			}else{
 				retBLhm.put("error", "Method not found");
@@ -97,5 +109,11 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware{
 	@Override
 	public void setParameters(Map<String, String[]> parameters) {
 		this.parameters = parameters;
+	}
+
+	@Override
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
+		
 	}
 }
