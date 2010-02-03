@@ -3,15 +3,21 @@ package actionclass;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
+import businesslogic.BaseBL;
+
 import com.opensymphony.xwork2.ActionSupport;
 
 import crud.InsertData;
+import dao.CrudDAO;
 
 
 
@@ -25,6 +31,7 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 	private String invokewfl = "false";
 	private String redirectUrl = null;
 	private String activityname = "";
+	private HashMap retBLhm = null;
 	private boolean create = false;
 	
 	
@@ -83,6 +90,8 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
     		resultHtml  = insert.doInsert(screenName, insertKeyValue, autogenId);
     		//resultHtml  = "hii i cant write now.. ";
     	
+    	postInsertProcessBL(screenName);
+    	
         System.out.println(insertKeyValue);
        // String resXML  = getResultXML (qry,metadata); 
         inputStream = new StringBufferInputStream(resultHtml);
@@ -96,5 +105,48 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
         }else{
         return SUCCESS;
         }
+	}
+
+	private void debug( int priority,String s){
+		if(priority > 0)
+		System.out.println("InsertDataAC:"+s);
+	}
+	
+	private void postInsertProcessBL(String screenName) {
+	
+		Class aclass = null;
+		CrudDAO cd = new CrudDAO();
+		String businessLogic = cd.getBusinessLogicName(screenName);
+		try {
+			if (businessLogic != null && !"".equals(businessLogic)) {
+				aclass = Class.forName(businessLogic);
+				BaseBL basebl = (BaseBL) aclass.newInstance();
+				Map buslogHm = new HashMap();
+
+				Map map = servletRequest.getParameterMap();//parameters;
+				
+				Iterator iter = map.entrySet().iterator();
+				while (iter.hasNext()) {
+					Entry n = (Entry) iter.next();
+					String key = n.getKey().toString();
+					String values[] = (String[]) n.getValue();
+					buslogHm.put(key, values);
+				}	
+				//buslogHm = map;
+				retBLhm = basebl.postInsertProcessBL(buslogHm);
+			}
+			else{
+				retBLhm.put("error", "Method not found");
+			}
+		} catch (Exception e) {
+			debug(1,"Businesslogic not found");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	public void setParameters(Map<String, String[]> parameters) {
+		//this.parameters = parameters;
 	}
 }
