@@ -101,6 +101,7 @@ function rrfCallBack(p){
 	fnAdjustTableWidth();
 }
 
+
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
 	var query = jQuery("#panelsdiv  table:first ").find("tr").eq(0).find("td ");
@@ -171,6 +172,15 @@ function rrfSubmit() {
 }
 
 function rrfSave() {
+	
+	if(document.getElementById("requestid").value == 'select'){		
+		document.getElementById("requestid").value=" ";
+	}
+	
+	if(document.getElementById("approvarid").value == 'select'){		
+		alert("Please enter Approver ID");
+		exit();
+	}
 	//alert("in save ");	
 	//alert(inserturlpart);
 	//alert("in savesdkgf ");	
@@ -178,10 +188,11 @@ function rrfSave() {
 	if(screenAction == "insert"){
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRRF";
 		//prompt("url",url);	
+		url = url + "&quotationid=" + document.getElementById("rrfquotationid").value;;
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 		//prompt("url",url);
-		//add key:vlaue to url
-		sendAjaxGet(url, saveCallBack);
+		//alert(url);
+		//add key:vlaue to url		
 	}
 	
 	if(screenAction == "modify"){
@@ -189,33 +200,55 @@ function rrfSave() {
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRRF";
 		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
-
 		//prompt("url",url);
-		//add key:vlaue to url
-		
-		sendAjaxGet(url, saveCallBack);
 	}
-			
+	sendAjaxGet(url, saveCallBack);
 }
 
 function deleteData(){
-	alert("in delete Data");
+	//alert("in delete Data");
 	whereclause  = makeWhereClause();
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmRRF";
+	url = url + "&quotationid=" + document.getElementById("rrfquotationid").value;
 	//prompt("url",url);	
-	alert("in delete!!!!!!! url" +url);
+	//alert("in delete!!!!!!! url" +url);
 	//prompt("url",url);
-	//add key:vlaue to url
-	
-	sendAjaxGet(url, saveCallBack);
+	//add key:vlaue to url	
+	sendAjaxGet(url, deleteCallBack);
 	
 }
 
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0)alert("Error while saving! ");
-	else alert("Successfully saved your rrf! ");
-	exit();
+	if(val < 0){
+		
+		alert("Error while saving! ");
+	}
+	else{
+		if(screenAction == "modify"){
+
+			location.href= ctxpath+"/template1.action?screenName=frmRRFList"
+			alert("Successfully modified your rrf! ");
+		}
+		if(screenAction == "insert"){
+
+			location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
+			alert("Successfully created your rrf! ");
+		}
+	}
+}
+
+
+function deleteCallBack(val) {
+	//show success message 
+	if(val < 0){
+		
+		alert("Error while deleting! ");
+	}
+	else{
+		location.href= ctxpath+"/template1.action?screenName=frmRRFList"
+		alert("Successfully deleted your rrf! ");
+	}
 }
 
 
@@ -239,6 +272,17 @@ function replacer(key, value) {
 
 function prepareInsertData() {
 
+	
+	
+	if(document.getElementById("approvarid").value == 'select'){		
+		alert("Please enter Approver ID");
+		exit();
+	}
+	
+	if(document.getElementById("requestid").value == 'select'){		
+		document.getElementById("requestid").value=" ";
+	}
+	
 	//alert("in prepare");
 	//var array = {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
@@ -247,6 +291,8 @@ function prepareInsertData() {
 	//exit();
 	//get the quotation id from quotation fileds
 	document.getElementById("quotationid").value=document.getElementById("rrfquotationid").value;
+	
+
 	
 	//need only panelfieds data for insert.
 	
@@ -257,10 +303,13 @@ function prepareInsertData() {
 	var j = 0;
 	jQuery.each(elem, function(index, item) {	
 		//alert(j);
+		//alert(item.id);
+		//alert(item.value);		
+		
 		requestar[j] = new KeyValue(item.id, item.value);				
 		j++;						
 	});
-	
+	//exit();
 	pclass[0] = new panelClass(dataTable[0].id,requestar);	
 	var k = new Object();
 	k.json = pclass
@@ -279,6 +328,7 @@ function updateData(obj){
 	document.getElementById("save").disabled=false;
 	document.getElementById("modify").disabled=true;
 	
+		
 	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
