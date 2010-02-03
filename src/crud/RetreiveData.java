@@ -147,8 +147,6 @@ public class RetreiveData  {
 			String parts[] = str.split("\\.");
 			if(parts.length > 1){
 			HashMap<String,String> hm = tempData.get(parts[0]);
-			System.out.println(parts[0]);
-			System.out.println(parts[1]);
 			String val = hm.get(parts[1]);
 			StringBuffer charseq=new StringBuffer(g);
 			resultStr =  resultStr.replace(charseq, val);
