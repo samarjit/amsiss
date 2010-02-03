@@ -538,7 +538,7 @@ function enablePrint(status,vendorid){
 
 var childwindow;
 function sendEmail(vendorid){
-  childwindow = window.open("rfqsendemail.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500");
+  childwindow = window.open("rfqsendemail.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500,scrollbars=1");
 }
 function populateEmailPage(parm){
  childwindow.populateCallbackValues($F("rfqid"),$F("itemtype"),$F("itemdesc"),$F("quantity"));

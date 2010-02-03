@@ -109,7 +109,8 @@ public class VendorMapDAO {
 
 	public ArrayList<HashMap<String, String>> selectAll(String rfqid) {
 		CachedRowSet crs = null;
-		String SQL = "select vendor_id, vendor_name,b.TYPE_NOTIFY,b.INDV_STATUS,b.SUGGEST_DLV_TIME, vendor_rating,vendor_email, vendor_status from AMS_VENDOR a, AMS_RFQ_VENDOR_MAP b  where a.VENDOR_ID = b.VENDORID ";
+		String SQL = "select vendor_id, vendor_name,b.TYPE_NOTIFY,b.INDV_STATUS,b.SUGGEST_DLV_TIME, vendor_rating,vendor_email, vendor_status from AMS_VENDOR a, AMS_RFQ_VENDOR_MAP b  where a.VENDOR_ID = b.VENDORID " +
+				"AND RFQID='"+rfqid+"'";
 		HashMap<String,String> vlist = null;//new HashMap<String, String>();
 		ArrayList<HashMap<String,String>> arvlist = new ArrayList<HashMap<String,String>>();
 		try {

@@ -30,7 +30,7 @@ function $(p){
 
 function $F(p){
 	if(document.getElementById(p))
-	return document.getElementById(p);
+	return document.getElementById(p).value;
 	return null;
 }
 function fnEmailSend() {
