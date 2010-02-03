@@ -32,12 +32,18 @@ function quotationCallBack(p){
 		if (detailTable[i].id == 'buttonPanel')
 			continue;
 		if(detailTable[i].id == 'panelFields' && screenMode == "capturequotation")
-		{
-			document.getElementById("status").value='NEW';
+		{			
+			document.getElementById("qtstatus").value='NEW';
 			document.getElementById("quotationdate").value='10/11/2010';
 			document.getElementById("dateofdelivery").value='10/12/2010';
-			document.getElementById("status").disabled=true;
-			//document.getElementById("totalamount").disabled=true;
+			document.getElementById("qtstatus").disabled=true;
+			document.getElementById("totalamount").disabled=true;
+			document.getElementById("totalamount").value='0';
+			document.getElementById("unitprice").value='0';
+			document.getElementById("discount").value='0';
+			document.getElementById("mischarge").value='0';
+			
+			
 			continue;
 		}
 		
@@ -84,6 +90,11 @@ function quotationCallBack(p){
 	}
 	else
 	{		
+		//alert("in view quotation");
+		if(document.getElementById("qtstatus").value == 'RRFCREATED'){
+			document.getElementById("btnDelete").disabled=true;
+			document.getElementById("btnModify").disabled=true;
+		}
 		document.getElementById("btnSave").disabled=true;
 		disable_fields();
 	}
@@ -141,7 +152,7 @@ function disable_fields(){
 	for(var i =0; i<panelsTable.length;i++){
 		
 	//	alert("panels "+ panelsTable[i].id);
-		if (panelsTable[i].id == 'panelFields'){
+		if (panelsTable[i].id == 'panelFields' || panelsTable[i].id == 'rfqFields'){
 			var query = jQuery(panelsTable[i]).find(" :input");
 			var elem = 	jQuery(query);
 		
@@ -167,54 +178,81 @@ function quotSave() {
 	//alert(inserturlpart);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
-	
+	//alert(document.getElementById("currency").value);
+	if(document.getElementById("currency").value == 'select'){		
+		alert("Please select currency");
+		exit();
+	}
+
 	if(screenAction == "insert"){
 		//alert("in insert");
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmQuotation";
 		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 		//prompt("url",url);
-		//add key:vlaue to url
-		sendAjaxGet(url, saveCallBack);
+		//add key:vlaue to url		
 
 	}
-	
+
 	if(screenAction == "modify"){
+
 		whereclause  = makeWhereClause();
 		//alert("in modify");
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmQuotation";
 		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
-
 		//prompt("url",url);
-		//add key:vlaue to url
-		
-		sendAjaxGet(url, saveCallBack);
-		}
-	
-		
+		//add key:vlaue to url		
+
+	}
+	sendAjaxGet(url, saveCallBack);
 }
 
 function deleteData(){
 	
+	
 	whereclause  = makeWhereClause();
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmQuotation";
-	prompt("url",url);	
-	alert("in update!!!!!!! url" +url);
+	//prompt("url",url);	
+	//alert("in update!!!!!!! url" +url);
 	//prompt("url",url);
-	//add key:vlaue to url
-	
-
-	sendAjaxGet(url, saveCallBack);
+	//add key:vlaue to url	
+	sendAjaxGet(url, deleteCallBack);
 	
 }
 
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0)alert("Error while saving! ");
-	else alert("Successfully saved your quotation! ");
+	if(val < 0){
+		
+		alert("Error while saving! ");
+	}
+	else{
+		
+		if(screenAction == "modify"){
+			location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
+			alert("Successfully saved your Quotation! ");
+		}
+		if(screenAction == "insert"){
+			location.href= ctxpath+"/template1.action?screenName=frmRFQList"
+			alert("Successfully saved your Quotation! ");
+		}
+	}
 }
 
+
+
+function deleteCallBack(val) {
+	//show success message 
+	if(val < 0){
+		
+		alert("Error while deleting! ");
+	}
+	else{
+		location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
+		alert("Successfully deleted your Quotation! ");
+	}
+}
 
 function KeyValue(a,b) {
 	this.key=a;
@@ -245,27 +283,34 @@ function prepareInsertData() {
 	document.getElementById("itemid").value=document.getElementById("rfqitemID").value;
 	document.getElementById("itemquantity").value=document.getElementById("rfqquantity").value;
 	document.getElementById("vendorid").value=document.getElementById("rfqvendorid").value;
-		//alert(dataTable.length);		
-		//for (var i=0; i<dataTable.length; i++) {
-				
-			var query = "#panelsdiv #" + dataTable[0].id + " :input";
-			var requestar = new Array();
-			//alert(query);
-			var elem = 	jQuery(query); 
-			var j = 0;
-			jQuery.each(elem, function(index, item) {	
-				//alert(j);
-				requestar[j] = new KeyValue(item.id, item.value);				
-				j++;						
-			});
-			
-			pclass[0] = new panelClass(dataTable[0].id,requestar);					
-		//}	
-		var k = new Object();
-		k.json = pclass
-		var myJSONText = JSON.stringify(k, replacer,"");
-		//alert(myJSONText );	
-		return myJSONText;			
+	//alert(dataTable.length);		
+	//for (var i=0; i<dataTable.length; i++) {
+	//alert(document.getElementById("currency").value);
+	
+	if(document.getElementById("currency").value == 'select'){		
+		alert("Please select currency");
+		exit();
+	}
+	
+	
+	var query = "#panelsdiv #" + dataTable[0].id + " :input";
+	var requestar = new Array();
+	//alert(query);
+	var elem = 	jQuery(query); 
+	var j = 0;
+	jQuery.each(elem, function(index, item) {	
+		//alert(j);
+		requestar[j] = new KeyValue(item.id, item.value);				
+		j++;						
+	});
+
+	pclass[0] = new panelClass(dataTable[0].id,requestar);					
+	//}	
+	var k = new Object();
+	k.json = pclass
+	var myJSONText = JSON.stringify(k, replacer,"");
+	//alert(myJSONText );	
+	return myJSONText;			
 }
 
 
@@ -285,7 +330,7 @@ function updateData(obj){
 
 		if (panelsTable[m].id == 'panelFields'){
 
-				fields = panelsTable[m].getElementsByTagName("input");
+			fields = panelsTable[m].getElementsByTagName("input");
 			var query = jQuery(panelsTable[m]).find(" :input");
 			var elem = 	jQuery(query);
 			//alert("inside update panel panels " + fields.length);
@@ -319,12 +364,10 @@ function updateData(obj){
 		}
 	}
 
-
-
 }
 
 function backToList(){
-	alert("please write code for this.");
+	location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
 }
 
 	 
@@ -359,9 +402,7 @@ function makeWhereClause(){
 		k.json = requestar;
 		var myJSONText = JSON.stringify(k, replacer,"");
 		
-		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
-		 
-		 
+		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');				
 		
 	}
 	
@@ -369,6 +410,34 @@ function makeWhereClause(){
 
 }
 
+
+function updateTotal() {
+	//alert("in updatetotal");
+	var unitprice = 0;
+	unitprice = parseInt(document.getElementById("unitprice").value);
+	//alert(unitprice);
+	var mischarge = 0;
+	mischarge= parseInt(document.getElementById("mischarge").value);
+	//alert(mischarge);
+	var discount = 0;
+	discount = parseInt(document.getElementById("discount").value);
+	//alert(discount);
+	var quantity = 0; 
+	quantity = parseInt(document.getElementById("rfqquantity").value);
+	//alert(quantity);
+	
+	var totalamount = 0;
+	totalamount = parseInt(document.getElementById("totalamount").value);
+	
+	//alert(unitprice * quantity + totalamount);
+	
+	totalamount = unitprice * quantity + mischarge - discount;
+	
+	//alert(totalamount);
+	
+	document.getElementById("totalamount").value = totalamount+''
+	//alert(" jkj " + document.getElementById("totalamount").value);	
+}
 
 function submitactivity(){
 	alert("here in submit activity")
