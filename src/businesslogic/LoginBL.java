@@ -47,4 +47,28 @@ public class LoginBL implements BaseBL {
 		return null;
 	}
 
+	@Override
+	public HashMap postDeleteProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap postInsertProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap preDeleteProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap preInsertProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
