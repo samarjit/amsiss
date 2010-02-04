@@ -22,7 +22,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Add
  *
  */
-public class SendMail extends ActionSupport{
+public class SendMailAC extends ActionSupport{
 private String sendto;
 private String from;
 private String subject;
@@ -84,7 +84,7 @@ public void setMsgbody(String msgbody) {
 }
 
 public String execute(){
-	 String resultHtml = "{'SUCCESS':'Email Sent'}";
+	 String resultHtml = "{\"SUCCESS\":\"Email Sent\"}";
 	 String errorm = "";
 	
 	//Validation of fields
@@ -101,9 +101,9 @@ public String execute(){
 	 
 	if ("".equals(errorm)) {
 		if(sendJavaMail() == false)
-		resultHtml = "{'ERROR':'Email Sending Failed'}";
+		resultHtml = "{\"ERROR\":\"Email Sending Failed\"}";
 	}else{//Error: validation failed!
-		resultHtml = "{'ERROR':'"+errorm+"'}";
+		resultHtml = "{\"ERROR\":\""+errorm+"\"}";
 	}
 	inputStream = new StringBufferInputStream(resultHtml);
 	return SUCCESS;

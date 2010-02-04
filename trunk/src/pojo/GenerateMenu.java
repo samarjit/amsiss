@@ -8,8 +8,14 @@ import dao.CrudDAO;
 import dbconn.DBConnector;
 
 public class GenerateMenu {
-	
+	private void debug(int priority,String s){
+		if(priority > 0)
+		System.out.println("GenerateMenu:"+s);
+	}
 	public StringBuffer retrieveMenu(String role){
+		
+		
+		
 		String menuName;
 		 String menuAction;
 		 StringBuffer result = new StringBuffer("");
@@ -17,7 +23,7 @@ public class GenerateMenu {
 		try {
 			DBConnector db = new DBConnector();
 			CrudDAO cd = new CrudDAO();
-			 crs =  cd.executeRetrieveQuery("Select * from ams_menu where menu_role_id='"+role+"' order by menu_id");
+			 crs =  cd.executeRetrieveQuery("Select MENU_NAME,MENU_ACTION from ams_menu where menu_role_id='"+role+"' order by menu_id");
 			 
 			 while(crs.next()){
 				 menuName = "";
@@ -26,20 +32,18 @@ public class GenerateMenu {
 				 menuName = crs.getString("MENU_NAME");
 				 menuAction = crs.getString("MENU_ACTION");
 				 System.out.println("menu menu "+menuName+" aa "+menuAction);
-				 if(result.equals("")){
-					 result.append("<ul>");
-				 }
+				 
 				 result.append("<li><a href="+menuAction+">"+menuName+"</a></li>");
 			 }
-			 result.append("</ul>");
-			 System.out.println(result.toString());
+			
+			 debug(0,result.toString());
 			 return result;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			 debug(5,e.getMessage());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			 debug(5,e.getMessage());
 		}
 		return null;
 		

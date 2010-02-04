@@ -13,13 +13,12 @@
 function fnCreateActivity(ac) { 
 	var ctxpath = '<%=request.getContextPath() %>';
 	var url = ctxpath+'/template1.action?';
-	var url1=ctxpath+'/workflow.action?';
-	var url2=ctxpath+'/scrworkflow.action?';
+	var url1= ctxpath+'/workflow.action?';
+	var url2= ctxpath+'/scrworkflow.action?';
 	if(ac== 'CR'){
-	
-	url =url + "screenName=frmRequest";
+      url =url + "screenName=frmRequest";
 	}else if(ac=='CRFQ'){
-	url =url2+ "activityname=CRFQ&create=true";	
+	  url =url+ "screenName=frmRFQ&activityname=CRFQ&create=true";	
 	}
 //	alert(url);
 //document.getElementById("frmmenu").action = url;
@@ -33,8 +32,10 @@ Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
 <hr/>
 <div id="header">
 <div id="menu">
+<ul>
 ${sessionScope.menu}
-
+<li><a href="logout.action">Logout</a></li>
+</ul>
 
 <br/>
 </div>

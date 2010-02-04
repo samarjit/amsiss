@@ -103,7 +103,7 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 </tr>
 </table> 
 <script>
-function changestate(){
+function changestate(objthis){
 	if(document.getElementById("retreivedetailsdiv").style.display == "none"){
 		document.getElementById("retreivedetailsdiv").style.display = "block";
 		 objthis.innerHTML = "-";
