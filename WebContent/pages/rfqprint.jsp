@@ -35,7 +35,10 @@ function $F(p){
 }
 function fnEmailSend() {
 
-	opener.rfqemailSent(vendorid);
+	opener.rfqPrinted(vendorid);
+	 
+	window.close();
+	
 }
 
 function populateData(){
@@ -56,6 +59,7 @@ function populateCallbackValues(){
 function fnPrint(objBtn){
 objBtn.style.visibility = "hidden";	
 	window.print();
+	fnEmailSend();
 }
 
 function testjsrpc(){

@@ -33,9 +33,17 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 	private String activityname = "";
 	private HashMap retBLhm = null;
 	private boolean create = false;
+	private String wflid;
 	
-	
-    public String getInvokewfl() {
+    public String getWflid() {
+		return wflid;
+	}
+
+	public void setWflid(String wflid) {
+		this.wflid = wflid;
+	}
+
+	public String getInvokewfl() {
 		return invokewfl;
 	}
 
@@ -97,14 +105,41 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
         inputStream = new StringBufferInputStream(resultHtml);
     	//inputStream = new StringBufferInputStream("in view details");
         System.out.println("in view details");
-        if(invokewfl.equals("true")){
+        if(invokewfl.equals("worlkflow")){
         	
         	redirectUrl = request1.getContextPath()+"/workflow.action?appid="+autogenId+"&activityname="+activityname+"&create="+create;
         	return "workflow";
         	
+        }else if(invokewfl.equals("scrflow")){
+        	redirectUrl = request1.getContextPath()+"/scrworkflow.action?appid="+autogenId+"&activityname="+activityname+"&create="+create;
+        	return "workflow";
         }else{
         return SUCCESS;
         }
+	}
+
+	public String getInsertKeyValue() {
+		return insertKeyValue;
+	}
+
+	public void setInsertKeyValue(String insertKeyValue) {
+		this.insertKeyValue = insertKeyValue;
+	}
+
+	public String getScreenName() {
+		return screenName;
+	}
+
+	public void setScreenName(String screenName) {
+		this.screenName = screenName;
+	}
+
+	public String getActivityname() {
+		return activityname;
+	}
+
+	public void setActivityname(String activityname) {
+		this.activityname = activityname;
 	}
 
 	private void debug( int priority,String s){
