@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
-
+<% response.setHeader("Pragma","no-cache");
+  response.setDateHeader("Expires",0);
+  response.setHeader("Cache-Control","no-cache");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -19,6 +22,11 @@ document.getElementById("formId0").submit();
 }
 </SCRIPT>
 <body>
+<br />
+
+<div id="errormsgdiv" name="">
+${param.errormsg}
+</div>
 
 <br/>
 <FORM METHOD="GET" ACTION="${pageContext.servletContext.contextPath}/ScreenFlowControllerServlet" id="formId0">

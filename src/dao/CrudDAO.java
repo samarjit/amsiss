@@ -260,7 +260,7 @@ public class CrudDAO {
 			result  = db.executeUpdate(sg);
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			throw e;
 		}		
 		return result  ;

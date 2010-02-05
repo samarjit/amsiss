@@ -152,14 +152,15 @@ function reqSubmit() {
 
 function reqSave() {
 	//alert("in save ");	
-	alert(inserturlpart);
+	alert(inserturlpart+" Mode:"+screenMode);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
-	
+	alert(screenMode);
 	if(screenMode == "insert"){
+	document.getElementById("rfqid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";
 	prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData();
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRFQ&create=true";
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
@@ -355,7 +356,7 @@ function makeWhereClause(){
 function submitactivity(){
 	alert("here in submit activity")
 	alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
 	alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
@@ -368,13 +369,14 @@ function submitactivity(){
 function submitScreenFlowactivity(){
 	alert("here in submit activity")
 	alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
 	alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	location.href = url;
 		
 	}
 

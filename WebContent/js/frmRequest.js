@@ -161,7 +161,7 @@ function reqSave() {
 	if(screenMode == "insert"){
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
 		prompt("url",url);	
-		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=true&activityname=CR&create=true";
+		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=worlkflow&activityname=CR&create=true";
 		//prompt("url",url);
 		//add key:vlaue to url
 		sendAjaxGet(url, saveCallBack);
@@ -243,7 +243,7 @@ function prepareInsertData() {
 			var val = item.id;
 
 			if(item.type=="hidden" && val.substring(val.length-2,val.length)=='id'){
-				item.value = "seqid";}
+				item.value = "AUTOGEN_SEQUENCE_ID";}
 
 			requestar[j] = new KeyValue(item.id, item.value);				
 			j++;						
