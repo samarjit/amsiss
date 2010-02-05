@@ -103,7 +103,7 @@ public String execute1(){
 			if (activityname != null && !"".equals(activityname)) {
 				ApplicationDTO appdto = new ApplicationDTO();
 				debug(0, "activityname:" + activityname);
-				String appid = wflBean.getNewApplicationId();
+				//String appid = wflBean.getNewApplicationId();
 				String WflName = wflBean.getSuitableWorkflowName(activityname);
 				//wflid = wflBean.workflowInit(appid, WflName, null);
 				ArrayList<String> hmActions = wflBean.getNextScrFlowActions(WflName, ""); //rest of the places wflid = WflName

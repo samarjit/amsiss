@@ -97,7 +97,7 @@ public class Createhtml {
 		String SQL = 
 			"SELECT scr_Name, panel_name, lblname, fname, idname, datatype," +
 					" dbcol, validation, strquery , nrow, ncol,classname,htmlelm,elem_attrib FROM  panel_fields where scr_name='"+screenName+"' AND panel_name='"+panelName+"' order by orderNo";
-		System.out.println(SQL);
+		//System.out.println(SQL);
 		
 		try {
 			CachedRowSet crs = db.executeQuery(SQL);
@@ -135,7 +135,6 @@ public class Createhtml {
 				datatype = crs.getString("datatype");
 				dbcol = crs.getString("dbcol");
 				fname = crs.getString("fname");
-				System.out.println("fname "+fname);
 				idname = crs.getString("idname");
 				lblname = crs.getString("lblname");
 				ncol = crs.getString("ncol");
@@ -147,7 +146,6 @@ public class Createhtml {
 				htmlelm = crs.getString("htmlelm");
 				strquery = crs.getString("strquery");
 				elem_attributes = crs.getString("elem_attrib");
-				System.out.println("strquery "+strquery);
 				
 				if(elem_attributes==null){
 					elem_attributes = "";

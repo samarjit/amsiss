@@ -16,7 +16,7 @@ import dao.CrudDAO;
 public class InsertData {
 	public void debug(int priority, String s){
 		if(priority >0)
-		System.out.println(s);
+		System.out.println("InsertData:"+s);
 	}
 	/**
 	 * main function is used only for testing doDelete() is the method that does 
@@ -46,12 +46,13 @@ public class InsertData {
 			String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
 			if(sg != null && !("".equals(sg))){
 				try {
-					String query = sg.replaceAll("seqid", autogenId);
+					String query = sg.replaceAll("AUTOGEN_SEQUENCE_ID", autogenId);
+					debug(1,"inserted successfully:"+query);
 					insertResult  = cd.executeInsertQuery(query);
-					debug(1,"inserted successfully");
+					debug(1,"inserted successfully:"+query);
 				} catch (Exception e) {
-					debug(5,"Failed in insert");
-					e.printStackTrace();
+					debug(5,"Failed in insert"+e);
+					//e.printStackTrace();
 					insertResult  = -1;
 				}
 				debug(0, "Insert query:" + sg);

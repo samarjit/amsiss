@@ -52,7 +52,7 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 					  
 					 System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Error loggin in");
 				}else{
-					System.out.println("****************************************************Error loggin in");
+					System.out.println("****************************************************Loggin in");
 
 					Login lin = new Login();
 					userid = request.getParameter("userid");
