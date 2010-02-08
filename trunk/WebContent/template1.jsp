@@ -14,7 +14,10 @@
 </style>
 <script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
 
+
 <s:property value="jsname" escape="false"/>
+<link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
+
 <s:url var="retriveurl" value="/retreivedetails.action" />
 <s:url var="inserturl" value="/insertdata.action" />
 <s:url var="updateurl" value="/updatedata.action" />
@@ -38,6 +41,12 @@ var ctxpath = "<%= ctxpath %>";
 <s:actionmessage/>
 <%@ include file="pages/header.jsp" %>
 <div id="page">
+<div id="errormsgdiv" class="ui-state-error ui-corner-all"  class="ui-state-error ui-corner-all"  style="display:none;padding: 0pt 0.7em;">
+
+</div>
+<div id="alertmsgdiv" class="ui-state-highlight ui-corner-all"  class="ui-state-error ui-corner-all"  style="display:none;padding: 0pt 0.7em;">
+
+</div>
 <!-- The following part is filled using template and DB -->
 <table> 
 <tr>
@@ -91,7 +100,6 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 <td>
 <div id="retreivedetailschilddiv" >
 <s:set var="scn" value="%{screenName}" />
-<s:property value="#scn"/> 
 <s:if test='#scn eq "frmRFQ"'>
 <jsp:include page="pages/rfqvendor.jsp" />
 </s:if>

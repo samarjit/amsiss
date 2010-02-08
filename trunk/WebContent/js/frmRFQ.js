@@ -1,7 +1,7 @@
 function populate()
 {
-	//alert("This alert box was called with the onload event");	
-
+	alert("This alert box was called with the onload event");	
+	fnAdjustTableWidth();
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
 		url=url+"&whereClause="+ whereClause;		
@@ -75,7 +75,6 @@ function requestCallBack(p){
 	}
 	
 	disable_fields();
-	fnAdjustTableWidth();
 	populateVendors();
 	
 	createVendorDropdownAjax();
@@ -379,10 +378,35 @@ function submitScreenFlowactivity(){
 	location.href = url;
 		
 	}
+function showerror(p){
+	//jQuery('#errormsgdiv').css("display","none");
+	jQuery('#errormsgdiv').html("<p>Error:"+p+"</p>");
+	var selectedEffect = 'clip';
+	var options = {};
+	jQuery("#errormsgdiv").show(selectedEffect,options,500,callback);
+	function callback() {
+//		setTimeout(function(){
+//			jQuery("#errormsgdiv:visible").hide(selectedEffect,options,500,null);
+//		}, 5000); 
+	}
+}
+function showalert(p){
+		//jQuery('#alertmsgdiv').css("display","none");
+		jQuery('#alertmsgdiv').html("<p>Error:"+p+"</p>");
+		var selectedEffect = 'clip';
+		var options = {};
+		jQuery("#alertmsgdiv").show(selectedEffect,options,500,callback);
+		function callback() {
+			setTimeout(function(){
+				jQuery("#alertmsgdiv:visible").hide(selectedEffect,options,500,null);
+			}, 5000); 
+		}
+	}
+
+ 
 
 function populateVendors(){
 	var url = ctxpath+"/vendormap.action?command=selectall"+"&rfqid="+document.getElementById("rfqid").value+"";
-	//alert("populating:"+url);
 	sendAjaxGet(url, popvendorcallback);
 }
 function deleteVendor(vendorid){
@@ -398,7 +422,7 @@ function deleteVendor(vendorid){
  */
 function popvendorcallback(parm){
 	if(/^ERROR/.test(parm)){
-		alert(parm.substring(6));
+		showerror(parm.substring(6));
 		return;
 	}
 	jQuery(document.getElementById("vendorlist")).html(parm);
@@ -412,7 +436,7 @@ function popvendorcallback(parm){
 		jQuery("#rfqstatus").val(rfqStatus);
 		
 	if(error != "" && typeof(error )!= 'undefined')	{
-	alert("here");	alert(error);
+	alert("here");	showerror(error);
 		return;
 	}
 	

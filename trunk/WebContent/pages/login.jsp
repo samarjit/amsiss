@@ -12,6 +12,7 @@
 <title>Login</title>
 <%String ctxstr = request.getContextPath(); %>
 <link rel="stylesheet" href="<%=ctxstr %>/css/login.css" type="text/css" />
+<link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
 <STYLE>
 @import "<%=ctxstr %>/css/button.css";
 </STYLE>
@@ -23,11 +24,14 @@ document.getElementById("formId0").submit();
 </SCRIPT>
 <body>
 <br />
-
-<div id="errormsgdiv" name="">
-${param.errormsg}
-</div>
-
+ 
+		 
+<c:if test="${not empty param.errormsg}">		
+<div id="errormsgdiv" class="ui-state-error ui-corner-all"  style="padding: 0pt 0.7em;">
+<p><span style="float: left;margin-left: 0.3em;  margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
+${param.errormsg}</p>
+</div> 
+</c:if>
 <br/>
 <FORM METHOD="GET" ACTION="${pageContext.servletContext.contextPath}/ScreenFlowControllerServlet" id="formId0">
 <input type="hidden" name="screenflowname" value="loginflow" />
