@@ -25,7 +25,7 @@ h3 {
 }
 p, ul, ol {
 line-height:240%;
-margin-top:0;
+margin:0;
 text-align:justify;
 }
 ul, ol {
