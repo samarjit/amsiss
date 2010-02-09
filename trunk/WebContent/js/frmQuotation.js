@@ -186,6 +186,7 @@ function quotSave() {
 
 	if(screenAction == "insert"){
 		//alert("in insert");
+		document.getElementById("quotationid").value = "AUTOGEN_SEQUENCE_ID";	
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmQuotation";
 		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
