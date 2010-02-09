@@ -6,7 +6,7 @@ import java.util.Map;
 public class RequestBL implements BaseBL{
 
 	@Override
-	public HashMap activitySubmit(Map hm) {
+	public HashMap preSubmitProcessBL(Map hm) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -60,6 +60,12 @@ public class RequestBL implements BaseBL{
 
 	@Override
 	public HashMap preInsertProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap postSubmitProcessBL(Map hm) {
 		// TODO Auto-generated method stub
 		return null;
 	}
