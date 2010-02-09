@@ -3,12 +3,18 @@ package workflow;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.SessionAware;
+
+import businesslogic.BaseBL;
 
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.Workflow;
@@ -18,6 +24,7 @@ import com.opensymphony.workflow.loader.WorkflowDescriptor;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
+import dao.CrudDAO;
 import dto.ApplicationDTO;
 import dto.UserDTO;
 
@@ -37,7 +44,7 @@ private Map<String, String[]> parameter;
 
 private String create;
 private String activityname;
-
+private HashMap retBLhm = null;
 private String navigateto;
 
 private String action;
@@ -98,6 +105,7 @@ public String execute1(){
 	String returnStr=SUCCESS;
 	UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
 	String url=""; 
+	String decision=null;
 	try {
 		if (create != null) {
 			if (activityname != null && !"".equals(activityname)) {
@@ -106,7 +114,7 @@ public String execute1(){
 				//String appid = wflBean.getNewApplicationId();
 				String WflName = wflBean.getSuitableWorkflowName(activityname);
 				//wflid = wflBean.workflowInit(appid, WflName, null);
-				ArrayList<String> hmActions = wflBean.getNextScrFlowActions(WflName, ""); //rest of the places wflid = WflName
+				ArrayList<String> hmActions = wflBean.getNextScrFlowActions(WflName, "",decision); //rest of the places wflid = WflName
 				if ("".equals(url) && hmActions.size() > 0) {
 					String actionname = (String) hmActions.get(0);
 					url = wflBean.getScreenId(actionname);
@@ -142,14 +150,16 @@ public String execute1(){
 //				} catch (WorkflowException e) {
 //					e.printStackTrace();
 //				}
-				wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'S' for started
+				preSubmitProcessBL(screenName);
+				wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
+				//postSubmitProcessBL(screenName);
 			} else {
 				debug(5, "WorkflowAC:doString is null");
 			}
 			
 			debug(1, "AppId:" + appid+ "  screenflowid:" + wflid+ " doString:(expecting CreateRequest, RFQ etc..)" + doString + "  ");
 
-			ArrayList<String> hmActions = wflBean.getNextScrFlowActions(wflid, doString);
+			ArrayList<String> hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
 			if ("".equals(url) && hmActions.size() > 0) {
 				String actionname = (String) hmActions.get(0);
 				url = wflBean.getScreenId(actionname);
@@ -177,13 +187,42 @@ public String execute1(){
 	}
 	redirecturl =  "/template1.action?screenName=frmRequestList";
 	
-	redirecturl =url;
+	//redirecturl =url;
 	if("".equals(redirecturl))redirecturl ="/pages/workflowcompleted.jsp";
 	returnStr = "flowcontroller";
 	return returnStr;	
 }
 
 
+
+private void preSubmitProcessBL(String screenName) {
+
+	Class aclass = null;
+	CrudDAO cd = new CrudDAO();
+	String businessLogic = cd.getBusinessLogicName(screenName);
+	HttpServletRequest servletRequest =  ServletActionContext.getRequest();
+	try {
+		if (businessLogic != null && !"".equals(businessLogic)) {
+			aclass = Class.forName(businessLogic);
+			BaseBL basebl = (BaseBL) aclass.newInstance();					
+			Map buslogHm = new HashMap();
+			Map map = parameter;			
+			buslogHm = map;
+			UserDTO usr = (UserDTO) (session.get("userSessionData"));
+			String id = usr.getUserid();
+			//System.out.println("ID"+id);
+			buslogHm.put("userDTO", usr);		
+			retBLhm = basebl.preSubmitProcessBL(buslogHm);
+		}
+		else{
+			retBLhm.put("error", "Method not found");
+		}
+	} catch (Exception e) {
+		debug(1,"Businesslogic not found");
+		e.printStackTrace();
+	}
+	
+}
 
 /**
  * /workflow.action?activityname=CR&create=true
