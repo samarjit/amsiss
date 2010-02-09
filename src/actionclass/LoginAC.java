@@ -31,6 +31,7 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 	private HttpServletRequest request;
 	private String username;
 	private String userid;
+	private String password;
 	 
 	public String getUserid() {
 		return userid;
@@ -62,7 +63,7 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 		ArrayList<String> arwflId= null;
 		HttpSession session = request.getSession(true);
 		
-		if( request.getParameter("userid") == null ){
+		if( request.getParameter("userid") == null ||  request.getParameter("password") == null){
 			 addActionError("Enter User ID!");
 			return ERROR;
 		}else{
@@ -116,6 +117,14 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 	public void setServletRequest(HttpServletRequest req) {
 		request = req;
 		
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 }
