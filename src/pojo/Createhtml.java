@@ -167,6 +167,14 @@ public class Createhtml {
 					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" />";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
+				
+				if("PASSWORD".equalsIgnoreCase(htmlelm)){
+					elmStr = lblname;
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					elmStr = "<input type=\"password\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" />";
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+				}
+				
 				if("DROPDOWN".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
