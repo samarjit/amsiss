@@ -32,6 +32,8 @@ import businesslogic.BaseBL;
 
 public class ScreenFlow {
 	boolean initialized = false;
+	HashMap propertyset ;
+	
 	public ScreenFlow() {
 		super();
 		if(!initialized)init();
@@ -48,6 +50,7 @@ private void init(){
 	initialized = true;
 	URL  st =  ScreenFlow.class.getResource("/scrflowxml/screenflowfactory.xml");
 	Document doc = null;
+	propertyset = new HashMap();
 	workflowlocationcache = new HashMap<String, String>();
 	try {
 		doc = parserXML(st.getFile());
@@ -72,7 +75,7 @@ private void init(){
 	}
 }
 
-public ArrayList<String> getNextActions(String scrFlowName, String currentAction){
+public ArrayList<String> getNextActions(String scrFlowName, String currentAction, String decision){
 	ArrayList<String> retar = new ArrayList<String>();
 	String workflowFile = 	ScreenFlow.workflowlocationcache.get(scrFlowName);
 	String transitTo ="";
@@ -203,14 +206,27 @@ public ArrayList<String> getNextActions(String scrFlowName, String currentAction
 					 throw new Exception("element not found");
 				 }
 				  NodeList descNodes = currentElement.getChildNodes();
+				  
+				 // if(currentElement.getNodeName().equals("decision")){
+					  
+				  //}
+				  
 				  for(int i=0;i<descNodes.getLength();i++){
 					  if(descNodes.item(i).getNodeType() == Document.ELEMENT_NODE){
 						  Element desElm = (Element) descNodes.item(i);
 						  if(desElm.getNodeName().equals("transition")){
 							  if(desElm.getAttribute("to") != null  &&   desElm.getAttribute("to").length() > 1){
 								  transitTo = desElm.getAttribute("to");
-								  retar.add (transitTo.trim());
-								  
+								  if(decision != null){
+									  String action = desElm.getAttribute("name");
+									  if(action.equals(decision)){
+										  retar.add (transitTo.trim());  
+									  }	
+									  continue;
+								  }else{
+									  retar.add (transitTo.trim());  
+								  }
+								  							  								  
 							  }
 							  
 						  }
@@ -342,7 +358,7 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ScreenFlow scf = new ScreenFlow();
 		scf.init();
-		System.out.println("NextAction:"+scf.getNextActions("scrrfqwfl", ""));
+		System.out.println("NextAction:"+scf.getNextActions("scrrfqwfl", "RRFApproval", "rejected"));
 		System.out.println("Current Screen Name:"+scf.getActionScreenName("newwfl", "start-state1"));
 		System.out.println("BusinessLogic:"+scf.getBusinessLogic("loginflow", ""));
 		String className = scf.getBusinessLogic("loginflow", "start");
