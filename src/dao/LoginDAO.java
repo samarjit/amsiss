@@ -61,5 +61,31 @@ public class LoginDAO {
 		}
 		return userName;
 	}
+
+	public String getPassword(String userId) {
+		String password = null;
+		String SQL = "select PASSWORD from AMS_EMPLOYEE where EMPID = '" + userId+"'";
+		CachedRowSet crs  = null;
+		DBConnector db = new DBConnector();
+		try {
+			crs = db.executeQuery(SQL);
+			if(crs.next())
+				password  = crs.getString("PASSWORD");
+		} catch (SQLException e) {
+			debug(5,"PASSWROD NOT FOUND:"+e.getMessage());
+		}finally{
+			if(crs != null){
+				try {
+					crs.close();
+				} catch (SQLException e) {
+					debug(5,"DB Close() failed:"+e.getMessage());
+					e.printStackTrace();
+				}
+				crs = null;
+			}
+		}
+		
+		return password;
+	}
 	
 }
