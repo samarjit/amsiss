@@ -168,21 +168,21 @@ function insertData() {
 
 
 function rrfSubmit() {
-	alert("In rrfsubmit  !!");
+	//alert("In rrfsubmit  !!");
 
 	//var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
 	var applicationid = document.getElementById("rfqid").value;
-	alert(applicationid);
+	//alert(applicationid);
 	
 	//var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	//var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	var actionid =  document.getElementById("wflactiondesc").value;
 	var wflid= document.getElementById("wflid").value;
 	var rrfid= document.getElementById("rrfid").value;
-	alert(rrfid);
+	//alert(rrfid);
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmRRF"+"&rrfid="+ rrfid ;
-	alert(url);
+	//alert(url);
 	location.href = url;
 	//prepareInsertData();
 }
