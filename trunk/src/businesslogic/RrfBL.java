@@ -1,8 +1,16 @@
 package businesslogic;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.naming.InitialContext;
 import javax.sql.rowset.CachedRowSet;
 
 import dbconn.DBConnector;
@@ -18,12 +26,7 @@ public class RrfBL implements BaseBL{
 		}
 	}
 	
-	@Override
-	public HashMap activitySubmit(Map hm) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public HashMap jsrpcProcessBL(Map buslogHm, String rpcid) {		
 		return (HashMap) buslogHm;
@@ -46,6 +49,82 @@ public class RrfBL implements BaseBL{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	@Override
+	/**
+	 * update the status of rrf to PENDAPPROVAL
+	 * 
+	 */
+	public HashMap preSubmitProcessBL(Map buslogHm) {
+		System.out.println("In rrf submit");
+		
+		//update the status of rrf.
+		String[] rrfidarr = (String[]) buslogHm.get("rrfid");
+		if(rrfidarr == null)
+			return (HashMap) buslogHm;
+		String rrfid = (String)(rrfidarr[0]);
+		debug(1, rrfid);
+		String SQL = "update ams_rrf set rrf_status='PENDAPPROVAL' where rrf_id= ? ";
+
+		CachedRowSet crs = null;
+		try {
+			DBConnector db = new DBConnector();
+			PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+			arPrepstmt.add(DataType.STRING, rrfid);			
+			debug(1,arPrepstmt.toString(SQL));
+			
+			crs = db.executePreparedQuery(SQL, arPrepstmt );
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (crs != null) {
+				try {
+					crs.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		
+		//send mail to approver - Not Working--
+		//boolean res = true;
+		/*InitialContext ic;
+		String snName = "java:comp/env/mail/MyMailSession";
+		Session session = null;		
+		try {
+			ic = new InitialContext();
+			session = (Session) ic.lookup(snName);
+		} catch (Exception e) {
+			debug(5, "Exception: JNDI failed!");
+		}
+		if (session == null) {
+			debug(0, "Using non JNDI way");
+			Properties props = System.getProperties();
+			props.put("mail.from", "admin@hp.com");
+			session = Session.getInstance(props, null);
+		}
+		Message msg = new MimeMessage(session);
+		try {
+			msg.setSubject("RRF For approval");
+			msg.setSentDate(new Date());
+			msg.setFrom();
+			 
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(
+					"mgr@mydomain.com", false));
+			msg.setContent("RRF for approval","text/html");
+			Transport.send(msg);
+
+			debug(1, "Email send to:" + "mgr@mydomain.com" + msg.getSubject() + " from:"
+					+ "admin@mydomain.com" + " sub:" + msg.getSubject());
+		} catch (Exception e) {
+			debug(5, "Exception in sending mail!");
+			e.printStackTrace();
+			//res = false;
+		}		*/
+		
+		return (HashMap)buslogHm;		
+	}
+
 
 	@Override
 	/**
@@ -126,6 +205,12 @@ public class RrfBL implements BaseBL{
 
 	@Override
 	public HashMap preInsertProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap postSubmitProcessBL(Map hm) {
 		// TODO Auto-generated method stub
 		return null;
 	}
