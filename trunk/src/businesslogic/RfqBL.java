@@ -16,8 +16,8 @@ public class RfqBL implements BaseBL {
 		}
 	}
 	@Override
-	public HashMap activitySubmit(Map hm) {
-		// TODO Auto-generated method stub
+	public HashMap preSubmitProcessBL(Map hm) {
+		//System.out.println("In rfqsubmit()");
 		return null;
 	}
 
@@ -104,6 +104,11 @@ public class RfqBL implements BaseBL {
 	}
 	@Override
 	public HashMap preInsertProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public HashMap postSubmitProcessBL(Map hm) {
 		// TODO Auto-generated method stub
 		return null;
 	}
