@@ -42,7 +42,7 @@ ${param.errormsg}</p>
 <TR><TH colspan="2" >Login</TH></TR></thead>
 <tr><td>User ID</td><td><input type="text" name="userid"  /></td></tr>
 <tr><td>Password </td><td>
-<input type="text" value="" name="password" /> </td></tr>
+<input type="password" value="" name="password" /> </td></tr>
 <tr><td><button href="#" class="button"   onclick="javascript:document.forms[0].reset();this.blur();" ><span>Reset</span></button> 
 </td><td><button href="#" class="button"   onclick="fnsubmit();this.blur();" ><span>Login</span></button></td></tr>
 </TABLE> 
