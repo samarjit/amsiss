@@ -21,4 +21,10 @@ public class Login {
 		
 	}
 	
+	public String getPassword(String userId) {
+		LoginDAO ldao = new LoginDAO();
+		return ldao.getPassword(userId);
+		
+	}
+	
 }
