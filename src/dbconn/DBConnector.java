@@ -275,7 +275,7 @@ public int executePreparedUpdate(String qry,PerpstmtDTOArray arPrepstmt) throws 
 	 */
 	public static void main(String[] args) {
 		try{
-		CachedRowSet crs = new DBConnector().executeQuery("select empid,empname from request");
+		CachedRowSet crs = new DBConnector().executeQuery("select empid,empname from ams_request");
 		while(crs.next()){
 	        System.out.print("Name:"+crs.getString("empid"));
 	        System.out.print(",Breanch:"+crs.getString("empname"));	     
