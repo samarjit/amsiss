@@ -46,7 +46,7 @@ function rrfCallBack(p){
 			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
 			//alert(comStr);
 			//alert(comVal);
-			if(comStr == "status" && (comVal == "APPROVED" || comVal == "PENDAPRVL")){
+			if(comStr == "status" && (comVal == "APPROVED" || comVal == "PENDAPPROVAL")){
 				document.getElementById("modify").disabled=true;
 				document.getElementById("delete").disabled=true;
 				document.getElementById("submit").disabled=true;				
@@ -168,7 +168,28 @@ function insertData() {
 
 
 function rrfSubmit() {
-	prepareInsertData();
+	alert("In rrfsubmit  !!");
+
+	//var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
+	var applicationid = document.getElementById("rfqid").value;
+	alert(applicationid);
+	
+	//var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	//var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var actionid =  document.getElementById("wflactiondesc").value;
+	var wflid= document.getElementById("wflid").value;
+	var rrfid= document.getElementById("rrfid").value;
+	alert(rrfid);
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmRRF"+"&rrfid="+ rrfid ;
+	alert(url);
+	location.href = url;
+	//prepareInsertData();
+}
+
+function rrfCancel() {
+	alert("cancel");
+	//prepareInsertData();
 }
 
 function rrfSave() {
@@ -186,6 +207,7 @@ function rrfSave() {
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;
 	if(screenAction == "insert"){
+		document.getElementById("rrfid").value = "AUTOGEN_SEQUENCE_ID";
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRRF";
 		//prompt("url",url);	
 		url = url + "&quotationid=" + document.getElementById("rrfquotationid").value;;
