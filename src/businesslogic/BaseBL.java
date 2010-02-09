@@ -6,7 +6,8 @@ import java.util.Map;
 
 public interface BaseBL extends Serializable {
 HashMap  processRequest(Map buslogHm);
-HashMap activitySubmit(Map hm);
+HashMap preSubmitProcessBL(Map hm);
+HashMap postSubmitProcessBL(Map hm);
 HashMap preRetreiveProcessBL(Map buslogHm);
 HashMap postRetreiveProcessBL(Map buslogHm);
 HashMap postInsertProcessBL(Map buslogHm);
