@@ -4,20 +4,12 @@
 
 
 	<start-state name="RFQCreate">
-		<transition to="SendRFQ"></transition>
+		<transition to="CreateRRF"></transition>
 	</start-state>
 
 
-	<task-node name="CompareQuotation">
-		<transition to="CreateRRF"></transition>
-	</task-node>
-
-	<task-node name="SendRFQ">
-		<transition to="CompareQuotation"></transition>
-	</task-node>
-
 	<task-node name="CreateRRF">
-		<transition to="CreatePO"></transition>
+		<transition to="RRFApproval"></transition>
 	</task-node>
 
 	<task-node name="CreatePO">
@@ -35,6 +27,12 @@
 	<task-node name="Allocate">
 		<transition to="end-state1"></transition>
 	</task-node>
+
+	<decision name="RRFApproval">
+		<handler></handler>
+		<transition to="CreatePO" name="approved"></transition>
+		<transition to="CreateRRF" name="rejected"></transition>
+	</decision>
 
 
 	<end-state name="end-state1"></end-state>
