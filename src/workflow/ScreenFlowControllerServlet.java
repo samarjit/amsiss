@@ -37,74 +37,82 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 
 	//currentPageName
     //flowname
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String pageaction = request.getParameter("currentaction");
-		String flowName = request.getParameter("screenflowname");
-		String businessLogic = scrfl.getBusinessLogic(flowName,pageaction);
-		String userid= null;
-		Class aclass = null;
-		String url = "";
-		try {
-			UserDTO usr = new UserDTO();
-			HttpSession session = request.getSession(true);
-			if(session.getAttribute("userSessionData") ==null){
-				if( request.getParameter("userid") == null ){
-					  
-					 System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Error loggin in");
-				}else{
-					System.out.println("****************************************************Loggin in");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String pageaction = request.getParameter("currentaction");
+    	String flowName = request.getParameter("screenflowname");
+    	String businessLogic = scrfl.getBusinessLogic(flowName,pageaction);
+    	
+    	Class aclass = null;
+    	String url = "";
+    	HashMap  retBLhm = null;
+    	try {
+    		UserDTO usrDTO = new UserDTO();
+    		HttpSession session = request.getSession(true);
+    		Login lin = new Login();
+    		if(session.getAttribute("userSessionData") ==null){
+    			if (businessLogic != null && !"".equals(businessLogic)) {
+    				aclass = Class.forName(businessLogic);
+    				BaseBL basebl = (BaseBL) aclass.newInstance();
+    				Map  buslogHm = new HashMap ();
 
-					Login lin = new Login();
-					userid = request.getParameter("userid");
-					usr.setRoleid(lin.getUserRole(userid));
-					usr.setUsername(lin.getUserName(userid));
-					usr.setUserid(userid);
-					debug("roleid:"+usr.getRoleid());
-					debug("UserId:"+usr.getUserid());
-					debug("User Name:"+usr.getUsername());
-					session.setAttribute("userSessionData", usr);
-					GenerateMenu gen = new GenerateMenu();
-					StringBuffer buf = gen.retrieveMenu(usr.getRoleid());
-					System.out.println("roleeeeee "+usr.getRoleid());
-					String menu = buf.toString();
-					session.setAttribute("menu", menu);
-				}
-			}
-			if (businessLogic != null && !"".equals(businessLogic)) {
-				aclass = Class.forName(businessLogic);
-				BaseBL basebl = (BaseBL) aclass.newInstance();
-				Map  buslogHm = new HashMap ();
-				 
-				Map map = request.getParameterMap();
-				Iterator iter = map.entrySet().iterator();
-				while (iter.hasNext()) {
-				Entry n = (Entry)iter.next();
-				String key = n.getKey().toString();
-				String values[] = (String[]) n.getValue();
-				buslogHm.put(key,values);
-				} 
-				HashMap  retBLhm = null;
-				retBLhm = basebl.processRequest(buslogHm);
-			}
-		ArrayList<String> nextaction = scrfl.getNextActions("loginflow", pageaction);
-		ScrFlowNode scrflow = scrfl.populateScrFlowNode(flowName, pageaction);
-		
-		//Currently no decision making is supported
-		url = scrflow.getDescription();
-		 
-		} catch (ClassNotFoundException e) {
-			debug(this.getServletName()+" "+e.toString());
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			debug(this.getServletName()+" "+e.toString());
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			debug(this.getServletName()+" "+e.toString());
-			e.printStackTrace();
-		}
-		url = request.getContextPath() + "/"+ url;
-		response.sendRedirect(url) ;
-	}
+    				Map map = request.getParameterMap();
+    				Iterator iter = map.entrySet().iterator();
+    				while (iter.hasNext()) {
+    					Entry n = (Entry)iter.next();
+    					String key = n.getKey().toString();
+    					String values[] = (String[]) n.getValue();
+    					buslogHm.put(key,values);
+    				} 
+
+    				retBLhm = basebl.processRequest(buslogHm);
+    			}
+
+    			ArrayList<String> nextaction = scrfl.getNextActions("loginflow", pageaction, null);
+    			ScrFlowNode scrflow = scrfl.populateScrFlowNode(flowName, pageaction);
+
+    			if(retBLhm.get("error")!= null){
+    				url = "/pages/login.jsp?errormsg="+(String) retBLhm.get("error");
+    			}else{
+    				
+    				String userid= request.getParameter("userid");
+    		    	//String password= request.getParameter("password");
+    		    	    				
+    				usrDTO.setRoleid(lin.getUserRole(userid));
+    				usrDTO.setUsername(lin.getUserName(userid));
+    				usrDTO.setUserid(userid);
+
+    				debug("roleid:"+usrDTO.getRoleid());
+    				debug("UserId:"+usrDTO.getUserid());
+    				debug("User Name:"+usrDTO.getUsername());
+
+    				session.setAttribute("userSessionData", usrDTO);
+    				GenerateMenu gen = new GenerateMenu();
+    				StringBuffer buf = gen.retrieveMenu(usrDTO.getRoleid());
+    				System.out.println("roleeeeee "+usrDTO.getRoleid());
+    				String menu = buf.toString();
+    				session.setAttribute("menu", menu);
+    				url = scrflow.getDescription();	
+    			}
+    		}else{
+    			ArrayList<String> nextaction = scrfl.getNextActions("loginflow", pageaction, null);
+    			ScrFlowNode scrflow = scrfl.populateScrFlowNode(flowName, pageaction);
+    			url = scrflow.getDescription();	
+    		}
+
+    	} catch (ClassNotFoundException e) {
+    		debug(this.getServletName()+" "+e.toString());
+    		e.printStackTrace();
+    	} catch (InstantiationException e) {
+    		debug(this.getServletName()+" "+e.toString());
+    		e.printStackTrace();
+    	} catch (IllegalAccessException e) {
+    		debug(this.getServletName()+" "+e.toString());
+    		e.printStackTrace();
+    	}
+
+    	url = request.getContextPath() + "/"+ url;
+    	response.sendRedirect(url) ;
+    }
 
 	 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
