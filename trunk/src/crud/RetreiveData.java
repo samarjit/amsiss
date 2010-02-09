@@ -68,7 +68,7 @@ public class RetreiveData  {
 				try {
 					//replace referenced whereClause
 					sg  = replaceRefWhereClause(sg,tempData);
-					debug(1,"Retrieve query:" + sg);
+					debug(1,"Retrieve query ("+panelName+"):" + sg);
 					crs = cd.executeRetrieveQuery(sg);
 					htmlTemp = "";
 					boolean firstItr = true;
