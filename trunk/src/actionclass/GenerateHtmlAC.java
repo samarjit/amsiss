@@ -1,4 +1,6 @@
 package actionclass;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -26,6 +28,21 @@ private String cssname;
 private String jsname;
 private String panelFieldsWhereClause;
 private String screenMode;
+private String ajaxPopulate = "";
+private InputStream inputStream;
+
+public String getAjaxPopulate() {
+	return ajaxPopulate;
+}
+public void setAjaxPopulate(String ajaxPopulate) {
+	this.ajaxPopulate = ajaxPopulate;
+}
+public InputStream getInputStream() {
+	return inputStream;
+}
+public void setInputStream(InputStream inputStream) {
+	this.inputStream = inputStream;
+}
 
 private void debug( int priority,String s){
 	if(priority > 0)
@@ -166,6 +183,13 @@ public void setPassword(String password) {
 		 //setDataPanel(htmlc.makehtml("panelFields"));
 		 //setButtonPanel(htmlc.makehtml("buttonPanel"));
 		 List<String> lstPanels =  htmlc.getPanels(screenName);
+		 if(ajaxPopulate.equalsIgnoreCase("true")){
+			 String result =  htmlc.makehtml(screenName, lstPanels.get(0));
+		        inputStream = new StringBufferInputStream(result);
+		        return "populate";
+
+			 
+		 }
 		 LinkedHashMap<String,String> arPanelData = new LinkedHashMap<String, String>();
 		 for(String panelName:lstPanels){
 			debug(0,"##"+panelName);
