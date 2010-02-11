@@ -13,19 +13,29 @@
 @import "<%=ctxstr %>/css/header.css";
 </style>
 <script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
-
+<script language="javascript" src="<%=request.getContextPath() %>/js/jquery.js"></script>
+<script language="javascript" src="<%=request.getContextPath() %>/js/json2.js"></script>
+<script language="javascript" src="<%=request.getContextPath() %>/js/encoder.js"></script>
 
 <s:property value="jsname" escape="false"/>
 <link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
 
 <s:url var="retriveurl" value="/retreivedetails.action" />
+<s:url var="prepopulateurl" value="/prepopulate.action" />
 <s:url var="inserturl" value="/insertdata.action" />
 <s:url var="updateurl" value="/updatedata.action" />
 <s:url var="deleteurl" value="/deletedata.action" />
+<s:url var="generateurl" value="/template1.action" />
+<s:url var="rpcurl" value="/jsrpc.action" />
+
+
 
 <%String ctxpath=request.getContextPath(); %>
-<script language="javascript" >
+<script language="javascript">
 var retriveurlpart='<s:property value="%{#retriveurl}"/>';
+var jsrpcurlpart='<s:property value="%{#rpcurl}"/>';
+var generateurlpart='<s:property value="%{#generateurl}"/>';
+var prepopulateurlpart='<s:property value="%{#prepopulateurl}"/>';
 var inserturlpart='<s:property value="%{#inserturl}"/>';
 var screenName= '<s:property value="%{#parameters.screenName}"/>';
 var updateurlpart='<s:property value="%{#updateurl}"/>';
@@ -124,6 +134,6 @@ function changestate(objthis){
 <button onclick="changestate(this)">+</button>
 <div id="retreivedetailsdiv" style="display:none">
 </div> <!-- close retreivedetailsdiv -->
-</div> <!-- id = page -->
+</div> 
 </body>
 </html>
