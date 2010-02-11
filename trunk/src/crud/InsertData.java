@@ -36,7 +36,7 @@ public class InsertData {
 		int insertResult = 0;
 		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
-		if (itrPanel.hasNext())
+		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
 			debug(0, "******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
@@ -46,6 +46,7 @@ public class InsertData {
 			String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
 			if(sg != null && !("".equals(sg))){
 				try {
+
 					String query = sg.replaceAll("AUTOGEN_SEQUENCE_ID", autogenId);
 					debug(1,"inserted successfully:"+query);
 					insertResult  = cd.executeInsertQuery(query);
@@ -63,6 +64,8 @@ public class InsertData {
 	}
 	
 	public String createInsertQuery(HashMap metadata,String scrname,String panelName, String insertClause) {
+		
+		System.out.println("*****************panelName*************** "+panelName);
 		String insertQry = "";
 		
 		CrudDAO cd = new CrudDAO();
@@ -90,6 +93,7 @@ public class InsertData {
 		}else {
 			debug(0, "Incomplete query was:"+"INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")");
 		}
+		System.out.println("*****************insert query*************** "+insertQry);
 		return insertQry;
 	}
 	
