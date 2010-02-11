@@ -1,6 +1,6 @@
 function populate()
 {
-	alert("This alert box was called with the onload event");	
+	//alert("This alert box was called with the onload event");	
 	fnAdjustTableWidth();
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
@@ -377,30 +377,6 @@ function submitScreenFlowactivity(){
 	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 	location.href = url;
 		
-	}
-function showerror(p){
-	//jQuery('#errormsgdiv').css("display","none");
-	jQuery('#errormsgdiv').html("<p>Error:"+p+"</p>");
-	var selectedEffect = 'clip';
-	var options = {};
-	jQuery("#errormsgdiv").show(selectedEffect,options,500,callback);
-	function callback() {
-//		setTimeout(function(){
-//			jQuery("#errormsgdiv:visible").hide(selectedEffect,options,500,null);
-//		}, 5000); 
-	}
-}
-function showalert(p){
-		//jQuery('#alertmsgdiv').css("display","none");
-		jQuery('#alertmsgdiv').html("<p>Error:"+p+"</p>");
-		var selectedEffect = 'clip';
-		var options = {};
-		jQuery("#alertmsgdiv").show(selectedEffect,options,500,callback);
-		function callback() {
-			setTimeout(function(){
-				jQuery("#alertmsgdiv:visible").hide(selectedEffect,options,500,null);
-			}, 5000); 
-		}
 	}
 
  

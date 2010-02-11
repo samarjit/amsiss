@@ -132,7 +132,6 @@ margin:0;
 padding:0;
 }
 #search input {
--x-system-font:none;
 border:medium none;
 float:left;
 font-family:Georgia,"Times New Roman",Times,serif;
@@ -430,6 +429,6 @@ text-transform:uppercase;
  }	
  
  #page TABLE TD{
- paddin:0px;
+ padding:0px;
  vertical-align: top; 
  }
