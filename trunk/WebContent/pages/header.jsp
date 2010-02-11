@@ -41,7 +41,7 @@ Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
 <div id="menu">
 <ul>
 ${sessionScope.menu}
-
+<li><a href="logout.action">Logout</a></li> 
 </ul>
 
 <br/>
