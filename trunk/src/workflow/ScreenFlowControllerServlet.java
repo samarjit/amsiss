@@ -37,6 +37,7 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 
 	//currentPageName
     //flowname
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String pageaction = request.getParameter("currentaction");
     	String flowName = request.getParameter("screenflowname");
