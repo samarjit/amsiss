@@ -12,13 +12,15 @@
 @import "<%=ctxstr %>/css/button.css";
 @import "<%=ctxstr %>/css/header.css";
 </style>
-<script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
+
 <script language="javascript" src="<%=request.getContextPath() %>/js/jquery.js"></script>
 <script language="javascript" src="<%=request.getContextPath() %>/js/json2.js"></script>
 <script language="javascript" src="<%=request.getContextPath() %>/js/encoder.js"></script>
-
+<script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
 <s:property value="jsname" escape="false"/>
 <link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
+
+
 
 <s:url var="retriveurl" value="/retreivedetails.action" />
 <s:url var="prepopulateurl" value="/prepopulate.action" />
