@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.Session;
 import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
@@ -67,12 +68,12 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 			 addActionError("Enter User ID!");
 			return ERROR;
 		}else{
+			
 			usr.setUserid(userid);
 			session.setAttribute("userSessionData", usr);
 			Login lin = new Login();
 			usr.setRoleid(lin.getUserRole(userid));
 			usr.setUsername(lin.getUserName(userid));
-			
 			WorkflowDAO wflDAO = new WorkflowDAO();
 			HashMap<String, ArrayList<String>> hmwflsess = wflDAO.getAvailableAction(usr.getUserid(),null);
 			
