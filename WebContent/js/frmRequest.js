@@ -2,9 +2,8 @@ function populate()
 {
 	alert(screenName);
 	if(screenName=='frmRequest'){
-		alert("hihihih");
-		var url = prepopulateurlpart+"?panelName=searchPanel&prepopulate=true&screenName="+screenName;
-		alert(url);
+		//var url = prepopulateurlpart+"?panelName=searchPanel&prepopulate=true&screenName="+screenName;
+		var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=createRequest";
 		sendAjaxGet(url, requestCallBack);
 		//alert("This alert box was called with the onload event");	
 	}
@@ -13,20 +12,49 @@ function populate()
 var screenMode = "insert";
 
 
+function requestCallBack(parm){
+	var jobj = JSON.parse(parm);
+	if(jobj.error != null ){
+	alert(jobj.error);return;
+	} 
+	document.getElementById("empid").value = jobj.empid;
+	
+	document.getElementById("empname").value = jobj.empname;
+	document.getElementById("reqdate").value = jobj.reqdate;
+	
+	var mgrid = (jobj.mgrid).split(",");
+	for(var i=0;i<mgrid.length;i++){
+		
+	AddSelectOption(document.getElementById("mgrid"),mgrid[i],mgrid[i],false);
+	}
+	
+
+		var ref_reqid = (jobj.REF_REQID).split(",");
+	for(var i=0;i<ref_reqid.length;i++){
+		
+	AddSelectOption(document.getElementById("refreqid"),ref_reqid[i],ref_reqid[i],false);
+	}
+	
+
+}
+
+
+
+
 function generatename(obj){
 	var selIndex = obj.selectedIndex;
 	var empid = obj.options[selIndex].value;
 	if(selIndex!=0){
-	var url = prepopulateurlpart+"?id="+empid+"&prepopulate=false&screenName="+screenName;
+		var url = jsrpcurlpart+"?screenName="+screenName+"&empid="+empid+"&rpcid=getManager";
 	sendAjaxGet(url, generaterequestname);
 	}
 }
 
 function generaterequestname(p){
-	alert(p);
-	document.getElementById("mgrname").value = p;	
+	var jobj = JSON.parse(p);
+	document.getElementById("mgrname").value = jobj.mgrname;	
 }
-
+ /*
 function generatecall(obj){
 	var selIndex = obj.selectedIndex;
 	alert(selIndex);
@@ -40,12 +68,43 @@ function generatecall(obj){
 function generaterequest(p){
 	
 	document.getElementById("retreivedetailschilddiv").innerHTML = p;	
-}
+} */
 
+function generatecall(obj){
+	var selIndex = obj.selectedIndex;
+	scrName = obj.options[selIndex].value;
+	if(selIndex!=0) {
+		if(scrName=='New Hardware'){
+         document.getElementById("NewHardware").style.display = "block";
+         document.getElementById("Software").style.display = "none";
+         document.getElementById("HardwareUpgrade").style.display = "none";
+
+    } 
+		if(scrName=="New Software"){
+			 document.getElementById("NewHardware").style.display = "none";
+	         document.getElementById("Software").style.display = "block";
+	         document.getElementById("HardwareUpgrade").style.display = "none";
+
+    }
+		
+		if(scrName== "Software Upgrade"){
+			 document.getElementById("NewHardware").style.display = "none";
+	         document.getElementById("Software").style.display = "block";
+	         document.getElementById("HardwareUpgrade").style.display = "none";
+
+   }
+		if(scrName=="Hardware Upgrade"){
+			 document.getElementById("NewHardware").style.display = "none";
+	         document.getElementById("Software").style.display = "none";
+	         document.getElementById("HardwareUpgrade").style.display = "block";
+	       
+	    }
+}
+}
 function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").Value = "";
 }
-
+/*
 function requestCallBack(p){
 	alert("Got from ajax:"+p);
 
@@ -109,7 +168,7 @@ function requestCallBack(p){
 
 	//disable_fields();
 
-}
+} */
 
 function AddSelectOption(selectObj, text, value, isSelected) 
 {
@@ -153,20 +212,17 @@ function reqSubmit() {
 function reqSave() {
 
 
-	//alert("in save ");	
-	alert(inserturlpart);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 
-	if(screenMode == "insert"){
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
 		prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=worlkflow&activityname=CR&create=true";
-		//prompt("url",url);
+		alert(url);
 		//add key:vlaue to url
 		sendAjaxGet(url, saveCallBack);
 
-	}
+	
 
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
@@ -224,7 +280,6 @@ function replacer(key, value) {
 
 function prepareInsertData() {
 
-	//alert("in prepare");
 	//var array = {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	var pclass = new Array();
@@ -233,13 +288,13 @@ function prepareInsertData() {
 	//alert(dataTable.length);		
 	for (var i=0; i<dataTable.length; i++) {
 
-		var query = "#panelsdiv #" + dataTable[i].id + " input";
+		var query = "#panelsdiv #" + dataTable[i].id + " :input";
 		var requestar = new Array();
-		//alert(query);
+	
 		var elem = 	jQuery(query); 
 		var j = 0;
 		jQuery.each(elem, function(index, item) {	
-
+		
 			var val = item.id;
 
 			if(item.type=="hidden" && val.substring(val.length-2,val.length)=='id'){
@@ -254,7 +309,6 @@ function prepareInsertData() {
 	var k = new Object();
 	k.json = pclass;
 	var myJSONText = JSON.stringify(k, replacer,"");
-	alert(myJSONText );	
 	return myJSONText;			
 }
 
