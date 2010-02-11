@@ -88,3 +88,28 @@ function isNumeric(form_value)
     else 
         return true; 
 } 
+
+function showerror(p){
+	//jQuery('#errormsgdiv').css("display","none");
+	jQuery('#errormsgdiv').html("<p>Error:"+p+"</p>");
+	var selectedEffect = 'clip';
+	var options = {};
+	jQuery("#errormsgdiv").show(selectedEffect,options,500,callback);
+	function callback() {
+//		setTimeout(function(){
+//			jQuery("#errormsgdiv:visible").hide(selectedEffect,options,500,null);
+//		}, 5000); 
+	}
+}
+function showalert(p){
+		//jQuery('#alertmsgdiv').css("display","none");
+		jQuery('#alertmsgdiv').html("<p>Error:"+p+"</p>");
+		var selectedEffect = 'clip';
+		var options = {};
+		jQuery("#alertmsgdiv").show(selectedEffect,options,500,callback);
+		function callback() {
+			setTimeout(function(){
+				jQuery("#alertmsgdiv:visible").hide(selectedEffect,options,500,null);
+			}, 5000); 
+		}
+	}

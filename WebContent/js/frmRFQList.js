@@ -167,7 +167,8 @@ function viewdetails(btnname){
 		}
 		else {
 			//alert("in view details");			
-			document.getElementById("formwhere").screenName.value = "frmRFQ";	
+			document.getElementById("formwhere").screenName.value = "frmRFQ";
+			document.getElementById("screenMode").value= "view";
 			//document.getElementById("formwhere").submit();
 		}
 		
