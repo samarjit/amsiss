@@ -215,8 +215,120 @@ public class RetreiveData  {
 		
 		return retrieveQuery;
 	}
+	
+	public String doRetrieveDatabyQuery(String scrName, String query) throws Exception{
+		CrudDAO cd = new CrudDAO();
+		List <String> lstPanelName = cd.findPanelByScrname(scrName);
+		HashMap<String,HashMap<String,String>> tempData = new HashMap<String, HashMap<String,String>>();
+		HashMap<String,String> tempPanelData = null;
+		HashMap metadata = null;
+		String tableHeader = "No data found";
+		String html = ""; //outer
+		String htmlTemp = "";
+		CachedRowSet crs = null;
 
+		//Fill this for every Panel
+			tempPanelData = new HashMap();
+			metadata = new HashMap();
+			Iterator itrPanel = lstPanelName.iterator();
+			
+			//For every panel in the screen create an XML table 
+			while (itrPanel.hasNext()){
+	
+		
+				String panelName = (String) itrPanel.next();
+				if(panelName.equalsIgnoreCase("buttonpanel"))continue;
+				cd.createRetrieveQueryPart1(metadata,scrName,panelName);
+			if (query != null && query.length() > 0) 	{
+				try {
+				
+					crs = cd.executeRetrieveQuery(query);
+					htmlTemp = "";
+					boolean firstItr = true;
+					String data = "";
+					String fname="";
+					
+					//Ideally this loop should run once in case of detail-data retrieval
+					while (crs.next()) {
+						htmlTemp += "\n<tr >";
+						if (firstItr) {
+							tableHeader = "\n<tr >";
+						}
+						System.out.println("hiii i am here");
+						if (metadata == null)
+							throw new Exception(
+									" Retreive Data : metadata null");
+						Iterator itrmetadata = metadata.keySet().iterator();
+						while (itrmetadata.hasNext()) {
+						    fname = (String) itrmetadata.next();
+							ListAttribute ls = (ListAttribute) metadata
+									.get(fname);
+							debug(0,"Fname=" + fname);
+							System.out.println("fname "+fname);
+						try{	data = crs.getString(fname);
+						
+						}catch(Exception e){
+							continue;
+						}
+							if(data == null)data="";
+							if (firstItr) {
+								tableHeader += "<th><div id=" + fname
+										+ " style='display:none'>" + ls
+										+ "</div>" + ls.getLblname() + "</th>";
+							}
+							htmlTemp += "<td id=" + fname + "> " + data + "</td>";
+							tempPanelData.put(fname, data);
+						}
+						if (firstItr) {
+							tableHeader += "</tr>";
+							firstItr = false;
+						}
+						htmlTemp += "</tr>";
+						
+						
+						
+						debug(0,htmlTemp);
+					} //while crs.next()
+					tempData.put(panelName, tempPanelData);
+				} catch (Exception e) {
+					 e.printStackTrace();
+					htmlTemp = "";
+					tableHeader = "No data found";
+				} finally {
+					try {
+						if(crs!=null)
+						crs.close();
+					} catch (Exception e) {
+						debug(5,e.getMessage());
+						e.printStackTrace();
+					}
+				}
+				html += "<table border=1 id='"+panelName+"'>" + tableHeader + htmlTemp + "</table>\n";
+			}else{// if sg.length >0
+				
+			}
+			}
+		return html;
+	}
 
+	public String doretrievedatabyname(String query){
+		CachedRowSet crs = null;
+		try {
+			DBConnector db = new DBConnector();
+			CrudDAO cd = new CrudDAO();
+			 crs =  cd.executeRetrieveQuery(query);
+			 if(crs.next()){
+				 return crs.getString(1);
+			 }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	
 	
