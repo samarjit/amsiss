@@ -14,9 +14,10 @@
 @import "<%=ctxstr %>/css/header.css"; 
 </style>
 </head>
-<script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
-<s:property value="jsname" escape="false"/>
 
+<s:property value="jsname" escape="false"/>
+<script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
+<link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
 <s:url var="url" value="/searchlist.action" />
 <script language="javascript" >
 var urlpart='<s:property value="%{#url}"/>';
@@ -25,7 +26,13 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 <body onload="search()">
 <%@ include file="pages/header.jsp" %>
 <div id="page">
- 
+ <div id="errormsgdiv" class="ui-state-error ui-corner-all"  class="ui-state-error ui-corner-all"  style="display:none;padding: 0pt 0.7em;">
+
+</div>
+<div id="alertmsgdiv" class="ui-state-highlight ui-corner-all"  class="ui-state-error ui-corner-all"  style="display:none;padding: 0pt 0.7em;">
+
+</div>
+
 <table> 
 <tr>
 <td>
