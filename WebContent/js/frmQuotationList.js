@@ -12,6 +12,8 @@ function search(){
 			url=url+'&squotationdate='+document.getElementById("squotationdate").value;
 		if(document.getElementById("squotationref"))
 			url=url+'&squotationref='+document.getElementById("squotationref").value;
+		if(document.getElementById("sdateofdelivery"))
+			url=url+'&sdateofdelivery='+document.getElementById("sdateofdelivery").value;
 						
 		sendAjaxGet(url,mycall);
 }
@@ -22,7 +24,17 @@ function mycall(p){
 	addSelectEvents();
 }
 
-
+jQuery(function() {
+	jQuery('#squotationdate').datepicker({
+		changeMonth: true,
+		changeYear: true
+	});
+	
+	jQuery('#sdateofdelivery').datepicker({
+		changeMonth: true,
+		changeYear: true
+	});
+});
 
 var selectedIdx = -1;
 
@@ -91,7 +103,8 @@ function viewdetails(btnname){
 				//alert(value);
 				//alert(btnname.id);
 				if(name == 'qtstatus' && value == 'RRFCREATED' && btnname.id=='createrrf' ){
-					alert("RRF Already created..");
+					//alert("RRF Already created..");
+					showerror("RRF Already created..");
 					return false;
 				}
 				//exit();
