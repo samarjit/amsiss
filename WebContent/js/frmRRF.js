@@ -17,6 +17,17 @@ function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").Value = "";
 }
 
+
+
+jQuery(function() {
+	jQuery('#rrfdate').datepicker({
+		changeMonth: true,
+		changeYear: true
+	});
+	
+});
+
+
 function rrfCallBack(p){
 	//alert("Got from ajax:"+p);	
 	document.getElementById("retreivedetailsdiv").innerHTML = p;	
@@ -181,14 +192,28 @@ function rrfSubmit() {
 	var rrfid= document.getElementById("rrfid").value;
 	//alert(rrfid);
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmRRF"+"&rrfid="+ rrfid ;
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmRRF"+"&rrfid="+ rrfid + "&action=submit"  ;
 	//alert(url);
 	location.href = url;
 	//prepareInsertData();
 }
 
 function rrfCancel() {
-	alert("cancel");
+	//alert("in rrf cancel");
+	var applicationid = document.getElementById("rfqid").value;
+	//alert(applicationid);
+	
+	//var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	//var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var actionid =  document.getElementById("wflactiondesc").value;
+	var wflid= document.getElementById("wflid").value;
+	var rrfid= document.getElementById("rrfid").value;
+	var qtid= document.getElementById("rrfquotationid").value;
+	//alert(rrfid);
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	var url = "scrworkflow.action?cancel=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmRRF"+"&rrfid="+ rrfid + "&qtid="+qtid  ;
+	//alert(url);
+	location.href = url;
 	//prepareInsertData();
 }
 
@@ -244,7 +269,7 @@ function saveCallBack(val) {
 	//show success message 
 	if(val < 0){
 		
-		alert("Error while saving! ");
+		alert("Could not save : Error Occured! ");
 	}
 	else{
 		if(screenAction == "modify"){
@@ -265,7 +290,7 @@ function deleteCallBack(val) {
 	//show success message 
 	if(val < 0){
 		
-		alert("Error while deleting! ");
+		showerror("Could not delete : Error Occured! ");
 	}
 	else{
 		location.href= ctxpath+"/template1.action?screenName=frmRRFList"
@@ -297,7 +322,7 @@ function prepareInsertData() {
 	
 	
 	if(document.getElementById("approvarid").value == 'select'){		
-		alert("Please enter Approver ID");
+		showerror("Please enter Approver ID");
 		exit();
 	}
 	
@@ -441,10 +466,10 @@ function makeWhereClause(){
 
 
 function submitactivity(){
-	alert("here in submit activity")
+	//alert("here in submit activity")
 	alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	alert(applicationid);
+	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
@@ -454,10 +479,10 @@ function submitactivity(){
 	}
 
 function submitScreenFlowactivity(){
-	alert("here in submit activity")
-	alert(wflcontrollerurl);
+	//alert("here in submit activity")
+	//alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	alert(applicationid);
+	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
