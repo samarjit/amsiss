@@ -17,6 +17,18 @@ function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").Value = "";
 }
 
+jQuery(function() {
+	jQuery('#quotationdate').datepicker({
+		changeMonth: true,
+		changeYear: true
+	});
+	
+	jQuery('#dateofdelivery').datepicker({
+		changeMonth: true,
+		changeYear: true
+	});
+});
+
 function quotationCallBack(p){
 	//alert("Got from ajax:"+p);
 	
@@ -180,7 +192,7 @@ function quotSave() {
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	//alert(document.getElementById("currency").value);
 	if(document.getElementById("currency").value == 'select'){		
-		alert("Please select currency");
+		showerror("Please select currency");
 		exit();
 	}
 
@@ -226,7 +238,7 @@ function saveCallBack(val) {
 	//show success message 
 	if(val < 0){
 		
-		alert("Error while saving! ");
+		showerror("Could not save : Error occured! ");
 	}
 	else{
 		
@@ -247,7 +259,7 @@ function deleteCallBack(val) {
 	//show success message 
 	if(val < 0){
 		
-		alert("Error while deleting! ");
+		showerror("Could not delete : Error occured! ");
 	}
 	else{
 		location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
@@ -289,7 +301,7 @@ function prepareInsertData() {
 	//alert(document.getElementById("currency").value);
 	
 	if(document.getElementById("currency").value == 'select'){		
-		alert("Please select currency");
+		showerror("Please select currency");
 		exit();
 	}
 	
@@ -441,10 +453,10 @@ function updateTotal() {
 }
 
 function submitactivity(){
-	alert("here in submit activity")
+	//alert("here in submit activity")
 	alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	alert(applicationid);
+	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
@@ -454,10 +466,10 @@ function submitactivity(){
 	}
 
 function submitScreenFlowactivity(){
-	alert("here in submit activity")
+	//alert("here in submit activity")
 	alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	alert(applicationid);
+	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
