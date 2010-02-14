@@ -22,6 +22,13 @@ function mycall(p){
 }
 
 
+jQuery(function() {
+	jQuery('#srrfdate').datepicker({
+		changeMonth: true,
+		changeYear: true
+	});
+	
+});
 
 var selectedIdx = -1;
 
