@@ -43,6 +43,7 @@ private String screenName;
 private Map<String, String[]> parameter;
 
 private String create;
+private String cancel;
 private String activityname;
 private HashMap retBLhm = null;
 private String navigateto;
@@ -173,11 +174,34 @@ public String execute1(){
 		} else if (navigateto != null) {
 //			ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
 //			HashMap<String, Integer> hmactions = appdto.getWflactions();
+			//wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
 			String pageName = navigateto;
 			url = wflBean.getScreenId(pageName);
 //			appdto.setCurrentAction(pageName);
 //			appdto.setCurrentActionId(hmactions.get(pageName));
 //			appdto.setWflid(wflid);
+			
+		} else if(cancel != null){
+			
+			wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
+			preSubmitProcessBL(screenName); 
+			ArrayList<String> hmActions = new ArrayList<String>();
+			if(retBLhm.get("nextAction") != null){
+				doString = (String) retBLhm.get("nextAction");
+				System.out.println("doString ##" + doString);
+				hmActions.add(doString);
+				url = wflBean.getScreenId(doString);
+			}
+			else{
+				hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
+				if ("".equals(url) && hmActions.size() > 0) {
+					String actionname = (String) hmActions.get(0);
+					url = wflBean.getScreenId(actionname);
+//					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
+//					appdto.setCurrentAction(actionname);
+				}
+			}
+			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
 			
 		}
 	} catch (Exception e) {
@@ -185,15 +209,23 @@ public String execute1(){
 		e.printStackTrace();
 		url="/pages/workflowerror.jsp";
 	}
-	redirecturl =  "/template1.action?screenName=frmRequestList";
+	//redirecturl =  "/template1.action?screenName=frmRequestList";
 	
-	//redirecturl =url;
+	redirecturl =url;
 	if("".equals(redirecturl))redirecturl ="/pages/workflowcompleted.jsp";
 	returnStr = "flowcontroller";
 	return returnStr;	
 }
 
 
+
+public String getCancel() {
+	return cancel;
+}
+
+public void setCancel(String cancel) {
+	this.cancel = cancel;
+}
 
 private void preSubmitProcessBL(String screenName) {
 
@@ -211,7 +243,7 @@ private void preSubmitProcessBL(String screenName) {
 			UserDTO usr = (UserDTO) (session.get("userSessionData"));
 			String id = usr.getUserid();
 			//System.out.println("ID"+id);
-			buslogHm.put("userDTO", usr);		
+			buslogHm.put("userDTO", usr);			
 			retBLhm = basebl.preSubmitProcessBL(buslogHm);
 		}
 		else{
@@ -223,6 +255,7 @@ private void preSubmitProcessBL(String screenName) {
 	}
 	
 }
+
 
 /**
  * /workflow.action?activityname=CR&create=true
