@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container width="633" height="485">
+<root-container width="615" height="434">
   <node name="RFQCreate" x="96" y="25" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
@@ -32,7 +32,6 @@
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="end-state1" x="438" y="397" width="132" height="36"/>
   <node name="RRFApproval" x="97" y="178" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
@@ -42,4 +41,5 @@
       <bendpoint w1="-34" h1="-52" w2="-57" h2="47"/>
     </edge>
   </node>
+  <node name="end-state1" x="438" y="397" width="132" height="36"/>
 </root-container>
