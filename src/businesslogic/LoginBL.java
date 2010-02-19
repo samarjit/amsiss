@@ -25,9 +25,8 @@ public class LoginBL implements BaseBL {
 		String password = null;
 		String[] usrnamearr = (String[]) buslogHm.get("userid");
 		if(usrnamearr == null)
-			error="Invalid user id";
-		else{
-					
+			error="Invalid user ID";
+		else{					
 			userid = (String)(usrnamearr[0]);
 			if(userid.equals("")){
 				error="Invalid User ID";
@@ -45,7 +44,7 @@ public class LoginBL implements BaseBL {
 						Login lin = new Login();
 						password = lin.getPassword(userid);						
 						if(password == null || (!password.equals(enterpassword))){
-							error="Invalid Input";
+							error="Invalid user name or passowrd";
 						}
 					}
 				}
