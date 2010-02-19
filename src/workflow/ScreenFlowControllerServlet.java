@@ -50,7 +50,7 @@ public class ScreenFlowControllerServlet extends HttpServlet {
     		UserDTO usrDTO = new UserDTO();
     		HttpSession session = request.getSession(true);
     		Login lin = new Login();
-    		if(session.getAttribute("userSessionData") ==null){
+    	//	if(session.getAttribute("userSessionData") ==null){
     			if (businessLogic != null && !"".equals(businessLogic)) {
     				aclass = Class.forName(businessLogic);
     				BaseBL basebl = (BaseBL) aclass.newInstance();
@@ -94,11 +94,11 @@ public class ScreenFlowControllerServlet extends HttpServlet {
     				session.setAttribute("menu", menu);
     				url = scrflow.getDescription();	
     			}
-    		}else{
+    		/*}else{
     			ArrayList<String> nextaction = scrfl.getNextActions("loginflow", pageaction, null);
     			ScrFlowNode scrflow = scrfl.populateScrFlowNode(flowName, pageaction);
     			url = scrflow.getDescription();	
-    		}
+    		}*/
 
     	} catch (ClassNotFoundException e) {
     		debug(this.getServletName()+" "+e.toString());
