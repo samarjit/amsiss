@@ -247,7 +247,7 @@ function saveCallBack(val) {
 			alert("Successfully saved your Quotation! ");
 		}
 		if(screenAction == "insert"){
-			location.href= ctxpath+"/template1.action?screenName=frmRFQList"
+			location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
 			alert("Successfully saved your Quotation! ");
 		}
 	}
