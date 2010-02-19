@@ -9,15 +9,17 @@ function search(){
 		url=url+'&srequesttype='+document.getElementById("srequesttype").value;
 	if(document.getElementById("srequeststatus"))
 		url=url+'&srequeststatus='+document.getElementById("srequeststatus").value;
-	if(document.getElementById("sitemid"))
-		url=url+'&sitemid='+document.getElementById("sitemid").value;
-	if(document.getElementById("sitemquantity"))
-		url=url+'&sitemquantity='+document.getElementById("sitemquantity").value;
+	if(document.getElementById("smanagerid"))
+		url=url+'&smanagerid='+document.getElementById("smanagerid").value;
+	if(document.getElementById("smanagername"))
+		url=url+'&smanagername='+document.getElementById("smanagername").value;
 	if(document.getElementById("sempid"))
 		url=url+'&sempid='+document.getElementById("sempid").value;
 	if(document.getElementById("sempname"))
 		url=url+'&sempname='+document.getElementById("sempname").value;
-					
+	if(document.getElementById("sdepartmentname"))
+		url=url+'&sdepartmentname='+document.getElementById("sdepartmentname").value;			
+	
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
@@ -34,83 +36,22 @@ function cleanUp() {
 	}
 }
 
-/*////////////////////////
-document.onclick = function(e){
-	var targ;
-	selectedIdx = -1;
-	cleanUp();
-
-	if (!e)
-	  {
-	  var e=window.event;
-	  }
-	if (e.target)
-	  {
-	  targ=e.target;
-	  }
-	else if (e.srcElement)
-	  {
-	  targ=e.srcElement;
-	  }
-	if (targ.nodeType==3) // defeat Safari bug
-	  {
-	  targ = targ.parentNode;
-	  }
-	var tname;
-	tname=targ.tagName;
-	var obj  = targ;
-	if(obj.tagName)
-	while( obj  != null && obj.tagName != "TR" && obj.tagName != "BODY"   ){
-	obj = obj.parentNode;
-	}
-	var flag = false;
-	var objtest = obj;
-	while( objtest  != null && objtest.tagName != "BODY"   ){
-	if(objtest.id == "searchdiv")flag=true;
-	objtest = objtest.parentNode;
-
-	}
-
-	if(obj != null && (obj.tagName == "tr" || obj.tagName == "TR" )  && flag ){
-//	  if(!(jQuery(obj).find("th").is("th")) ) {
-//	  selectedIdx  = obj.rowIndex;
-//	  obj.style.backgroundColor= "#a0b0a0";
-//	  alert("inside jquery");
-//	  }
-	  
-
-//	 prototype 
-//	var nodes = $A(obj.getElementsByTagName("TH"));
-//
-//			nodes.each(function(node){
-//					alert(node.nodeName + ': ' + node.innerHTML);
-//				});
-//	 
-	var arTH = obj.getElementsByTagName("TH");
-	 if(arTH.length == 0 ){
-		 selectedIdx  = obj.rowIndex;
-	  obj.style.backgroundColor= "#C5FF60";
-	 }
-
-	}
-
-	}
-*/
-function addSelectEvents(){
-	 
+function addSelectEvents()
+{
 	var srchdv = document.getElementById("searchdiv").getElementsByTagName("TR");
-	for (var i =0;i< srchdv.length;i++) {
-	if(srchdv[i].childNodes[0].tagName != "TH"){ 
-			srchdv[i].onclick=function(p){
-			 cleanUp();
-			 selectedIdx  = this.rowIndex;
+	for (var i =0;i< srchdv.length;i++) 
+	{
+		if(srchdv[i].childNodes[0].tagName != "TH")
+		{ 
+			srchdv[i].onclick=function(p)
+			{
+			  cleanUp();
+			  selectedIdx  = this.rowIndex;
 			  this.style.backgroundColor= "#D6F1A3";
-				}
-			}
+			};
 		}
+	}
 }
- 
-
 //create url with where clause
 function KeyValue(a,b) {
 	this.key=a;
@@ -123,13 +64,14 @@ function replacer(key, value) {
 	}
 	return value;
 }
+
+
 function viewdetails(){
 	 
-	alert("in make url,selectedIdx:"+selectedIdx);
+	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
-	
+	//alert("Calling View Details Method");
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
-
 	whereClause = "panelFields1WhereClause=";
 	if(listTable != null && selectedIdx != -1){
 		//poplate wher clause url
@@ -137,7 +79,7 @@ function viewdetails(){
 		requestar = new Array();
 		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
 		{  
-			alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
+			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
 			if(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
 				name = jQuery("#searchdiv").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
 				name = jQuery.trim(name);
@@ -154,7 +96,6 @@ function viewdetails(){
 		var myJSONText = JSON.stringify(k, replacer,"");
 		
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
-		 		 
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
 		document.getElementById("formwhere").screenName.value = "frmApproval";
 		document.getElementById("formwhere").submit();
@@ -163,11 +104,11 @@ function viewdetails(){
 		return false;
 	}
 	return true;	 
-
 }
 
 //create url with where clause
-function clearWhereClause(){
+function clearWhereClause()
+{
 	document.getElementById("panelFieldsWhereClause").value="";
 }
 
