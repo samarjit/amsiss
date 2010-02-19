@@ -22,7 +22,18 @@ function mycall(p){
 	//alert("Got from ajax:"+p);
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
+	//clearSearchFields();
 }
+
+/*function clearSearchFields()
+{
+	document.getElementById("squotationid").value = "";
+	document.getElementById("sitemid").value = "";
+	document.getElementById("svendorid").value = "";
+	document.getElementById("squotationdate").value = "";
+	document.getElementById("squotationref").value = "";
+	document.getElementById("sdateofdelivery").value = "";
+}*/
 
 jQuery(function() {
 	jQuery('#squotationdate').datepicker({
