@@ -103,6 +103,7 @@ function rrfCallBack(p){
 		document.getElementById("modify").disabled=true;
 		document.getElementById("delete").disabled=true;
 		document.getElementById("cancel").disabled=true;
+		document.getElementById("submit").disabled=true;
 		disable_quot_fields();
 	}
 	else
@@ -217,6 +218,11 @@ function rrfCancel() {
 	//prepareInsertData();
 }
 
+
+function backToList(){
+	location.href= ctxpath+"/template1.action?screenName=frmRRFList"
+}
+
 function rrfSave() {
 	
 	if(document.getElementById("requestid").value == 'select'){		
@@ -279,7 +285,7 @@ function saveCallBack(val) {
 		}
 		if(screenAction == "insert"){
 
-			location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
+			location.href= ctxpath+"/template1.action?screenName=frmRRFList"
 			alert("Successfully created your rrf! ");
 		}
 	}
