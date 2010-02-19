@@ -59,33 +59,95 @@ public class RrfBL implements BaseBL{
 	public HashMap preSubmitProcessBL(Map buslogHm) {
 		System.out.println("In rrf submit");
 		
-		//update the status of rrf.
-		String[] rrfidarr = (String[]) buslogHm.get("rrfid");
-		if(rrfidarr == null)
-			return (HashMap) buslogHm;
-		String rrfid = (String)(rrfidarr[0]);
-		debug(1, rrfid);
-		String SQL = "update ams_rrf set rrf_status='PENDAPPROVAL' where rrf_id= ? ";
+		String[] cancelarr = (String[]) buslogHm.get("cancel");
+		if(cancelarr != null){			
+			String cancel = (String)(cancelarr[0]);
+			if(cancel.equals("true")){
+				
+				String[] qtidarr = (String[]) buslogHm.get("qtid");
+				if(qtidarr == null)
+					return (HashMap) buslogHm;
+				String qtid = (String)(qtidarr[0]);
+				String QTSQL = "update ams_quotation set qt_status='RRFCANCELLED' where qt_id=? ";
 
-		CachedRowSet crs = null;
-		try {
-			DBConnector db = new DBConnector();
-			PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
-			arPrepstmt.add(DataType.STRING, rrfid);			
-			debug(1,arPrepstmt.toString(SQL));
-			
-			crs = db.executePreparedQuery(SQL, arPrepstmt );
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			if (crs != null) {
+				CachedRowSet qtcrs = null;
 				try {
-					crs.close();
-				} catch (Exception e) {
+					DBConnector db = new DBConnector();
+					PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+					arPrepstmt.add(DataType.STRING, qtid);			
+					debug(1,arPrepstmt.toString(QTSQL));
+
+					qtcrs = db.executePreparedQuery(QTSQL, arPrepstmt );
+				}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					if (qtcrs != null) {
+						try {
+							qtcrs.close();
+						} catch (Exception e) {
+						}
+					}
+				}
+				
+				
+				
+				String[] rrfidarr = (String[]) buslogHm.get("rrfid");
+				if(rrfidarr == null)
+					return (HashMap) buslogHm;
+				String rrfid = (String)(rrfidarr[0]);
+				String RRFSQL = "update ams_rrf set rrf_status='CANCELLED' where rrf_id=? ";
+
+				CachedRowSet rrfcrs = null;
+				try {
+					DBConnector db = new DBConnector();
+					PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+					arPrepstmt.add(DataType.STRING, rrfid);			
+					debug(1,arPrepstmt.toString(RRFSQL));
+
+					rrfcrs = db.executePreparedQuery(RRFSQL, arPrepstmt );
+				}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					if (rrfcrs != null) {
+						try {
+							rrfcrs.close();
+						} catch (Exception e) {
+						}
+					}
+				}
+								
+				
+				buslogHm.put("nextAction", "CreateRRF");
+			}						
+		}					
+		else{
+			//update the status of rrf.
+			String[] rrfidarr = (String[]) buslogHm.get("rrfid");
+			if(rrfidarr == null)
+				return (HashMap) buslogHm;
+			String rrfid = (String)(rrfidarr[0]);
+			debug(1, rrfid);
+			String SQL = "update ams_rrf set rrf_status='PENDAPPROVAL' where rrf_id=? ";
+
+			CachedRowSet crs = null;
+			try {
+				DBConnector db = new DBConnector();
+				PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+				arPrepstmt.add(DataType.STRING, rrfid);			
+				debug(1,arPrepstmt.toString(SQL));
+
+				crs = db.executePreparedQuery(SQL, arPrepstmt );
+			}catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				if (crs != null) {
+					try {
+						crs.close();
+					} catch (Exception e) {
+					}
 				}
 			}
 		}
-		
 		//send mail to approver - Not Working--
 		//boolean res = true;
 		/*InitialContext ic;
