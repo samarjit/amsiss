@@ -22,6 +22,7 @@ private String topPanel;
 private HashMap extraFields;
 private String screenName;
 private String errorMessage; 
+private String screenTitle;
 
 
 private String cssname;
@@ -31,6 +32,13 @@ private String screenMode;
 private String ajaxPopulate = "";
 private InputStream inputStream;
 
+
+public String getScreenTitle() {
+	return screenTitle;
+}
+public void setScreenTitle(String screenTitle) {
+	this.screenTitle = screenTitle;
+}
 public String getAjaxPopulate() {
 	return ajaxPopulate;
 }
@@ -178,7 +186,7 @@ public void setPassword(String password) {
 		  
 		 String templateName;
 		 Createhtml htmlc = new Createhtml();
-		 
+		 setScreenTitle(htmlc.findScreenTitle(screenName));
 		 setJsname(htmlc.getJsCsshtml(screenName));
 		 //setDataPanel(htmlc.makehtml("panelFields"));
 		 //setButtonPanel(htmlc.makehtml("buttonPanel"));

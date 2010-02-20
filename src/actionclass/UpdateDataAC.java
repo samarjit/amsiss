@@ -75,6 +75,7 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 			} catch (JSONException e) {
 				debug(5,e.getMessage());
 				e.printStackTrace();
+				resultHtml = String.valueOf(-1);
 			}
     		//resultHtml  = "hii i cant write now.. ";
     	

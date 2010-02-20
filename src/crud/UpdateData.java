@@ -57,7 +57,9 @@ public class UpdateData {
 					queryResult = -1;
 				}
 				 
-			}		
+			}else{
+				queryResult = -1;
+			}
 			
 		}
 		

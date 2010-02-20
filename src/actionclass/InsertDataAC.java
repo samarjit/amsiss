@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.json.JSONObject;
 
 import businesslogic.BaseBL;
 
@@ -93,6 +94,8 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
     	System.out.println("Screen Name  = " + screenName);
     	
     	String resultHtml = "No Data found";
+    	JSONObject jobj = new JSONObject();
+    	jobj.put("message", resultHtml);
     	String autogenId =insert.getNewAppId();
     	if(insertKeyValue != null || (!"".equals(insertKeyValue)))
     		resultHtml  = insert.doInsert(screenName, insertKeyValue, autogenId);

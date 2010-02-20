@@ -432,3 +432,10 @@ text-transform:uppercase;
  padding:0px;
  vertical-align: top; 
  }
+ 
+ #screen_title{
+ width:940px;
+ margin:0px auto;
+ font-weight: bold;
+ font-size:1.2em; 
+ }

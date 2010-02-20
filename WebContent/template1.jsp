@@ -1,12 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<% response.setHeader("Pragma","no-cache");
+  response.setDateHeader("Expires",0);
+  response.setHeader("Cache-Control","no-cache");
+%>
 <%@ taglib prefix="s" uri="/struts-tags" %>  
 <%@ page import="java.util.Iterator,java.util.LinkedHashMap" %>  
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>${screenTitle }</title>
 <%String ctxstr = request.getContextPath(); %>
 <style>
 @import "<%=ctxstr %>/css/button.css";
@@ -52,7 +56,9 @@ var ctxpath = "<%= ctxpath %>";
 <s:actionerror/>
 <s:actionmessage/>
 <%@ include file="pages/header.jsp" %>
+<div id="screen_title">${screenTitle }</div>
 <div id="page">
+
 <div id="errormsgdiv" class="ui-state-error ui-corner-all"  class="ui-state-error ui-corner-all"  style="display:none;padding: 0pt 0.7em;">
 
 </div>

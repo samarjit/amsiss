@@ -151,14 +151,14 @@ function reqSubmit() {
 
 function reqSave() {
 	//alert("in save ");	
-	alert(inserturlpart+" Mode:"+screenMode);
+	//alert(inserturlpart+" Mode:"+screenMode);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
-	alert(screenMode);
+	//alert(screenMode);
 	if(screenMode == "insert"){
 	document.getElementById("rfqid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";
-	prompt("url",url);	
+	//prompt("url",url);	
 	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRFQ&create=true";
 	//prompt("url",url);
 	//add key:vlaue to url
@@ -169,7 +169,7 @@ function reqSave() {
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRFQ";
-		prompt("url",url);	
+		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 
 		//prompt("url",url);
@@ -198,8 +198,11 @@ function deleteData(){
 
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0)alert("Error while saving! ");
-	else alert("Successfully saved your request! ");
+	if(val < 0)showerror("Error while saving! ");
+	else {
+		showalert("Successfully saved your request! ");
+		populate();
+	}
 }
 
 
@@ -412,7 +415,7 @@ function popvendorcallback(parm){
 		jQuery("#rfqstatus").val(rfqStatus);
 		
 	if(error != "" && typeof(error )!= 'undefined')	{
-	alert("here");	showerror(error);
+		showerror(error);
 		return;
 	}
 	
