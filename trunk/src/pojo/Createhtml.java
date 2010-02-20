@@ -164,21 +164,21 @@ public class Createhtml {
 				if("TEXTBOX".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" />";
+					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" class="+classname+" />";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				
 				if("PASSWORD".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<input type=\"password\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" />";
+					elmStr = "<input type=\"password\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" class="+classname+" />";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				
 				if("DROPDOWN".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+"><option value=\"select\">Select</option>";
+					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+" class="+classname+"><option value=\"select\">Select</option>";
 					CachedRowSet crs1 = null;
 					try {
 						 
@@ -202,7 +202,7 @@ public class Createhtml {
 				if("HIDDEN".equalsIgnoreCase(htmlelm)){
 					//elmStr = lblname;
 					//htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<input type=\"hidden\" name='"+fname+"' id='"+idname+"' value=''  "+validation+" "+attributes+" />";
+					elmStr = "<input type=\"hidden\" name='"+fname+"' id='"+idname+"' value=''  "+validation+" "+attributes+" class="+classname+" />";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("LABEL".equalsIgnoreCase(htmlelm)){
@@ -227,7 +227,7 @@ public class Createhtml {
 				if("TEXTAREA".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<TEXTAREA name='"+fname+"' id='"+idname+"' "+validation+" ></TEXTAREA>";
+					elmStr = "<TEXTAREA name='"+fname+"' id='"+idname+"' "+validation+" class="+classname+" ></TEXTAREA>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
 				}
 				if("BUTTON".equalsIgnoreCase(htmlelm)){
@@ -235,7 +235,7 @@ public class Createhtml {
 				//	htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, "");
 				//	elmStr = "<input type=\"button\" name='"+fname+"' id='"+idname+"' value='"+lblname+"'  "+validation+" />";
 				//	elmStr = "<div class=\"clear\" "+validation+"><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'     ><SPAN>"+lblname+"</SPAN></a></div>";
-					elmStr = "<button "+validation+" class=\"button\" name='"+fname+"' id='"+idname+"' "+attributes+">"+lblname+"</button>";
+					elmStr = "<button "+validation+" class=\"button "+classname+"\" name='"+fname+"' id='"+idname+"' "+attributes+">"+lblname+"</button>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol), elmStr);
 				}
 			

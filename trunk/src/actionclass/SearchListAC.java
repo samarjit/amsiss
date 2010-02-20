@@ -87,8 +87,10 @@ public class SearchListAC extends ActionSupport {
 	        			joiner = " AND ";
 	        		}
 	        		
-	        		if(!val.equalsIgnoreCase(""))
-	        		searchQueryWhere +=joiner+dbcol+" like '%"+val+"%'";
+	        		if(!val.equalsIgnoreCase("")){
+	        			val = val.toUpperCase();
+	        			searchQueryWhere +=joiner+"UPPER("+dbcol+") like '%"+val+"%'";
+	        		}
 	        	}
 	        	crs.close();
 			} catch (SQLException e) {
@@ -207,6 +209,7 @@ public class SearchListAC extends ActionSupport {
 						String fname = (String) itr.next();
 						ListAttribute ls = (ListAttribute) metadata.get(fname);
 						data  = crs.getString(fname);
+						if(data ==null)data="";
 						debug(0,crs.getString(fname));
 						if(firstItr){
 							tableHeader += "<th><div id="+fname+" style='display:none'>"+ls+"</div>"+ls.getLblname()+"</th>";
