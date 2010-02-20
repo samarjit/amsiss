@@ -51,7 +51,7 @@
 			<result name="success">/login.jsp</result>
 			<result name="template1">/template1.jsp</result>
 			<result name="template2">/template2.jsp</result>
-			<result name="failure">/index.jsp</result>
+			<result name="failure">/pages/unknownerror.jsp</result>
 			<result name="populate" type="stream">
 				<param name="contentType">text/html</param>
 				<param name="inputName">inputStream</param>
