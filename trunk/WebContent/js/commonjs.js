@@ -103,7 +103,7 @@ function showerror(p){
 }
 function showalert(p){
 		//jQuery('#alertmsgdiv').css("display","none");
-		jQuery('#alertmsgdiv').html("<p>Error:"+p+"</p>");
+		jQuery('#alertmsgdiv').html("<p>Message:"+p+"</p>");
 		var selectedEffect = 'clip';
 		var options = {};
 		jQuery("#alertmsgdiv").show(selectedEffect,options,500,callback);

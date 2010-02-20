@@ -178,7 +178,7 @@ public class Createhtml {
 				if("DROPDOWN".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
-					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+" class="+classname+"><option value=\"select\">Select</option>";
+					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+" class="+classname+"><option value=\"\">Select</option>";
 					CachedRowSet crs1 = null;
 					try {
 						 
@@ -292,6 +292,29 @@ return (String)htable.toString();
 		 
 		 
 		return htmlStr;
+	}
+
+	public String findScreenTitle(String screenName) {
+		CachedRowSet crs = null;
+		 String SQL = "select screen_title		 from screen  where   scr_name='"+screenName+"'";
+		String scr_title = ""; 
+		try {
+			DBConnector db = new DBConnector();
+			crs = db.executeQuery(SQL);
+			if(crs.next()){
+				scr_title = crs.getString("screen_title");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (crs != null) {
+				try {
+					crs.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		return scr_title;
 	}
 
 }

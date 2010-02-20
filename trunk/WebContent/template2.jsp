@@ -1,4 +1,8 @@
 <%@ page language="java" pageEncoding="ISO-8859-1"%>
+<% response.setHeader("Pragma","no-cache");
+  response.setDateHeader("Expires",0);
+  response.setHeader("Cache-Control","no-cache");
+%>
 <%@ taglib prefix="s" uri="/struts-tags" %>  
 <%@ page import="java.util.Iterator,java.util.LinkedHashMap" %>  
 
@@ -8,7 +12,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <%String ctxstr = request.getContextPath(); %>
-<title>New Page</title>
+<title>${screenTitle }</title>
 <style>
 @import "<%=ctxstr %>/css/button.css";
 @import "<%=ctxstr %>/css/header.css"; 
@@ -25,6 +29,7 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 </script>
 <body onload="search()">
 <%@ include file="pages/header.jsp" %>
+<div id="screen_title">${screenTitle }</div>
 <div id="page">
  <div id="errormsgdiv" class="ui-state-error ui-corner-all"  class="ui-state-error ui-corner-all"  style="display:none;padding: 0pt 0.7em;">
 

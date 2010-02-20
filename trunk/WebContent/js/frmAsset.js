@@ -151,15 +151,15 @@ function reqSubmit() {
 
 function reqSave() {
 	//alert("in save ");	
-	alert(inserturlpart+" Mode:"+screenMode);
+	//alert(inserturlpart+" Mode:"+screenMode);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
-	alert(screenMode);
+	 
 	if(screenMode == "insert"){
-	document.getElementById("rfqid").value = "AUTOGEN_SEQUENCE_ID";	
-	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";
-	prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRFQ&create=true";
+	document.getElementById("assetid").value = "AUTOGEN_SEQUENCE_ID";	
+	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAsset";
+	//prompt("url",url);	
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRAST&create=true";
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
@@ -168,8 +168,8 @@ function reqSave() {
 	
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
-		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRFQ";
-		prompt("url",url);	
+		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmAsset";
+		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 
 		//prompt("url",url);
@@ -198,8 +198,11 @@ function deleteData(){
 
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0)alert("Error while saving! ");
-	else alert("Successfully saved your request! ");
+	if(val < 0)showerror("Error while saving! ");
+	else {
+		showalert("Successfully saved your request! ");
+		populate();
+	}
 }
 
 
