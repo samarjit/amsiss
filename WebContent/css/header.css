@@ -416,9 +416,13 @@ text-transform:uppercase;
 
  .paneltable{
 	border:1px solid #618c04;
+	border-spacing:0px;
+	margin:0px;
+	padding:0px;
 	}
  .paneltable TD{
 	border:0px solid #618c04;
+	
 	border-collapse: collapse;
 	}
  .buttonpanel{

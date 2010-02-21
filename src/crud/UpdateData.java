@@ -1,5 +1,6 @@
 package crud;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,9 +22,10 @@ public class UpdateData {
 	 * main function is used only for testing doDelete() is the method that does 
 	 * really works
 	 * @param args
+	 * @throws SQLException 
 	 */
 	
-	public String doUpdate(String screenName, String insertClause, String whereclause) throws JSONException{
+	public String doUpdate(String screenName, String insertClause, String whereclause) throws JSONException, SQLException{
 	 
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
@@ -38,32 +40,44 @@ public class UpdateData {
 		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
 		int queryResult = 0;
-		if (itrPanel.hasNext())
+		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			debug(0, "******** calling creteUpdateQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
-		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
-			metadata = new HashMap();
-			//column metadata should get populated here
-
-			String sg = createUpdateQuery(metadata,scrName,panelName, insertClause, hmWhere);
-			debug(2, "Update query:" + sg);
-			if(sg != null && !("".equals(sg))){
-				try {
-					queryResult = cd.executeInsertQuery(sg);
-				} catch (Exception e) {
-					debug(5,"Failed in update");
-					e.printStackTrace();
-					queryResult = -1;
-				}
-				 
-			}else{
-				queryResult = -1;
-			}
+			String storeflag = cd.getStoreFlag(screenName, panelName);
+			if( storeflag.indexOf('W') > -1){
+				
 			
-		}
+				debug(0, "******** calling creteUpdateQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
+			    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
+				metadata = new HashMap();
+				//column metadata should get populated here
+	
+				String sg = createUpdateQuery(metadata,scrName,panelName, insertClause, hmWhere);
+				debug(2, "Update query:" + sg);
+				if(sg != null && !("".equals(sg))){
+					try {
+						queryResult = cd.executeInsertQuery(sg);
+					} catch (Exception e) {
+						debug(5,"Failed in update");
+						e.printStackTrace();
+						queryResult = -1;
+					}
+					 
+				}/*else{ //incomplete query i think incomplete query should come anyway
+					queryResult = -1;
+				}*/ 
+				if(queryResult <0 ){
+					html+= ","+panelName;
+				}
+				
+			} //if storeflag
+		}//while()
 		
-		html = String.valueOf(queryResult);
+		if(html.length() > 0){
+			html = html.substring(1); 
+		  html = "Update failed in "+html;
+		}
+			
 		return html;
 	}
 	
@@ -100,7 +114,7 @@ public class UpdateData {
 		}
 		//process where clause
 		String strWhereQuery  = cd.createWhereClause(joiner,scrname,panelName,hmWherePanel,true);
-		debug(0, "strWhereQuery= "+strWhereQuery+"table name:"+tableName+"query part "+qryPart1);
+		debug(0, "strWhereQuery= "+strWhereQuery+"table name="+tableName+"query part="+qryPart1);
 		
 		if(tableName!= null && tableName.length() >0 && qryPart1 !=null && qryPart1.length() > 0 && strWhereQuery!=null && strWhereQuery.length()>0){
 			//updateQuery ="UPDATE  SET " +qryPart1+ " FROM "+tableName+splWhereClause+strWhereQuery; 

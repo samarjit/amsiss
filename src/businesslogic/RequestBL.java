@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.CachedRowSet;
 
 import dbconn.DBConnector;
-import dto.PerpstmtDTOArray;
+import dto.PrepstmtDTOArray;
 import dto.UserDTO;
 import dto.PrepstmtDTO.DataType;
 
@@ -42,7 +42,7 @@ public class RequestBL implements BaseBL{
 			
 				CachedRowSet crs = null;
 				DBConnector db = new DBConnector();
-				PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 				arPrepstmt.add(DataType.STRING, empid);
 				try {
 					crs = db.executePreparedQuery(query, arPrepstmt);
@@ -132,7 +132,7 @@ public class RequestBL implements BaseBL{
 
 				CachedRowSet crs5 = null;
 				DBConnector db5 = new DBConnector();
-				PerpstmtDTOArray arPrepstmt5 = new PerpstmtDTOArray();
+				PrepstmtDTOArray arPrepstmt5 = new PrepstmtDTOArray();
 				arPrepstmt5.add(DataType.STRING, empid);
 				
 				int count1 = 0;
@@ -179,7 +179,7 @@ public class RequestBL implements BaseBL{
 				 String queryy = "SELECT empname mgrname FROM ams_employee where empid=?";
 				 CachedRowSet crs = null;
 					DBConnector db = new DBConnector();
-					PerpstmtDTOArray arPrepstmt4 = new PerpstmtDTOArray();
+					PrepstmtDTOArray arPrepstmt4 = new PrepstmtDTOArray();
 					arPrepstmt4.add(DataType.STRING, empid1);
 					try {
 						crs = db.executePreparedQuery(queryy, arPrepstmt4);
@@ -255,6 +255,18 @@ public class RequestBL implements BaseBL{
 
 	@Override
 	public HashMap preSubmitProcessBL(Map hm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap postUpdateProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap preUpdateProcessBL(Map buslogHm) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -18,7 +18,9 @@ function fnCreateActivity(ac) {
 	if(ac== 'CR'){
       url =url + "screenName=frmRequest";
 	}else if(ac=='CRFQ'){
-	  url =url+ "screenName=frmRFQ&activityname=CRFQ&create=true&screenMode=insert";	
+	  url =url+ "screenName=frmRFQ&activityname=CRFQ&create=true&screenMode=create";	
+	}else if(ac=='CRAST'){
+	  url =url+ "screenName=frmAsset&activityname=CRAST&create=true&screenMode=create";	
 	}
 //	alert(url);
 //document.getElementById("frmmenu").action = url;

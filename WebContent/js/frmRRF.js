@@ -1,6 +1,7 @@
 function populate()
 {
-	//alert("This alert box was called with the onload event");	
+	//alert("This alert box was called with the onload event");
+	fnAdjustTableWidth();
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
 		url=url+"&whereClause="+ whereClause;		
@@ -110,22 +111,24 @@ function rrfCallBack(p){
 	{		
 		disable_fields();
 	}
-	fnAdjustTableWidth();
+	
 }
 
 
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
-	var query = jQuery("#panelsdiv  table:first ").find("tr").eq(0).find("td ");
-	var elem = 	jQuery(query);
-
-	jQuery.each(query, function(index, item) {
-		tdwidthar[index]  = jQuery(item).width();
+	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
+		 
+		var query = jQuery(elem).eq(0).find("tr").eq(0).find("td ");
+		jQuery.each(query, function(index, item) {
+			if(!tdwidthar[index])tdwidthar[index]  = jQuery(item).width();
+			else if(   tdwidthar[index] < jQuery(item).width())			{
+				tdwidthar[index]  = jQuery(item).width();
+			}
+		});
 	});
-
 	var j = 0 ;
 	var maxtd = tdwidthar.length;
-
 	var tblar = document.getElementById("panelsdiv").getElementsByTagName("table") ;
 	for (var i=0; i<tblar.length; i++) {
 		query = jQuery(tblar[i]).find("tr").eq(0).find("td");
@@ -135,7 +138,6 @@ function fnAdjustTableWidth() {
 			jQuery(item).width(tdwidthar[j]);
 			j++;
 			if(maxtd == j)j=0;
-
 		});
 	}
 }

@@ -2,6 +2,7 @@ package actionclass;
 
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,9 +34,20 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 	private String redirectUrl = null;
 	private String activityname = "";
 	private HashMap retBLhm = null;
+	
+
 	private boolean create = false;
 	private String wflid;
 	
+	
+	public HashMap getRetBLhm() {
+		return retBLhm;
+	}
+
+	public void setRetBLhm(HashMap retBLhm) {
+		this.retBLhm = retBLhm;
+	}
+
     public String getWflid() {
 		return wflid;
 	}
@@ -74,7 +86,7 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 	}
 	
 	
-	public String execute() throws Exception {
+	public String execute()  {
 		HashMap metadata = new HashMap();
     	InsertData insert = new InsertData();
     	
@@ -94,20 +106,48 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
     	System.out.println("Screen Name  = " + screenName);
     	
     	String resultHtml = "No Data found";
+    	String insertresult ="";
+    	ArrayList errorList = new ArrayList();
     	JSONObject jobj = new JSONObject();
-    	jobj.put("message", resultHtml);
+    	
     	String autogenId =insert.getNewAppId();
     	if(insertKeyValue != null || (!"".equals(insertKeyValue)))
-    		resultHtml  = insert.doInsert(screenName, insertKeyValue, autogenId);
-    		//resultHtml  = "hii i cant write now.. ";
+    		 insertresult    = insert.doInsert(screenName, insertKeyValue, autogenId);
     	
-    	postInsertProcessBL(screenName);
+    	if(insertresult.length() >1){
+			errorList.add(insertresult);
+		}
     	
-        System.out.println(insertKeyValue);
+    	HashMap retBL =  postInsertProcessBL(screenName);
+    	debug(5,"business logic ");
+    	if(retBL.get("error")!= null){
+			errorList.add("Business Logic error occured");
+		}
+    	 debug(5,errorList.toString());
+        
+        try {
+        	jobj.put("message", resultHtml);
+			if (errorList.size() > 0) {
+				
+				jobj.put("error", errorList);
+				jobj.put("message", "Record saved successfully");
+				resultHtml = jobj.toString();
+			}else{
+				jobj.put("message", "Record saved successfully");
+				resultHtml = jobj.toString();
+			}
+		} catch (Exception e) {
+			debug(5,e.toString());
+		}
+		
        // String resXML  = getResultXML (qry,metadata); 
         inputStream = new StringBufferInputStream(resultHtml);
-    	//inputStream = new StringBufferInputStream("in view details");
+        debug(5,errorList.toString());
         System.out.println("in view details");
+        if(errorList.size() > 0){
+        	 return SUCCESS;
+        }
+        
         if(invokewfl.equals("worlkflow")){
         	
         	redirectUrl = request1.getContextPath()+"/workflow.action?appid="+autogenId+"&activityname="+activityname+"&create="+create;
@@ -150,10 +190,11 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 		System.out.println("InsertDataAC:"+s);
 	}
 	
-	private void postInsertProcessBL(String screenName) {
+	private HashMap postInsertProcessBL(String screenName) {
 	
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
+		retBLhm = new HashMap();
 		String businessLogic = cd.getBusinessLogicName(screenName);
 		try {
 			if (businessLogic != null && !"".equals(businessLogic)) {
@@ -174,13 +215,15 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 				retBLhm = basebl.postInsertProcessBL(buslogHm);
 			}
 			else{
-				retBLhm.put("error", "Method not found");
+				//retBLhm.put("error", "Method not found");
+				debug(1,"Method not defined");
 			}
 		} catch (Exception e) {
 			debug(1,"Businesslogic not found");
 			e.printStackTrace();
+			retBLhm.put("error","Error executing business logic");
 		}
-		
+		return retBLhm;
 	}
 	
 	

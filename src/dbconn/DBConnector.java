@@ -20,7 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import com.sun.rowset.CachedRowSetImpl;
 
-import dto.PerpstmtDTOArray;
+import dto.PrepstmtDTOArray;
 import dto.PrepstmtDTO;
 
 
@@ -150,7 +150,7 @@ public int executeUpdate(String qry) throws SQLException{
 	return retval;
 }
 
-public CachedRowSet executePreparedQuery(String qry,PerpstmtDTOArray arPrepstmt) throws SQLException{
+public CachedRowSet executePreparedQuery(String qry,PrepstmtDTOArray arPrepstmt) throws SQLException{
 	CachedRowSetImpl crs = null;
 	Connection conn =null;
 	try {
@@ -216,7 +216,7 @@ public CachedRowSet executePreparedQuery(String qry,PerpstmtDTOArray arPrepstmt)
 	return crs;
 }
 
-public int executePreparedUpdate(String qry,PerpstmtDTOArray arPrepstmt) throws SQLException{
+public int executePreparedUpdate(String qry,PrepstmtDTOArray arPrepstmt) throws SQLException{
 	Connection conn =null;
 	int retval =0;
 	try {

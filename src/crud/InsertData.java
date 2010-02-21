@@ -57,9 +57,15 @@ public class InsertData {
 					insertResult  = -1;
 				}
 				debug(0, "Insert query:" + sg);
+				if(insertResult <0 ){
+					html+= ","+panelName;
+				}
 			}						
 		}
-		html = String.valueOf(insertResult);
+		if(html.length() > 0){
+			html = html.substring(1); 
+			html = "Insert failed in "+html;
+		}
 		return html;
 	}
 	

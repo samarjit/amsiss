@@ -9,9 +9,13 @@ function populate()
 		// prompt("url",url);	
 		sendAjaxGet(url, requestCallBack);
 	}	
+	if(screenMode == "create"){
+		jQuery('#btnVendorMap').attr('disabled','disabled');
+		jQuery('#btnSubmit').attr('disabled','disabled');
+	}
 	//alert("In populate");
 }
-var screenMode = "insert";
+//var screenMode = "insert";
 function $F(p){
 	if(document.getElementById(p))
 	return document.getElementById(p).value;
@@ -120,7 +124,7 @@ function disable_fields(){
 	for(var i =0; i<panelsTable.length;i++){
 		
 	//	alert("panels "+ panelsTable[i].id);
-		if (panelsTable[i].id == 'panelFields'){
+		if (panelsTable[i].id == 'panelFields' ||panelsTable[i].id == 'statusFields'){
 //			
 //		fields = panelsTable[i].getElementsByTagName("input");
 //			for(var k = 0; k<fields.length; k++){
@@ -137,6 +141,16 @@ function disable_fields(){
 		
 		}
 	}
+	var updateonar = "Status,wflactionid,wflactiondesc,wflid,btnSave".split(",");
+	for ( var i = 0; i < updateonar.length; i++) {
+		var arelm = updateonar[i];
+		jQuery("#"+ arelm).attr('disabled','disabled');
+	}
+	if(jQuery("#rfqid").val() == null || jQuery("#rfqid").val() == ""){ 
+		jQuery('#btnVendorMap').attr('disabled','disabled');
+		jQuery('#btnSubmit').attr('disabled','disabled');
+	}
+		
 }
 
 function insertData() {
