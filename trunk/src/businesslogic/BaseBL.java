@@ -14,7 +14,8 @@ HashMap postInsertProcessBL(Map buslogHm);
 HashMap preInsertProcessBL(Map buslogHm);
 HashMap preDeleteProcessBL(Map buslogHm);
 HashMap postDeleteProcessBL(Map buslogHm);
-
+HashMap preUpdateProcessBL(Map buslogHm);
+HashMap postUpdateProcessBL(Map buslogHm);
 HashMap jsrpcProcessBL(Map buslogHm, String rpcid);
  
 

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.sql.rowset.CachedRowSet;
 import dbconn.DBConnector;
-import dto.PerpstmtDTOArray;
+import dto.PrepstmtDTOArray;
 import dto.PrepstmtDTO.DataType;
 
 public class VendorMapDAO {
@@ -24,7 +24,7 @@ public class VendorMapDAO {
 //		"values('"+rfqid+"','"+vendorid+"','"+typenotify+"','NotAttended',"+suggestdelvtime+") ";
 		String SQL = "insert into AMS_RFQ_VENDOR_MAP(rfqid,vendorid,type_notify,INDV_STATUS,SUGGEST_DLV_TIME) " +
 		"values(?,?,?,'NotAttended',?) ";
-		PerpstmtDTOArray prepar =  new PerpstmtDTOArray();
+		PrepstmtDTOArray prepar =  new PrepstmtDTOArray();
 		prepar.add(DataType.STRING, rfqid);
 		prepar.add(DataType.STRING, vendorid);
 		prepar.add(DataType.STRING, typenotify);
@@ -149,7 +149,7 @@ public class VendorMapDAO {
 		String retStr = "SUCCESS";
 		String SQL = "delete from AMS_RFQ_VENDOR_MAP where rfqid = ? AND vendorid = ? ";
 
-		PerpstmtDTOArray prepar =  new PerpstmtDTOArray();
+		PrepstmtDTOArray prepar =  new PrepstmtDTOArray();
 		prepar.add(DataType.STRING, rfqid);
 		prepar.add(DataType.STRING, vendorid);
 		debug(1,prepar.toString(SQL));
@@ -178,7 +178,7 @@ public class VendorMapDAO {
 	public String initialMap(String rfqid, String department, String typenotify, String suggestdelvtime) {
 		String retStr = "SUCCESS";
 		DBConnector db = new DBConnector();
-		PerpstmtDTOArray prepar =  new PerpstmtDTOArray();
+		PrepstmtDTOArray prepar =  new PrepstmtDTOArray();
 		CachedRowSet crs = null;
 		CachedRowSet crs2 = null;
 		String SQLvendorid= " select vendor_id from ams_dept_vendor_map where dept_id =?  " +
@@ -199,7 +199,7 @@ public class VendorMapDAO {
 		"?,'NotAttended', ?) ";
 		
 		
-		PerpstmtDTOArray prepar2 =  new PerpstmtDTOArray();
+		PrepstmtDTOArray prepar2 =  new PrepstmtDTOArray();
 		prepar2.add(DataType.STRING, rfqid);
 		prepar2.add(DataType.STRING, vendorid);
 		prepar2.add(DataType.STRING, typenotify);
@@ -243,7 +243,7 @@ public class VendorMapDAO {
 		try {
 			DBConnector db = new DBConnector();
 			
-			PerpstmtDTOArray prepar =  new PerpstmtDTOArray();
+			PrepstmtDTOArray prepar =  new PrepstmtDTOArray();
 			prepar.add(DataType.STRING, typenotify);
 			prepar.add(DataType.STRING, indvstatus);
 			prepar.add(DataType.STRING, rfqid);
@@ -274,14 +274,14 @@ public class VendorMapDAO {
 		String rfqstatus = "CREATE";
 		try {
 			DBConnector db = new DBConnector();
-			PerpstmtDTOArray prepar =  new PerpstmtDTOArray();
+			PrepstmtDTOArray prepar =  new PrepstmtDTOArray();
 			prepar.add(DataType.STRING, "Attended");
 			prepar.add(DataType.STRING, rfqid);
 			crs2 = db.executePreparedQuery(SQL2,prepar);
 			if(crs2.next()){
 				String count = crs2.getString("num");
 				if(count !=null && Integer.parseInt(count) > 0 ){
-					PerpstmtDTOArray prepar2 =  new PerpstmtDTOArray();
+					PrepstmtDTOArray prepar2 =  new PrepstmtDTOArray();
 					prepar2.add(DataType.STRING, "NotAttended");
 					prepar2.add(DataType.STRING, rfqid);
 					crs3 = db.executePreparedQuery(SQL2,prepar2);
@@ -300,7 +300,7 @@ public class VendorMapDAO {
 				}
 			}
 			String SQL3 = "update AMS_RFQ set RFQ_STATUS=? where rfq_id= ? ";
-			PerpstmtDTOArray prepar3 =  new PerpstmtDTOArray();
+			PrepstmtDTOArray prepar3 =  new PrepstmtDTOArray();
 			prepar3.add(DataType.STRING, rfqstatus);
 			prepar3.add(DataType.STRING, rfqid);
 			db.executePreparedUpdate(SQL3,prepar3);

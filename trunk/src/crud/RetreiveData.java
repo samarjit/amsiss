@@ -51,83 +51,86 @@ public class RetreiveData  {
 		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			debug(0,"******** calling creteRetreiveQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
-		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
-			metadata = new HashMap();
-			
-			//Fill this for every Panel
-			tempPanelData = new HashMap();
-			
-			//column metadata should get populated here
-			String sg = createRetrieveQuery(metadata, scrName,	panelName, hmWhere);
-			debug(1,"Retrieve query:" + sg);
-			
-			String tableHeader = "No data found";
-			
-			if (sg != null && sg.length() > 0) 	{
-				try {
-					//replace referenced whereClause
-					sg  = replaceRefWhereClause(sg,tempData);
-					debug(1,"Retrieve query ("+panelName+"):" + sg);
-					crs = cd.executeRetrieveQuery(sg);
-					htmlTemp = "";
-					boolean firstItr = true;
-					String data = "";
-					String fname="";
-					//Ideally this loop should run once in case of detail-data retrieval
-					while (crs.next()) {
-						htmlTemp += "\n<tr >";
-						if (firstItr) {
-							tableHeader = "\n<tr >";
-						}
-
-						if (metadata == null)
-							throw new Exception(
-									" Retreive Data : metadata null");
-						Iterator itrmetadata = metadata.keySet().iterator();
-						while (itrmetadata.hasNext()) {
-						    fname = (String) itrmetadata.next();
-							ListAttribute ls = (ListAttribute) metadata
-									.get(fname);
-							debug(0,"Fname=" + fname);
-							data = crs.getString(fname);
-							if(data == null)data="";
-							if (firstItr) {
-								tableHeader += "<th><div id=" + fname
-										+ " style='display:none'>" + ls
-										+ "</div>" + ls.getLblname() + "</th>";
-							}
-							htmlTemp += "<td id=" + fname + "> " + data + "</td>";
-							tempPanelData.put(fname, data);
-						}
-						if (firstItr) {
-							tableHeader += "</tr>";
-							firstItr = false;
-						}
-						htmlTemp += "</tr>";
-						
-						
-						
-						debug(0,htmlTemp);
-					} //while crs.next()
-					tempData.put(panelName, tempPanelData);
-				} catch (Exception e) {
-					 e.printStackTrace();
-					htmlTemp = "";
-					tableHeader = "No data found";
-				} finally {
-					try {
-						if(crs!=null)
-						crs.close();
-					} catch (Exception e) {
-						debug(5,e.getMessage());
-						e.printStackTrace();
-					}
-				}
-				html += "<table border=1 id='"+panelName+"'>" + tableHeader + htmlTemp + "</table>\n";
-			}else{// if sg.length >0
+			String storeflag = cd.getStoreFlag(scrName, panelName);
+			if( storeflag.indexOf('R') > -1){
+				debug(0,"******** calling creteRetreiveQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
+			    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
+				metadata = new HashMap();
 				
-			}
+				//Fill this for every Panel
+				tempPanelData = new HashMap();
+				
+				//column metadata should get populated here
+				String sg = createRetrieveQuery(metadata, scrName,	panelName, hmWhere);
+				debug(1,"Retrieve query:" + sg);
+				
+				String tableHeader = "No data found";
+				
+				if (sg != null && sg.length() > 0) 	{
+					try {
+						//replace referenced whereClause
+						sg  = replaceRefWhereClause(sg,tempData);
+						debug(1,"Retrieve query ("+panelName+"):" + sg);
+						crs = cd.executeRetrieveQuery(sg);
+						htmlTemp = "";
+						boolean firstItr = true;
+						String data = "";
+						String fname="";
+						//Ideally this loop should run once in case of detail-data retrieval
+						while (crs.next()) {
+							htmlTemp += "\n<tr >";
+							if (firstItr) {
+								tableHeader = "\n<tr >";
+							}
+	
+							if (metadata == null)
+								throw new Exception(
+										" Retreive Data : metadata null");
+							Iterator itrmetadata = metadata.keySet().iterator();
+							while (itrmetadata.hasNext()) {
+							    fname = (String) itrmetadata.next();
+								ListAttribute ls = (ListAttribute) metadata
+										.get(fname);
+								debug(0,"Fname=" + fname);
+								data = crs.getString(fname);
+								if(data == null)data="";
+								if (firstItr) {
+									tableHeader += "<th><div id=" + fname
+											+ " style='display:none'>" + ls
+											+ "</div>" + ls.getLblname() + "</th>";
+								}
+								htmlTemp += "<td id=" + fname + "> " + data + "</td>";
+								tempPanelData.put(fname, data);
+							}
+							if (firstItr) {
+								tableHeader += "</tr>";
+								firstItr = false;
+							}
+							htmlTemp += "</tr>";
+							
+							
+							
+							debug(0,htmlTemp);
+						} //while crs.next()
+						tempData.put(panelName, tempPanelData);
+					} catch (Exception e) {
+						 e.printStackTrace();
+						htmlTemp = "";
+						tableHeader = "No data found";
+					} finally {
+						try {
+							if(crs!=null)
+							crs.close();
+						} catch (Exception e) {
+							debug(5,e.getMessage());
+							e.printStackTrace();
+						}
+					}
+					html += "<table border=1 id='"+panelName+"'>" + tableHeader + htmlTemp + "</table>\n";
+				}else{// if sg.length >0
+					
+				}
+		   }
 			
 			
 		}

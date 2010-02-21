@@ -13,6 +13,8 @@ import pojo.ListAttribute;
 
 
 import dbconn.DBConnector;
+import dto.PrepstmtDTO;
+import dto.PrepstmtDTOArray;
 
 public class CrudDAO {
 	private void debug(int priority,String s){
@@ -450,10 +452,36 @@ public class CrudDAO {
 			try{
 				if(crs!=null)crs.close();
 			}catch(SQLException e){
-				debug(0, e.getMessage());
+				debug(5, e.getMessage());
 			}
 		}
 		return appid;
+	}
+
+	public String getStoreFlag(String screenName, String panelName) throws SQLException {
+		DBConnector db = new DBConnector();
+		CachedRowSet crs = null;
+		String SQL = "select rw_flg from  screen_panel where scr_name =? and panel_name = ?";
+		String storeflag=""; 
+		try {
+			PrepstmtDTOArray  arPrepStmt = new PrepstmtDTOArray();
+			arPrepStmt.add(PrepstmtDTO.DataType.STRING, screenName);
+			arPrepStmt.add(PrepstmtDTO.DataType.STRING, panelName);
+				crs = db.executePreparedQuery(SQL,arPrepStmt);
+				while(crs.next()){
+					storeflag=  crs.getString("rw_flg");
+				}
+				if(storeflag == null)storeflag="";
+		} catch (SQLException e) {
+			throw e;
+		}finally{
+			try{
+				if(crs!=null)crs.close();
+			}catch(SQLException e){
+				debug(5, e.getMessage());
+			}
+		}
+		return storeflag;
 	}
 
 }

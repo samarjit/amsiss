@@ -2,13 +2,13 @@ package dto;
 
 import java.util.ArrayList;
 
-public class PerpstmtDTOArray    {
+public class PrepstmtDTOArray    {
 private ArrayList<PrepstmtDTO> ardto =null;
 
 public ArrayList<PrepstmtDTO> getArdto() {
 	return ardto;
 }
-public PerpstmtDTOArray(){
+public PrepstmtDTOArray(){
 	ardto = new ArrayList<PrepstmtDTO>();
 }
 public void add( PrepstmtDTO.DataType dt,String data){

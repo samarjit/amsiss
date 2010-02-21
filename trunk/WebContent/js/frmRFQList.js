@@ -175,6 +175,7 @@ function viewdetails(btnname){
 		document.getElementById("formwhere").submit();
 	}
 	else {
+		showalert("select a record first");
 		return false;
 	}
 	return true;	 

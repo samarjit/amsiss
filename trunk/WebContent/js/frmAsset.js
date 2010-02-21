@@ -8,10 +8,14 @@ function populate()
 		//alert("In message: whereClause=" + whereClause);
 		// prompt("url",url);	
 		sendAjaxGet(url, requestCallBack);
-	}	
-	//alert("In populate");
+	}
+	if(screenMode == "create"){
+		jQuery('#btnModify').attr('disabled','disabled');
+		jQuery('#btnDelete').attr('disabled','disabled');
+		jQuery('#btnSubmit').attr('disabled','disabled');
+	}
 }
-var screenMode = "insert";
+//var screenMode = "insert";
 function $F(p){
 	if(document.getElementById(p))
 	return document.getElementById(p).value;
@@ -36,6 +40,7 @@ function requestCallBack(p){
 		//alert(detailTable[i].id);			
 		if (detailTable[i].id == 'buttonPanel')
 			continue;
+		if(detailTable[i].rows[0])
 		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
 			//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
 
@@ -75,23 +80,27 @@ function requestCallBack(p){
 	}
 	
 	disable_fields();
-	populateVendors();
+	 
 	
-	createVendorDropdownAjax();
+	//createVendorDropdownAjax();
 	
 }
 
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
-	var query = jQuery("#panelsdiv  table:first ").find("tr").eq(0).find("td ");
-
-
-	var elem = 	jQuery(query);
-
-	jQuery.each(query, function(index, item) {
-		tdwidthar[index]  = jQuery(item).width();
+	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
+		 
+		var query = jQuery(elem).eq(0).find("tr").eq(0).find("td ");
+		jQuery.each(query, function(index, item) {
+		//	alert(elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width());
+			if(!tdwidthar[index])tdwidthar[index]  = jQuery(item).width();
+			else if(   tdwidthar[index] < jQuery(item).width())			{
+				tdwidthar[index]  = jQuery(item).width();
+			}
+			 
+				
+		});
 	});
-
 	var j = 0 ;
 	var maxtd = tdwidthar.length;
 
@@ -136,6 +145,13 @@ function disable_fields(){
 			});
 		
 		}
+		 
+		
+	}//btnRead,btnSave,btnModify,btnDelete,btnSubmit,btnSubmitselAll
+	var updateonar = "dnid,Status,wflactionid,wflactiondesc,wflid,btnSave".split(",");
+	for ( var i = 0; i < updateonar.length; i++) {
+		var arelm = updateonar[i];
+		jQuery("#"+ arelm).attr('disabled','disabled');
 	}
 }
 
@@ -155,7 +171,7 @@ function reqSave() {
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	 
-	if(screenMode == "insert"){
+	if(screenMode == "create"){
 	document.getElementById("assetid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAsset";
 	//prompt("url",url);	
@@ -197,10 +213,12 @@ function deleteData(){
 }
 
 function saveCallBack(val) {
-	//show success message 
-	if(val < 0)showerror("Error while saving! ");
+	//show success message
+	var json = JSON.parse(val);
+	
+	if(json.error !=null )showerror(json.error);
 	else {
-		showalert("Successfully saved your request! ");
+		showalert(json.message);
 		populate();
 	}
 }
@@ -261,7 +279,7 @@ function updateData(obj){
 	screenMode = "modify";
 	//There will be only one table in search screen 'search div'
 	//document.requestFrm.submit();
-	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
+	/*listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 
@@ -304,9 +322,15 @@ function updateData(obj){
 			});
 
 		}
-	}
-
-
+	}*/
+	
+//dnid,hidspace,assetid,assetname,assettype,vendorid,make,tag,config,allocstatus,warranty,quantity,remarks,
+	//Status,wflactionid,wflactiondesc,wflid,
+var updateonar = "dnid,assetname,assettype,vendorid,make,tag,config,allocstatus,warranty,quantity,remarks,btnSave".split(",");
+for ( var i = 0; i < updateonar.length; i++) {
+	var arelm = updateonar[i];
+	jQuery("#" + arelm).removeAttr('disabled');
+}
 
 }
 

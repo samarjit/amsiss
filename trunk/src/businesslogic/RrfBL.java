@@ -14,7 +14,7 @@ import javax.naming.InitialContext;
 import javax.sql.rowset.CachedRowSet;
 
 import dbconn.DBConnector;
-import dto.PerpstmtDTOArray;
+import dto.PrepstmtDTOArray;
 import dto.UserDTO;
 import dto.PrepstmtDTO.DataType;
 
@@ -73,7 +73,7 @@ public class RrfBL implements BaseBL{
 				CachedRowSet qtcrs = null;
 				try {
 					DBConnector db = new DBConnector();
-					PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 					arPrepstmt.add(DataType.STRING, qtid);			
 					debug(1,arPrepstmt.toString(QTSQL));
 
@@ -100,7 +100,7 @@ public class RrfBL implements BaseBL{
 				CachedRowSet rrfcrs = null;
 				try {
 					DBConnector db = new DBConnector();
-					PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 					arPrepstmt.add(DataType.STRING, rrfid);			
 					debug(1,arPrepstmt.toString(RRFSQL));
 
@@ -132,7 +132,7 @@ public class RrfBL implements BaseBL{
 			CachedRowSet crs = null;
 			try {
 				DBConnector db = new DBConnector();
-				PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 				arPrepstmt.add(DataType.STRING, rrfid);			
 				debug(1,arPrepstmt.toString(SQL));
 
@@ -205,7 +205,7 @@ public class RrfBL implements BaseBL{
 		CachedRowSet crs = null;
 		try {
 			DBConnector db = new DBConnector();
-			PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+			PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 			arPrepstmt.add(DataType.STRING, quotationid);			
 			debug(1,arPrepstmt.toString(SQL));
 
@@ -241,7 +241,7 @@ public class RrfBL implements BaseBL{
 		CachedRowSet crs = null;
 		try {
 			DBConnector db = new DBConnector();
-			PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+			PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 			arPrepstmt.add(DataType.STRING, quotationid);			
 			debug(1,arPrepstmt.toString(SQL));
 
@@ -273,6 +273,20 @@ public class RrfBL implements BaseBL{
 
 	@Override
 	public HashMap postSubmitProcessBL(Map hm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public HashMap postUpdateProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public HashMap preUpdateProcessBL(Map buslogHm) {
 		// TODO Auto-generated method stub
 		return null;
 	}

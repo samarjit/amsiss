@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.sql.rowset.CachedRowSet;
 
 import dbconn.DBConnector;
-import dto.PerpstmtDTOArray;
+import dto.PrepstmtDTOArray;
 import dto.PrepstmtDTO.DataType;
 
 public class RfqBL implements BaseBL {
@@ -37,7 +37,7 @@ public class RfqBL implements BaseBL {
 			CachedRowSet crs = null;
 			try {
 				DBConnector db = new DBConnector();
-				PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 				arPrepstmt.add(DataType.STRING, vendorid);
 				arPrepstmt.add(DataType.STRING, rfqid);
 				debug(0,arPrepstmt.toString(SQL));
@@ -109,6 +109,16 @@ public class RfqBL implements BaseBL {
 	}
 	@Override
 	public HashMap postSubmitProcessBL(Map hm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public HashMap postUpdateProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public HashMap preUpdateProcessBL(Map buslogHm) {
 		// TODO Auto-generated method stub
 		return null;
 	}

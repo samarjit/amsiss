@@ -3,18 +3,28 @@ package actionclass;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.net.URLDecoder;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import businesslogic.BaseBL;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import crud.InsertData;
 import crud.UpdateData;
+import dao.CrudDAO;
 
 public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 
@@ -22,6 +32,8 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 	private String insertKeyValue;
 	private String screenName;
 	private String whereclause;
+	private HashMap retBLhm = null;
+	
 	private HttpServletRequest servletRequest;
 	
 	private void debug(int priority, String s){
@@ -43,6 +55,13 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 			servletRequest = request;
 	}
 	
+	public HashMap getRetBLhm() {
+		return retBLhm;
+	}
+
+	public void setRetBLhm(HashMap retBLhm) {
+		this.retBLhm = retBLhm;
+	}
 	
 	public String execute()  {
 		HashMap metadata = new HashMap();
@@ -69,17 +88,45 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
     	debug(0,"where clause  = " +whereclause);
     	
     	String resultHtml = "No Data found";
+    	ArrayList errorList = new ArrayList();
     	if(insertKeyValue != null || (!"".equals(insertKeyValue)))
 			try {
-				resultHtml = update.doUpdate(screenName, insertKeyValue, whereclause);
+				
+				String updresult = update.doUpdate(screenName, insertKeyValue, whereclause);
+				if(updresult.length() >1){
+					errorList.add(updresult);
+				}
+				debug(5,"callin postUpdateProcessBL ");
+				HashMap retBL = postUpdateProcessBL(screenName);
+				if(retBL.get("error")!=null){
+					errorList.add("Business Logic error occured");
+				}
+				
 			} catch (JSONException e) {
 				debug(5,e.getMessage());
 				e.printStackTrace();
-				resultHtml = String.valueOf(-1);
+				errorList.add("Data extraction error");
+			} catch (Exception e) {
+				debug(5,e.getMessage());
+				e.printStackTrace();
+				errorList.add("Business Logic Exception");
 			}
-    		//resultHtml  = "hii i cant write now.. ";
     	
-        debug(5,"Update Result"+resultHtml);
+			try {
+				JSONObject jobj = new JSONObject();
+				if (errorList.size() > 0) {
+					
+					jobj.put("error", errorList);
+					jobj.put("message", "Record updated successfully");
+					resultHtml = jobj.toString();
+				}else{
+					jobj.put("message", "Record updated successfully");
+					resultHtml = jobj.toString();
+				}
+			} catch (Exception e) {
+				debug(5,e.toString());
+			}
+		debug(5,"Updated resultHtml:"+resultHtml);
        // String resXML  = getResultXML (qry,metadata); 
         inputStream = new StringBufferInputStream(resultHtml);
     	//inputStream = new StringBufferInputStream("in view details");
@@ -87,6 +134,46 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
         
         //clearing the where clause after use
         return SUCCESS;
+	}
+	
+	private void preUpdateProcessBL(String screenName) {
+	
+	}
+	private HashMap postUpdateProcessBL(String screenName) throws Exception {
+		
+		Class aclass = null;
+		CrudDAO cd = new CrudDAO();
+		retBLhm = new HashMap();
+		String businessLogic = cd.getBusinessLogicName(screenName);
+		try {
+			if (businessLogic != null && !"".equals(businessLogic)) {
+				aclass = Class.forName(businessLogic);
+				BaseBL basebl = (BaseBL) aclass.newInstance();
+				Map buslogHm = new HashMap();
+
+				Map map = servletRequest.getParameterMap();//parameters;
+				
+				Iterator iter = map.entrySet().iterator();
+				while (iter.hasNext()) {
+					Entry n = (Entry) iter.next();
+					String key = n.getKey().toString();
+					String values[] = (String[]) n.getValue();
+					buslogHm.put(key, values);
+				}	
+				//buslogHm = map;
+				retBLhm = basebl.postUpdateProcessBL(buslogHm);
+			}
+			else{
+				//retBLhm.put("error", "BL Class not defined");
+				debug(1," BL Class from DB not defined");
+			}
+		} catch (Exception e) {
+			debug(1,"Businesslogic not found");
+			e.printStackTrace();
+			retBLhm.put("error","Error executing business logic");
+			throw e;
+		}
+		return retBLhm;
 	}
 
 }

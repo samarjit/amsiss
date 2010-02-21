@@ -184,7 +184,7 @@ public class SearchListAC extends ActionSupport {
 		}
 		
 		
-		debug(1,searchQuery);
+		debug(1,"searchQuery:"+searchQuery);
     	return searchQuery;
     }
     
