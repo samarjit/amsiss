@@ -9,9 +9,9 @@ function populate()
 		// prompt("url",url);	
 		sendAjaxGet(url, approvalRRFCallBack);
 	}	
-	//alert("In populate");
+	alert("In populate");
+	System.out.println("in populate..");
 }
-
 
 function clearWhereClause(){
 	alert(">>>Calling clearWhereClause...");
@@ -19,9 +19,12 @@ function clearWhereClause(){
 }
 
 var screenMode = "insert";
+
 function approvalRRFCallBack(p){
 	//alert("Got from ajax:"+p);
-	//disable_fields();
+	disable_fields();
+	document.getElementById("rrfcomments").disabled=false;
+	
 	document.getElementById("retreivedetailsdiv").innerHTML = p;	
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	//alert(panelsTable.length);
@@ -92,87 +95,6 @@ function reqSubmit() {
 	prepareInsertData();
 }
 
-function rrfSave() {
-	//alert("in save ");	
-	alert(inserturlpart);
-	//alert("in savesdkgf ");	
-	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
-	alert("dnSave method ....");
-	
-	if(screenMode == "insert"){
-		
-			var url=inserturlpart+"?panelName=searchPanel&screenName=frmDeliveryNote";
-			prompt("url",url);	
-			url = url+ "&insertKeyValue="+ prepareInsertData();
-			//prompt("url",url);
-			//add key:vlaue to url
-			sendAjaxGet(url, saveCallBack);
-			alert("dnSave method for insert");
-
-	}
-	
-	if(screenMode == "modify"){
-		
-		whereclause  = makeWhereClause();
-		alert("Where Clause is :"+whereclause);
-		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmDeliveryNote";
-		prompt("url",url);	
-		url = url+ "&insertKeyValue="+ prepareInsertData();
-
-		//prompt("url",url);
-		//add key:vlaue to urlate
-		sendAjaxGet(url, saveCallBack);
-	}
-}
-
-////update method from delivery note....
-function updateData(obj){
-	//obj.disabled = true;
-	screenMode = "modify";
-	alert("Calling updateData method for pressing Modify button");
-	//There will be only one table in search screen 'search div'
-	//document.requestFrm.submit();
-	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
-
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-
-	for(var m =0; m<panelsTable.length;m++){
-
-		if (panelsTable[m].id == 'panelFields'){
-
-			fields = panelsTable[m].getElementsByTagName("input");
-			var query = jQuery(panelsTable[m]).find(" :input");
-			var elem = 	jQuery(query);
-			//alert("inside update panel panels " + fields.length);
-			// for(var k = 0; k<fields.length; k++){
-			jQuery.each(elem,function(k,fields){
-				//alert("inside panel panels " + fields.id);
-				for (i = 0; i <listTable.rows[0].cells.length ; i++ )
-				{
-					// alert(fields[k].id);
-					
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id){
-						
-						//alert(jQuery(listTable.rows[0].cells[i]).find("div").text().split(',')[6]);
-						if(!(jQuery(listTable.rows[0].cells[i]).find("div").text().split(',')[6]  == 'Y')) {
-
-							fields.disabled = false;
-						}
-					}
-
-					//for date
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id){
-						if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE')) {
-						fields.disabled = true;
-						}
-					} 
-				}
-
-			});
-		}
-	}
-}
-
 function deleteData(){
 	
 	whereclause  = makeWhereClause();
@@ -184,10 +106,32 @@ function deleteData(){
 	sendAjaxGet(url, saveCallBack);
 }
 
+//Error/Successful Message for saving
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0)alert("Error while saving! ");
-	else alert("Successfully saved your request! ");
+	if(val < 0)
+	{ 
+		showerror("Could not update : Error Occured! "); 
+	}
+	
+	else
+	{
+		if(flash=='1')
+		{ 
+			location.href= ctxpath+"/template1.action?screenName=frmApprovalRRFList";
+			alert("Successfully sent your rrf to the next level! ");	
+		}
+		else if(flash=='2')
+		{  
+			location.href= ctxpath+"/template1.action?screenName=frmApprovalRRFList";
+			alert("Successfully saved your approval rrf! "); 
+		}
+		else if(flash=='3')
+		{  
+			location.href= ctxpath+"/template1.action?screenName=frmApprovalRRFList";
+			alert("Successfully saved your rejected rrf! "); 
+		}
+	}
 }
 
 function KeyValue(a,b) {
@@ -213,73 +157,32 @@ function prepareInsertData() {
 	//var array = {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	var pclass = new Array();
-		//alert(dataTable.length);		
+	
+	//alert(dataTable.length);		
 		for (var i=0; i<dataTable.length; i++) {
 				
-			var query = "#panelsdiv #" + dataTable[i].id + " input";
+			var query = "#panelsdiv #" + dataTable[i].id + " :input";
 			var requestar = new Array();
 			//alert(query);
 			var elem = 	jQuery(query); 
 			var j = 0;
 			jQuery.each(elem, function(index, item) {	
 				//alert(j);
-				requestar[j] = new KeyValue(item.id, item.value);				
+				requestar[j] = new KeyValue(item.id, item.value);	
+				//alert("requestar"+requestar[j]);
 				j++;						
 			});
+			pclass[i] = new panelClass(dataTable[i].id,requestar);	
 			
-			pclass[i] = new panelClass(dataTable[i].id,requestar);					
 		}	
 		var k = new Object();
-		k.json2 = pclass;
-		//alert(">>>pclass array::"+pclass);
-		var myJSONText = JSON.stringify(k,replacer,"");
-		//alert(myJSONText );	
+		k.json = pclass;
+		
+		var myJSONText = JSON.stringify(k, replacer,"");
+		//alert(myJSONText);	
 		return myJSONText;			
 }
-/*
-function updateData(obj){
-	//obj.disabled = true;
-	screenMode = "modify";
-		//There will be only one table in search screen 'search div'
-		//document.requestFrm.submit();
-		listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
-
-panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-for(var m =0; m<panelsTable.length;m++){
-	if (panelsTable[m].id == 'panelFields'){
-	fields = panelsTable[m].getElementsByTagName("input");
-		//alert("inside update panel panels " + fields.length);
-		for(var k = 0; k<fields.length; k++){
-		//	alert("inside panel panels " + fields[k].id);
-			for (i = 0; i <listTable.rows[0].cells.length ; i++ )
-			{
-				// alert(fields[k].id);
-				// alert(jQuery(listTable.rows[0].cells[i]).text());
-				if(!(jQuery(listTable.rows[0].cells[i]).text().split(',')[6]  == 'Y')) {
-					
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[3] == fields[k].id){
-						
-						fields[k].disabled = false;
-				}
-			}
-				
-				//for date
-				if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE')) {
-					
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[3] == fields[k].id){
-						fields[k].disabled = true;
-				}
-			} 
-			
-		
-		}
-	
-	}
-}
-	
-}
-}*/
-
+var rrfid= null;
 function makeWhereClause(){
 	 
 	// alert("in make url,selectedIdx:"+selectedIdx);
@@ -288,8 +191,9 @@ function makeWhereClause(){
 	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 	whereClause = "panelFields1WhereClause=";
+	//alert(">>>>>whereClause in makeWhereClause method ::"+whereClause);
 	if(listTable != null){
-		//poplate where clause url
+		//poplate wher clause url
 		var j=0;
 		requestar = new Array();
 		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
@@ -300,6 +204,7 @@ function makeWhereClause(){
 				name = jQuery.trim(name);
 				value = jQuery("#retreivedetailsdiv").find(" table tbody tr").eq(1).find(" td").eq(i).text();
 				value = jQuery.trim(value);
+				rrfid=value;
 				whereClause = whereClause + name + "!" + value + "~#";
 				requestar[j] = new KeyValue(name, value);				
 				j++;		
@@ -311,45 +216,86 @@ function makeWhereClause(){
 		var myJSONText = JSON.stringify(k, replacer,"");
 		
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
+		//alert(">>>whereClause in MakeWhereClause::"+whereClause);
+		 		
 	}
+	
 	return whereClause;	 
 
 }
+function approvalRrfSave() 
+{
+    whereclause  = makeWhereClause();
+	var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApprovalRRF";
+	//prompt("url",url);	
+	url = url+ "&insertKeyValue="+ prepareInsertData();
+	//prompt("url",url);
+	//add key:vlaue to url
+	sendAjaxGet(url, saveCallBack);
+}
+
+function saveCallBackforPO(val) 
+{
+	//show success message 
+	if(val < 0)
+		showerror("Could not save PO for this rrf : Error Occured! ");
+	else 
+	{
+		alert("Successfully saved your purchase order! ");
+	}
+}
+
+var flash='0';
 //update the status depending on the manager approval
 function updateStatus(btnname) 
 {
-	//alert(">>>Button Name:"+btnname);
+	
 	if(btnname=="btnforwardtonextlevel")
 	{
-		//alert("forwardtonextlevel");
-		
-		//document.getElementById("requestid").value = "AUTOGEN_SEQUENCE_ID";	
-		whereclause  = makeWhereClause();
-		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApprovalRRF";
-		prompt("url",url);	
-		url = url+ "&insertKeyValue="+ prepareInsertData();
-
-		//prompt("url",url);
-		//add key:vlaue to url
-		sendAjaxGet(url, saveCallBack);
-					
-			
-						
+		flash=='1';	
+		document.getElementById("rrfstatus").value = "Fw To Next Level";	
+		approvalRrfSave();
+		savePO();
 	}
 	else if(btnname=="btnapprove")
 	{
-		//alert("approve");
+		flash=='2';
+		document.getElementById("rrfstatus").value = "Approved";	
+		approvalRrfSave();
+		getMgrId();
 	}
 	else if (btnname=="btnreject")
 	{
-		//alert("reject");
+		flash=='3';
+		document.getElementById("rrfstatus").value = "Rejected";	
+		approvalRrfSave();
 	}	
 }
-
-function createPO()
+function getMgrId()
 {
-	location.href= ctxpath+"/template1.action?screenName=frmCreatePO";
+	
+	var url = jsrpcurlpart+"?screenName=frmApprovalRRF&rrfid="+rrfid+"&rpcid=getmanagerid";
+	sendAjaxGet(url, saveCallBack);
+	/*jQuery.ajax({
+		   type: "GET",
+		   url: "jsrpc.action?screenName=frmApprovalRRF&rrfid="+rrfid+"&rpcid=getmanagerid",
+		   success:  saveCallBackforPO
+
+		 });*/
 }
+
+function savePO()
+{
+	alert("in testjsrpc method...");
+	alert(">>RRFid>>>>"+rrfid);
+	jQuery.ajax({
+		   type: "GET",
+		   url: "jsrpc.action?screenName=frmApprovalRRF&rrfid="+rrfid+"&rpcid=purchaseorder",
+		   success:  saveCallBackforPO
+
+		 });
+}
+
 
 function submitactivity(){
 	//alert("here in submit activity");
