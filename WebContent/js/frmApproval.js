@@ -16,6 +16,10 @@ function clearWhereClause(){
 
 function approvalReqCallBack(p)
 {
+	disable_fields();
+	document.getElementById("comments").disabled=false;
+	document.getElementById("managerid").disabled=false;
+		
 	//alert("Starting approvalReqCallBack method...");
 	document.getElementById("retreivedetailsdiv").innerHTML = p;	
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
@@ -57,21 +61,10 @@ function approvalReqCallBack(p)
 			}
 		}
 	}
-	/*if(screenMode == "createrrf")
-	{
-		document.getElementById("modify").disabled=true;
-		document.getElementById("delete").disabled=true;
-		document.getElementById("cancel").disabled=true;
-		disable_quot_fields();
-	}
-	else
-	{		
-		disable_fields();
-	}
-	fnAdjustTableWidth();*/
-	//alert("In the Reqcallback method");
+	
+	fnAdjustTableWidth();
+	
 }
-
 
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
@@ -120,7 +113,6 @@ function insertData() {
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 }
 
-
 function requestSubmit() {
 	//alert("In rrfsubmit  !!");
 
@@ -141,56 +133,72 @@ function requestSubmit() {
 	//prepareInsertData();
 }
 
-function approvalReqSave() {
-	//alert("in save ");
-	screenMode="modify";
-	//alert(inserturlpart+" Mode:"+screenMode);
-	//alert("in savesdkgf ");	
-	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
-	//alert(screenMode);
-	if(screenMode == "insert"){
-	document.getElementById("requestid").value = "AUTOGEN_SEQUENCE_ID";	
-	var url=inserturlpart+"?panelName=searchPanel&screenName=frmApproval";
+function approvalReqSave() 
+{
+	whereclause  = makeWhereClause();
+	var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApproval";
 	//prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRFQ&create=true";
+	url = url+ "&insertKeyValuve="+ prepareInsertData();
+
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
-
-	}
-	
-	if(screenMode == "modify"){
-		whereclause  = makeWhereClause();
-		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApproval";
-		//prompt("url",url);	
-		url = url+ "&insertKeyValue="+ prepareInsertData();
-
-		//prompt("url",url);
-		//add key:vlaue to url
-		sendAjaxGet(url, saveCallBack);
-		}
-	
+}
+var flash=0;
+//update the status depending on the manager approval
+function updateStatus(btnname) 
+{
+	if(btnname=="btnforwardtonextlevel")
+	{
+		flash='1';
+		document.getElementById("requeststatus").value = "Forward To Next Level";
+		//alert(flash);
+		approvalReqSave();
 		
+	}
+	else if(btnname=="btnapprove")
+	{
+		flash='2';
+		document.getElementById("requeststatus").value = "Approved";	
+		//alert(flash);
+		approvalReqSave();
+		
+	}
+	else if (btnname=="btnreject")
+	{
+		flash='3';
+		document.getElementById("requeststatus").value = "Rejected";
+		//alert(flash);
+		approvalReqSave();
+		
+	}	
 }
 
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0){
-		
-		alert("Error while saving! ");
+	if(val < 0)
+	{ 
+		showerror("Could not update : Error Occured! "); 
 	}
-	else{
-		if(screenAction == "modify"){
-
-			//location.href= ctxpath+"/template1.action?screenName=frmRRFList"
-			alert("Successfully modified your rrf! ");
+	
+	else
+	{
+		if(flash=='1')
+		{ 
+			location.href= ctxpath+"/template1.action?screenName=frmApprovalList";
+			alert("Successfully sent your request to the next level! ");	
 		}
-		if(screenAction == "insert"){
-
-			//location.href= ctxpath+"/template1.action?screenName=frmQuotationList"
-			alert("Successfully created your rrf! ");
+		else if(flash=='2')
+		{  
+			location.href= ctxpath+"/template1.action?screenName=frmApprovalList";
+			alert("Successfully saved your approval request! "); 
 		}
+		else if(flash=='3')
+		{  
+			location.href= ctxpath+"/template1.action?screenName=frmApprovalList";
+			alert("Successfully saved your rejected request! "); 
 		}
+	}
 }
 
 function KeyValue(a,b) {
@@ -241,126 +249,10 @@ function prepareInsertData() {
 		//alert(myJSONText);	
 		return myJSONText;			
 }
-//update the status depending on the manager approval
-function updateStatus(btnname) 
-{
-	//alert(">>>Button Name:"+btnname);
-	if(btnname=="btnforwardtonextlevel")
-	{
-		//alert("forwardtonextlevel");
-		
-		//document.getElementById("requestid").value = "AUTOGEN_SEQUENCE_ID";	
-		whereclause  = makeWhereClause();
-		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApproval";
-		//prompt("url",url);	
-		url = url+ "&insertKeyValue="+ prepareInsertData();
-
-		//prompt("url",url);
-		//add key:vlaue to url
-		sendAjaxGet(url, saveCallBack);
-					
-			
-						
-	}
-	else if(btnname=="btnapprove")
-	{
-		//alert("approve");
-	}
-	else if (btnname=="btnreject")
-	{
-		//alert("reject");
-	}	
-}
 
 
 
-/*function updateData(obj){
 
-	whereclause  = makeWhereClause();
-	alert("whereclause :"+whereclause);
-	var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApproval";
-	prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData();
-
-	//prompt("url",url);
-	//add key:vlaue to urlate
-	sendAjaxGet(url, saveCallBack);
-
-}*/
-
-/*function updateData(obj){
-	//obj.disabled = true;
-	//screenAction = "modify";
-	//There will be only one table in search screen 'search div'
-	//document.requestFrm.submit();
-	//alert("In update Data method...");
-	//document.getElementById("save").disabled=false;
-	//document.getElementById("modify").disabled=true;
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	//alert("PanelsTable's Length : "+panelsTable.length);
-	detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
-	//alert("DetailTable's Length : "+detailTable.length);
-	
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		if (detailTable[i].id == 'buttonPanel')
-		continue;
-		//alert("detail table's cell length : "+detailTable[i].rows[0].cells.length);
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) 
-		{			
-			comStr = jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			//alert("comStr: "+comStr);
-			//alert("comVal: "+comVal);
-			var testid=document.getElementById("requestid").value;
-			alert("Test id"+testid);
-			if(comStr='requeststatus' && comVal=='Applied')
-			{
-				document.getElementById("requeststatus").value='Approved';
-				var whereclause  = makeWhereClause();
-				//var whereclause  = " where REQID="+testid;
-				alert("Where Clause >>>>>"+whereclause);
-				var url=updateurlpart+"?wclause=" + whereclause+"&screenName=frmApproval";
-				
-				//alert("URL is : "+url);
-				prompt("url",url);	
-				url = url+ "&insertKeyValue="+ prepareInsertData();
-				//prompt("url",url);
-				//add key:vlaue to url
-				sendAjaxGet(url, saveCallBack);
-			
-				}
-				
-			}
-				
-		}
-	}*/
-	/*
-	
-	for(var m =0; m<panelsTable.length;m++){
-
-		if (panelsTable[m].id == 'panelFields'){
-
-			fields = panelsTable[m].getElementsByTagName("input");
-			var query = jQuery(panelsTable[m]).find(" :input");
-			var elem = 	jQuery(query);
-			alert("Element :"+elem);
-			//alert("inside update panel panels " + fields.length);
-			// for(var k = 0; k<fields.length; k++){
-			jQuery.each(elem,function(k,fields){
-				//alert("inside panel panels " + fields.id);
-				for (i = 0; i <listTable.rows[0].cells.length ; i++ )
-				{
-					alert("Data for update method :"+);
-				}
-
-			});
-
-		}*/
-	
-	
-
- 
 function makeWhereClause(){
 	 
 	// alert("in make url,selectedIdx:"+selectedIdx);
