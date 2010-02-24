@@ -16,47 +16,54 @@ function clearWhereClause(){
 
 function approvalReqCallBack(p)
 {
-	disable_fields();
-	document.getElementById("comments").disabled=false;
-	document.getElementById("managerid").disabled=false;
-		
-	//alert("Starting approvalReqCallBack method...");
-	document.getElementById("retreivedetailsdiv").innerHTML = p;	
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	//alert("PanelsTable's Length : "+panelsTable.length);
 	
-	detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
-	//alert("DetailTable's Length : "+detailTable.length);
-	
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		if (detailTable[i].id == 'buttonPanel')
-		continue;
-		//alert("detail table's cell length : "+detailTable[i].rows[0].cells.length);
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
-						
-			comStr = jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			//alert("comStr:",comStr);
-			//alert("comVal:",comVal);
-				
-			for(var l = 0; l<panelsTable.length; l++)
-			{
-				//alert(panelsTable[i].id);
-				if (panelsTable[l].id == 'buttonPanel')
+	var json = JSON.parse(p);	
+	if(json.error !=null ){
+		showerror(json.error);
+	}
+	else {
+		disable_fields();
+		document.getElementById("comments").disabled=false;
+		document.getElementById("managerid").disabled=false;
+		p = decodeURIComponent(json.message);
+		//alert("Starting approvalReqCallBack method...");
+		document.getElementById("retreivedetailsdiv").innerHTML = p;	
+		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+		//alert("PanelsTable's Length : "+panelsTable.length);
+
+		detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+		//alert("DetailTable's Length : "+detailTable.length);
+
+		for ( var i=0; i<detailTable.length ; i++)
+		{
+			if (detailTable[i].id == 'buttonPanel')
 				continue;
-			
-				if(detailTable[i].id == panelsTable[l].id)
-				{ 
-				   //var input = panelsTable[l].getElementsByTagName("input");
-					var query = jQuery(panelsTable[l]).find(" :input");
-					var elem = 	jQuery(query);					
-					jQuery.each(elem, function(index, item) 
-					{						
-					 	if(item.id == comStr){
-						 jQuery(item).val(comVal);						 
-					 	}
-					});
+			//alert("detail table's cell length : "+detailTable[i].rows[0].cells.length);
+			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
+
+				comStr = jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
+				//alert("comStr:",comStr);
+				//alert("comVal:",comVal);
+
+				for(var l = 0; l<panelsTable.length; l++)
+				{
+					//alert(panelsTable[i].id);
+					if (panelsTable[l].id == 'buttonPanel')
+						continue;
+
+					if(detailTable[i].id == panelsTable[l].id)
+					{ 
+						//var input = panelsTable[l].getElementsByTagName("input");
+						var query = jQuery(panelsTable[l]).find(" :input");
+						var elem = 	jQuery(query);					
+						jQuery.each(elem, function(index, item) 
+								{						
+							if(item.id == comStr){
+								jQuery(item).val(comVal);						 
+							}
+								});
+					}
 				}
 			}
 		}
