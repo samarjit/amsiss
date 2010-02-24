@@ -48,6 +48,8 @@ private Map<String, String[]> parameter;
 
 private String create;
 private String cancel;
+
+private String approve;
 private String activityname;
 private HashMap retBLhm = null;
 private String navigateto;
@@ -83,6 +85,14 @@ public void setCreate(String create) {
 
 public String getActivityname() {
 	return activityname;
+}
+
+public String getApprove() {
+	return approve;
+}
+
+public void setApprove(String approve) {
+	this.approve = approve;
 }
 
 public void setActivityname(String activityname) {
@@ -181,6 +191,7 @@ public String executeScrflow(){
 //				} catch (WorkflowException e) {
 //					e.printStackTrace();
 //				}
+				
 				preSubmitProcessBL(screenName);
 				wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
 				//postSubmitProcessBL(screenName);
@@ -234,6 +245,34 @@ public String executeScrflow(){
 			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
 			
 		}
+		else if(approve != null){
+			
+			wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
+			preSubmitProcessBL(screenName); 
+			ArrayList<String> hmActions = new ArrayList<String>();
+			/*if(retBLhm.get("nextAction") != null){
+				doString = (String) retBLhm.get("nextAction");
+				System.out.println("doString ##" + doString);
+				hmActions.add(doString);
+				url = wflBean.getScreenId(doString);
+			}*/
+			//else{
+			if(approve.equals("true")){
+				decision="approved";
+			}else{
+				decision="rejected";
+			}
+			hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
+			if ("".equals(url) && hmActions.size() > 0) {
+				String actionname = (String) hmActions.get(0);
+				url = wflBean.getScreenId(actionname);
+//					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
+//					appdto.setCurrentAction(actionname);
+			}
+			//}
+			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
+		}
+		
 	} catch (Exception e) {
 	debug(5,"Some Error has occured:"+e.getMessage());
 			e.printStackTrace();
