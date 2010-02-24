@@ -287,9 +287,8 @@ public String executeScrflow(){
 		returnStr = "flowcontroller";
 		
 		String ajaxresultHtml = "";
-		returnStr = "ajaxwflsuccess";
 		 if("true".equals(ajaxflag)){
-			 
+			 returnStr = "ajaxwflsuccess";
 			 try {
 				 JSONObject jobjpasseddownerror = new JSONObject(passeddownerror);
 				 String msg = jobjpasseddownerror.getString("message");
@@ -463,9 +462,9 @@ private void preSubmitProcessBL(String screenName) {
 		returnStr = "flowcontroller";
 		
 		String ajaxresultHtml = "";
-		returnStr = "ajaxwflsuccess";
+		
 		 if("true".equals(ajaxflag)){
-			 
+			 returnStr = "ajaxwflsuccess";
 			 try {
 				 JSONObject jobjpasseddownerror = new JSONObject(passeddownerror);
 				 String msg = jobjpasseddownerror.getString("message");
