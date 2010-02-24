@@ -10,7 +10,8 @@ import oracle.jdbc.util.Login;
 import crud.InsertData;
 
 import dbconn.DBConnector;
-import dto.PerpstmtDTOArray;
+import dto.PrepstmtDTOArray;
+import dto.PrepstmtDTOArray;
 import dto.UserDTO;
 import dto.PrepstmtDTO.DataType;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class ApprovalRrfBL implements BaseBL{
 			CachedRowSet crs = null;
 			try {
 					 DBConnector db = new DBConnector();
-					 PerpstmtDTOArray arPrepstmt = new PerpstmtDTOArray();
+					 PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 					 arPrepstmt.add(DataType.STRING, autogenId);		
 					 debug(0,arPrepstmt.toString(SQL));
 				     crs = db.executePreparedQuery(SQL, arPrepstmt);
@@ -155,6 +156,18 @@ public class ApprovalRrfBL implements BaseBL{
 		// TODO Auto-generated method stub
 		debug(1,"Post Submit Business logic");
 		return (HashMap) hm;
+	}
+
+	@Override
+	public HashMap postUpdateProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap preUpdateProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
