@@ -31,64 +31,70 @@ jQuery(function() {
 
 function quotationCallBack(p){
 	//alert("Got from ajax:"+p);
-	
-	document.getElementById("retreivedetailsdiv").innerHTML = p;	
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	//alert(panelsTable.length);
-	//alert("for checking");
-	detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+	var json = JSON.parse(p);	
+	if(json.error !=null ){
+		showerror(json.error);
+	}
+	else {
+		p = decodeURIComponent(json.message);
+		document.getElementById("retreivedetailsdiv").innerHTML = p;	
+		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+		//alert(panelsTable.length);
+		//alert("for checking");
+		detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
 
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		//alert(detailTable[i].id);			
-		if (detailTable[i].id == 'buttonPanel')
-			continue;
-		if(detailTable[i].id == 'panelFields' && screenMode == "capturequotation")
-		{			
-			document.getElementById("qtstatus").value='NEW';
-			document.getElementById("quotationdate").value='10/11/2010';
-			document.getElementById("dateofdelivery").value='10/12/2010';
-			document.getElementById("qtstatus").disabled=true;
-			document.getElementById("totalamount").disabled=true;
-			document.getElementById("totalamount").value='0';
-			document.getElementById("unitprice").value='0';
-			document.getElementById("discount").value='0';
-			document.getElementById("mischarge").value='0';
-			
-			
-			continue;
-		}
-		
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
-			//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
+		for ( var i=0; i<detailTable.length ; i++)
+		{
+			//alert(detailTable[i].id);			
+			if (detailTable[i].id == 'buttonPanel')
+				continue;
+			if(detailTable[i].id == 'panelFields' && screenMode == "capturequotation")
+			{			
+				document.getElementById("qtstatus").value='NEW';
+				document.getElementById("quotationdate").value='10/11/2010';
+				document.getElementById("dateofdelivery").value='10/12/2010';
+				document.getElementById("qtstatus").disabled=true;
+				document.getElementById("totalamount").disabled=true;
+				document.getElementById("totalamount").value='0';
+				document.getElementById("unitprice").value='0';
+				document.getElementById("discount").value='0';
+				document.getElementById("mischarge").value='0';
 
-			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			
-			//comVal = detailTable[i].rows[1].cells[k].innerText;	  
-			for(var l = 0; l<panelsTable.length; l++)
-			{
-				//alert(panelsTable[i].id);
-				if (panelsTable[l].id == 'buttonPanel')
-					continue;
-				if (panelsTable[l].id == 'panelFields' && screenMode=="capturequotation"){
-					
-					continue;
-				}
-				if(detailTable[i].id == panelsTable[l].id)
-				{ 
-/*					var input = panelsTable[l].getElementsByTagName("input");*/
-					var query = jQuery(panelsTable[l]).find(" :input");
-					var elem = 	jQuery(query);
-				
-					jQuery.each(elem, function(index, item) {
-						
-					 	if(item.id == comStr){
-						 jQuery(item).val(comVal);
-					 	}
-					});
 
+				continue;
+			}
+
+			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
+				//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
+
+				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+				//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
+				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
+
+				//comVal = detailTable[i].rows[1].cells[k].innerText;	  
+				for(var l = 0; l<panelsTable.length; l++)
+				{
+					//alert(panelsTable[i].id);
+					if (panelsTable[l].id == 'buttonPanel')
+						continue;
+					if (panelsTable[l].id == 'panelFields' && screenMode=="capturequotation"){
+
+						continue;
+					}
+					if(detailTable[i].id == panelsTable[l].id)
+					{ 
+						/*					var input = panelsTable[l].getElementsByTagName("input");*/
+						var query = jQuery(panelsTable[l]).find(" :input");
+						var elem = 	jQuery(query);
+
+						jQuery.each(elem, function(index, item) {
+
+							if(item.id == comStr){
+								jQuery(item).val(comVal);
+							}
+						});
+
+					}
 				}
 			}
 		}
@@ -296,6 +302,8 @@ function prepareInsertData() {
 	document.getElementById("itemid").value=document.getElementById("rfqitemID").value;
 	document.getElementById("itemquantity").value=document.getElementById("rfqquantity").value;
 	document.getElementById("vendorid").value=document.getElementById("rfqvendorid").value;
+	//document.getElementById("rfqid").value=document.getElementById("rfqrfqid").value;
+	
 	//alert(dataTable.length);		
 	//for (var i=0; i<dataTable.length; i++) {
 	//alert(document.getElementById("currency").value);
