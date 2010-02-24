@@ -10,8 +10,9 @@ import oracle.jdbc.util.Login;
 import crud.InsertData;
 
 import dbconn.DBConnector;
+//import dto.PerpstmtDTOArray;
 import dto.PrepstmtDTOArray;
-import dto.PrepstmtDTOArray;
+
 import dto.UserDTO;
 import dto.PrepstmtDTO.DataType;
 import java.util.Map;
@@ -24,12 +25,144 @@ public class ApprovalRrfBL implements BaseBL{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map session;
+	
+	
+	
 	@Override
-	public HashMap preSubmitProcessBL(Map hm) {
+	public HashMap preSubmitProcessBL(Map buslogHm) {
 		// TODO Auto-generated method stub
+		System.out.println("In rrf submit");
 		
-		debug(1,"pre submit Business logic");
-		return (HashMap) hm;
+		String[] apprarr = (String[]) buslogHm.get("approve");
+		if(apprarr != null){			
+			String approve = (String)(apprarr[0]);
+			if(approve.equals("true")){
+							
+				String[] rrfidarr = (String[]) buslogHm.get("rrfid");
+				if(rrfidarr == null)
+					return (HashMap) buslogHm;
+				String rrfid = (String)(rrfidarr[0]);
+				String RRFSQL = "update ams_rrf set rrf_status='APPROVED' where rrf_id=? ";
+
+				CachedRowSet rrfcrs = null;
+				try {
+					DBConnector db = new DBConnector();
+					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+					arPrepstmt.add(DataType.STRING, rrfid);			
+					debug(1,arPrepstmt.toString(RRFSQL));
+
+					rrfcrs = db.executePreparedQuery(RRFSQL, arPrepstmt );
+				}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					if (rrfcrs != null) {
+						try {
+							rrfcrs.close();
+						} catch (Exception e) {
+						}
+					}
+				}
+				//buslogHm.put("nextAction", "CreateRRF");
+			}						
+		}					
+		else{
+			
+			String approve = (String)(apprarr[0]);
+			if(approve.equals("true")){
+							
+				String[] rrfidarr = (String[]) buslogHm.get("rrfid");
+				if(rrfidarr == null)
+					return (HashMap) buslogHm;
+				String rrfid = (String)(rrfidarr[0]);
+				String RRFSQL = "update ams_rrf set rrf_status='REJECTED' where rrf_id=? ";
+
+				CachedRowSet rrfcrs = null;
+				try {
+					DBConnector db = new DBConnector();
+					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+					arPrepstmt.add(DataType.STRING, rrfid);			
+					debug(1,arPrepstmt.toString(RRFSQL));
+
+					rrfcrs = db.executePreparedQuery(RRFSQL, arPrepstmt );
+				}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					if (rrfcrs != null) {
+						try {
+							rrfcrs.close();
+						} catch (Exception e) {
+						}
+					}
+				}
+				//buslogHm.put("nextAction", "CreateRRF");
+			}
+		}
+			
+			
+			//update the status of rrf.
+			/*String[] rrfidarr = (String[]) buslogHm.get("rrfid");
+			if(rrfidarr == null)
+				return (HashMap) buslogHm;
+			String rrfid = (String)(rrfidarr[0]);
+			debug(1, rrfid);
+			String SQL = "update ams_rrf set rrf_status='PENDAPPROVAL' where rrf_id=? ";
+
+			CachedRowSet crs = null;
+			try {
+				DBConnector db = new DBConnector();
+				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+				arPrepstmt.add(DataType.STRING, rrfid);			
+				debug(1,arPrepstmt.toString(SQL));
+
+				crs = db.executePreparedQuery(SQL, arPrepstmt );
+			}catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				if (crs != null) {
+					try {
+						crs.close();
+					} catch (Exception e) {
+					}
+				}
+			}
+		}*/
+		//send mail to approver - Not Working--
+		//boolean res = true;
+		/*InitialContext ic;
+		String snName = "java:comp/env/mail/MyMailSession";
+		Session session = null;		
+		try {
+			ic = new InitialContext();
+			session = (Session) ic.lookup(snName);
+		} catch (Exception e) {
+			debug(5, "Exception: JNDI failed!");
+		}
+		if (session == null) {
+			debug(0, "Using non JNDI way");
+			Properties props = System.getProperties();
+			props.put("mail.from", "admin@hp.com");
+			session = Session.getInstance(props, null);
+		}
+		Message msg = new MimeMessage(session);
+		try {
+			msg.setSubject("RRF For approval");
+			msg.setSentDate(new Date());
+			msg.setFrom();
+			 
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(
+					"mgr@mydomain.com", false));
+			msg.setContent("RRF for approval","text/html");
+			Transport.send(msg);
+
+			debug(1, "Email send to:" + "mgr@mydomain.com" + msg.getSubject() + " from:"
+					+ "admin@mydomain.com" + " sub:" + msg.getSubject());
+		} catch (Exception e) {
+			debug(5, "Exception in sending mail!");
+			e.printStackTrace();
+			//res = false;
+		}		*/
+		
+		return (HashMap)buslogHm;	
 	}
 	
 	private void debug(int priotiry, String s){
@@ -48,8 +181,7 @@ public class ApprovalRrfBL implements BaseBL{
 		
 		debug(1,"Pre Retrieve Business logic");
 		
-		System.out.println("To check the manager id with the login user id--->preretrieve");
-		
+		System.out.println("To check the manager id with the login user id--->preretrieve");		
 		
 		return (HashMap) buslogHm;
 	}
