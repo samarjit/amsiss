@@ -3,6 +3,7 @@ package actionclass;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.json.JSONObject;
 
 import businesslogic.BaseBL;
 
@@ -68,14 +70,46 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
     	whereclause = decoder.decode(request1.getParameter("wclause"));
     	
     	
-    	postDeleteProcessBL(screenName);
+    	
     	debug(0,"Screen Name  = " +screenName);
     	debug(0,"where clause  = " +whereclause);
     	
     	String resultHtml = "No Data found";
+    	ArrayList errorList = new ArrayList();
+    	JSONObject jobj = new JSONObject();
+    	
     	if(whereclause != null || (!"".equals(whereclause)))
     		resultHtml = delete.doDelete(screenName,whereclause);
     		//resultHtml  = "hii i cant write now.. ";
+    	
+    	if(resultHtml.length() >1){
+			errorList.add(resultHtml);
+		}
+    	   	
+    	HashMap retPostBL = postDeleteProcessBL(screenName);
+    	
+    	if(retPostBL.get("error")!= null){
+			errorList.add("Post Business Logic error occured");
+		}
+    	
+    	try {
+        	jobj.put("message", resultHtml);
+			if (errorList.size() > 0) {
+				
+				jobj.put("error", errorList);
+				jobj.put("message", "Record saved successfully");
+				resultHtml = jobj.toString();
+			}else{
+				jobj.put("message", "Record saved successfully");
+				resultHtml = jobj.toString();
+			}
+		} catch (Exception e) {
+			debug(5,e.toString());
+		}
+		
+		 if(errorList.size() > 0){
+        	 return SUCCESS;
+        }
     	
         debug(5,"Update Result"+resultHtml);
        // String resXML  = getResultXML (qry,metadata); 
@@ -87,7 +121,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
         return SUCCESS;
 	}
 
-	private void postDeleteProcessBL(String screenName2) {
+	private HashMap postDeleteProcessBL(String screenName2) {
 		
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
@@ -117,6 +151,8 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 			debug(1,"Businesslogic not found");
 			e.printStackTrace();
 		}		
+		return retBLhm;
 	}
+	
 		
 }
