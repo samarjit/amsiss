@@ -13,29 +13,40 @@ function populate()
 
 function dnCallBack(p)
 {
+	
+	
 	disable_fields();
-	document.getElementById("retreivedetailsdiv").innerHTML = p;	
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	detailTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		if (detailTable[i].id == 'buttonPanel')	continue;
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) 
-		{			
-			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			
-			for(var l = 0; l<panelsTable.length; l++)
-			{
-				if (panelsTable[l].id == 'buttonPanel')	continue;
-				if(detailTable[i].id == panelsTable[l].id)
+	
+	var json = JSON.parse(p);	
+	if(json.error !=null ){
+		showerror(json.error);
+	}
+	else {
+		p = decodeURIComponent(json.message);
+
+		document.getElementById("retreivedetailsdiv").innerHTML = p;	
+		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+		detailTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+		for ( var i=0; i<detailTable.length ; i++)
+		{
+			if (detailTable[i].id == 'buttonPanel')	continue;
+			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) 
+			{			
+				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
+
+				for(var l = 0; l<panelsTable.length; l++)
 				{
-					var input = panelsTable[l].getElementsByTagName("input");
-					for( var m = 0 ; m < input.length; m++)
+					if (panelsTable[l].id == 'buttonPanel')	continue;
+					if(detailTable[i].id == panelsTable[l].id)
 					{
-						if(input[m].id == comStr)
+						var input = panelsTable[l].getElementsByTagName("input");
+						for( var m = 0 ; m < input.length; m++)
 						{
-							input[m].value = comVal;
+							if(input[m].id == comStr)
+							{
+								input[m].value = comVal;
+							}
 						}
 					}
 				}
