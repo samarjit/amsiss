@@ -100,7 +100,7 @@ public class SearchListAC extends ActionSupport {
         
         /////////////////////relatedpanel may be put in screen_panel ///////////////
         String SQL = 
-        	"select relatedpanel from screen  where   scr_name='"+scrname+"'";
+        	"select relatedpanel from screen_panel  where   scr_name='"+scrname+"' and panel_name='"+panelName+"' ";
         debug(1,SQL);
         String relatedPanel = "";
         try {

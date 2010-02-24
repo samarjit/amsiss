@@ -33,6 +33,11 @@ private String ajaxPopulate = "";
 private InputStream inputStream;
 
 
+private void debug( int priority,String s){
+	if(priority > 0)
+	System.out.println("GenerateHtml:"+s);
+}
+
 public String getScreenTitle() {
 	return screenTitle;
 }
@@ -52,10 +57,6 @@ public void setInputStream(InputStream inputStream) {
 	this.inputStream = inputStream;
 }
 
-private void debug( int priority,String s){
-	if(priority > 0)
-	System.out.println("GenerateHtml:"+s);
-}
 private void debug(String s){
 //	System.out.println("GenerateHtml:"+s);
 }
@@ -205,7 +206,7 @@ public void setPassword(String password) {
 		 } 
 		 templateName = htmlc.getTemplateName(screenName);
 		 setExtraFields(arPanelData);
-		//  System.out.println("Extrs fields:"+getExtraFields());
+		  debug(0,"Extrs fields:"+getExtraFields());
 		 // setLeftPanel(leftPanel);
 		// setTopPanel(topPanel);
 		// setBottomPanel(bottomPanel);

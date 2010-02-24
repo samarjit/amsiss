@@ -21,19 +21,72 @@ function search(){
 function mycall(p){
 	//alert("Got from ajax:"+p);
 	document.getElementById("searchdiv").innerHTML = p;
-	addSelectEvents();
+	addSelectEvents("searchdiv");
+	search2();
 }
 
+function search2(){
+	 
+	var url=urlpart+"?panelName=searchPanelAsst&screenName="+screenName;
+	if(document.getElementById("assetid"))
+		url=url+'&assetid='+document.getElementById("assetid").value;
+	if(document.getElementById("assetname"))
+		url=url+'&assetname='+document.getElementById("assetname").value;
+	if(document.getElementById("assettype"))
+		url=url+'&assettype='+document.getElementById("assettype").value;
+	if(document.getElementById("make"))
+		url=url+'&make='+document.getElementById("make").value;
+	if(document.getElementById("assetversion"))
+		url=url+'&assetversion='+document.getElementById("assetversion").value;	
+	if(document.getElementById("allocstatus"))
+		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
+	
+	sendAjaxGet(url,mycall2);
+}
+function mycall2(p){
+	//alert("Got from ajax:"+p);
+	document.getElementById("searchdiv2").innerHTML = p;
+	addSelectEvents("searchdiv2");
+	search3();
+}
+function search3(){
+	 
+	var url=urlpart+"?panelName=searchPanelAlloc&screenName="+screenName;
+	if(document.getElementById("assetid"))
+		url=url+'&assetid='+document.getElementById("assetid").value;
+	if(document.getElementById("assetname"))
+		url=url+'&assetname='+document.getElementById("assetname").value;
+	if(document.getElementById("assettype"))
+		url=url+'&assettype='+document.getElementById("assettype").value;
+	if(document.getElementById("make"))
+		url=url+'&make='+document.getElementById("make").value;
+	if(document.getElementById("assetversion"))
+		url=url+'&assetversion='+document.getElementById("assetversion").value;	
+	if(document.getElementById("allocstatus"))
+		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
+	
+	sendAjaxGet(url,mycall3);
+}
+function mycall3(p){
+	//alert("Got from ajax:"+p);
+	document.getElementById("searchdiv3").innerHTML = p;
+	addSelectEvents("searchdiv3");
+}
 
 
 var selectedIdx = -1;
 
-function cleanUp() {
-	var arobj = document.getElementById("searchdiv").getElementsByTagName("TR");
+function cleanUp(obj) {
+	/*var arobj = document.getElementById("searchdiv").getElementsByTagName("TR");
 
 	for (var i =1 ; i < arobj.length; i++) {
 		arobj[i].style.backgroundColor= "#E7FFBF";
-	}
+	}*/
+	query = jQuery(obj.parentNode).find("tr");
+	jQuery.each(query,function(index,item){
+		item.style.backgroundColor= "#E7FFBF";
+	});
+	
 }
 
 /*////////////////////////
@@ -98,14 +151,14 @@ document.onclick = function(e){
 
 	}
 */
-function addSelectEvents(){
+function addSelectEvents(param){
  
-	var srchdv = document.getElementById("searchdiv").getElementsByTagName("TR");
+	var srchdv = document.getElementById(param).getElementsByTagName("TR");
 
 	for (var i =0;i< srchdv.length;i++) {
 	if(srchdv[i].childNodes[0].tagName != "TH"){ 
 			srchdv[i].onclick=function(p){
-			 cleanUp();
+			 cleanUp(this);
 			 selectedIdx  = this.rowIndex;
 			  this.style.backgroundColor= "#D6F1A3";
 				}
