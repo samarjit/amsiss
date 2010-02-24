@@ -31,6 +31,11 @@ public class Createhtml {
 	private int  COL1ENTRY1  = 1; 
 	private int  COL2ENTRY1  = 2; 
 	
+
+	private void debug( int priority,String s){
+		if(priority > -1)
+		System.out.println("Createhtml:"+s);
+	}
 	
 	public List<String> getPanels(String screenName){
 		String SQL = 
@@ -119,7 +124,7 @@ public class Createhtml {
 			}
 			crs.absolute(-1); //resetting crs to start point to parse it again
 			
-			System.out.println("panelType:"+panelType);
+			debug(1,"panelType:"+panelType+" "+panelName);
 			if(panelType == COL2ENTRY1)
 				htable = new HTable((maxrows+1),(maxcols+1)*2);
 			else if(panelType == COL1ENTRY1){
@@ -163,21 +168,21 @@ public class Createhtml {
 				//System.out.println(panel_name+" :" + nrow + " "+ncol);
 				if("TEXTBOX".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "<input type=\"text\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" class="+classname+" />";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				
 				if("PASSWORD".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "<input type=\"password\" name='"+fname+"' id='"+idname+"' value='' "+validation+" "+attributes+" class="+classname+" />";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				
 				if("DROPDOWN".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+" class="+classname+"><option value=\"\">Select</option>";
 					CachedRowSet crs1 = null;
 					try {
@@ -197,25 +202,25 @@ public class Createhtml {
 						}
 					} 
 					elmStr+= "</select>";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				if("HIDDEN".equalsIgnoreCase(htmlelm)){
 					//elmStr = lblname;
-					//htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					//htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "<input type=\"hidden\" name='"+fname+"' id='"+idname+"' value=''  "+validation+" "+attributes+" class="+classname+" />";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				if("LABEL".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				if(htmlelm == null || "".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = " name='"+fname+"' id='"+idname+"#"+dbcol+"' ";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				
 				if("CHECKBOX".equalsIgnoreCase(htmlelm)){
@@ -226,21 +231,26 @@ public class Createhtml {
 				}
 				if("TEXTAREA".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "<TEXTAREA name='"+fname+"' id='"+idname+"' "+validation+" class="+classname+" ></TEXTAREA>";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2+1, elmStr);
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				if("BUTTON".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
-				//	htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, "");
+				//	htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, "");
 				//	elmStr = "<input type=\"button\" name='"+fname+"' id='"+idname+"' value='"+lblname+"'  "+validation+" />";
 				//	elmStr = "<div class=\"clear\" "+validation+"><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'     ><SPAN>"+lblname+"</SPAN></a></div>";
 					elmStr = "<button "+validation+" class=\"button "+classname+"\" name='"+fname+"' id='"+idname+"' "+attributes+">"+lblname+"</button>";
-					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol), elmStr);
+					
+					int column =0;
+					if(panelType == COL2ENTRY1)
+						column=1;
+					else column=0;
+					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType +column, elmStr);
 				}
 			
 			}
-			//System.out.println(htable.toString());
+			//debug(0,htable.toString());
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
