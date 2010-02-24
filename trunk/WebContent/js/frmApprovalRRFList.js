@@ -12,11 +12,12 @@ function search(){
 		url=url+'&srrfdate='+document.getElementById("srrfdate").value;
 	if(document.getElementById("srrfstatus"))
 		url=url+'&srrfstatus='+document.getElementById("srrfstatus").value;
+	url=url+'&srrfaprv='+userId;
 	sendAjaxGet(url,mycall);
 }
 function mycall(p)
 {
-	//alert("Got from ajax:"+p);
+	//alert("Got from ajax:"+userId);
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
 }
