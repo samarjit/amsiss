@@ -10,6 +10,7 @@ function populate()
 		sendAjaxGet(url, requestCallBack);
 	}	
 	if(screenMode == "create"){
+		jQuery('#btnModify').attr('disabled','disabled');
 		jQuery('#btnVendorMap').attr('disabled','disabled');
 		jQuery('#btnSubmit').attr('disabled','disabled');
 	}
@@ -169,7 +170,7 @@ function reqSave() {
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	//alert(screenMode);
-	if(screenMode == "insert"){
+	if(screenMode == "create"){
 	document.getElementById("rfqid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";
 	//prompt("url",url);	
@@ -212,11 +213,16 @@ function deleteData(){
 
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0)showerror("Error while saving! ");
+	alert(val);
+	var json = JSON.parse(val);
+	
+	if(json.error !=null )showerror(json.error);
 	else {
-		showalert("Successfully saved your request! ");
+		showalert(json.message);
 		populate();
 	}
+	if(json.workflowurl != null)
+	location.href = json.workflowurl ;
 }
 
 

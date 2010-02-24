@@ -1,5 +1,7 @@
 package workflow;
 
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +15,8 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.SessionAware;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import businesslogic.BaseBL;
 
@@ -49,12 +53,26 @@ private HashMap retBLhm = null;
 private String navigateto;
 
 private String action;
+private String ajaxflag;
 
 private String wflid;
 private String appid;
 private String doString;
+private InputStream inputStream;
+private String passeddownerror;
 
 
+public InputStream getInputStream() {
+    return inputStream;
+}
+
+public String getAjaxflag() {
+	return ajaxflag;
+}
+
+public void setAjaxflag(String ajaxflag) {
+	this.ajaxflag = ajaxflag;
+}
 public String getCreate() {
 	return create;
 }
@@ -98,13 +116,25 @@ public String getForwardtourl() {
 public void setForwardtourl(String forwardtourl) {
 	this.forwardtourl = forwardtourl;
 }
+
+
+
+public String getPasseddownerror() {
+	return passeddownerror;
+}
+
+public void setPasseddownerror(String passeddownerror) {
+	this.passeddownerror = passeddownerror;
+}
+
 /**
  * /workflow.action?activityname=CR&create=true
  * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
  */
-public String execute1(){
+public String executeScrflow(){
 	String returnStr=SUCCESS;
 	UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
+	ArrayList<String> errorList = new ArrayList<String>();
 	String url=""; 
 	String decision=null;
 	try {
@@ -205,15 +235,39 @@ public String execute1(){
 			
 		}
 	} catch (Exception e) {
-		debug(5,"Some Error has occured:"+e.getMessage());
-		e.printStackTrace();
-		url="/pages/workflowerror.jsp";
-	}
-	//redirecturl =  "/template1.action?screenName=frmRequestList";
-	
-	redirecturl =url;
-	if("".equals(redirecturl))redirecturl ="/pages/workflowcompleted.jsp";
-	returnStr = "flowcontroller";
+	debug(5,"Some Error has occured:"+e.getMessage());
+			e.printStackTrace();
+			url=url+"&workflowerror=workflow error occured";
+			errorList.add("Workflow Error");
+			addActionError("Workflow error occured");
+		}
+		
+		redirecturl =url;
+		if("".equals(redirecturl)){	redirecturl ="/pages/workflowcompleted.jsp";}
+		
+		returnStr = "flowcontroller";
+		
+		String ajaxresultHtml = "";
+		returnStr = "ajaxwflsuccess";
+		 if("true".equals(ajaxflag)){
+			 
+			 try {
+				 JSONObject jobjpasseddownerror = new JSONObject(passeddownerror);
+				 String msg = jobjpasseddownerror.getString("message");
+				 if(msg.length() > 0 )
+					 ajaxresultHtml = msg+ ", workflow completed successfully";
+				jobjpasseddownerror.put("message",ajaxresultHtml);
+				jobjpasseddownerror.put("workflowurl",ServletActionContext.getRequest().getContextPath()+ url);
+				if(errorList.size() > 0)
+				jobjpasseddownerror.put("error",errorList);
+				 ajaxresultHtml = jobjpasseddownerror.toString();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		 }
+		 	 
+		 inputStream = new StringBufferInputStream(ajaxresultHtml);
 	return returnStr;	
 }
 
@@ -265,12 +319,16 @@ private void preSubmitProcessBL(String screenName) {
 	public String execute(){
 		String returnStr=SUCCESS;
 		UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
+		ArrayList<String> errorList = new ArrayList<String>();
 		String url=""; 
 		long worflowid = -1;
+		
 		if(wflid != null && !"".equals(wflid))
 		worflowid = Long.parseLong(wflid);
 		
 		try {
+			
+			
 			if (create != null) {
 				if (activityname != null && !"".equals(activityname)) {
 					ApplicationDTO appdto = new ApplicationDTO();
@@ -310,8 +368,10 @@ private void preSubmitProcessBL(String screenName) {
 						wflBean.doAction(wflSession/*appid*/, worflowid, actionid);
 
 					} catch (InvalidInputException e) {
+						errorList.add("Workflow Error");
 						e.printStackTrace();
 					} catch (WorkflowException e) {
+						errorList.add("Workflow Error");
 						e.printStackTrace();
 					}
 					wflBean.changeStageApplicationWfl(usrDTO.getUserid(),worflowid, wflSession /*appid*/, "C", Integer.parseInt(doString));//'S' for started
@@ -342,15 +402,49 @@ private void preSubmitProcessBL(String screenName) {
 				appdto.setWflid(worflowid);
 				
 			}
+			
+			
+			 if("true".equals(ajaxflag)){
+				
+				
+			 }
+			 
+			 
 		} catch (Exception e) {
 			debug(5,"Some Error has occured:"+e.getMessage());
 			e.printStackTrace();
+			url=url+"&workflowerror=workflow error occured";
+			errorList.add("Workflow Error");
+			addActionError("Workflow error occured");
 		}
-		redirecturl =  "/template1.action?screenName=frmRequestList";
 		
 		redirecturl =url;
-		if("".equals(redirecturl))redirecturl ="/pages/workflowcompleted.jsp";
+		if("".equals(redirecturl)){	redirecturl ="/pages/workflowcompleted.jsp";}
+		
 		returnStr = "flowcontroller";
+		
+		String ajaxresultHtml = "";
+		returnStr = "ajaxwflsuccess";
+		 if("true".equals(ajaxflag)){
+			 
+			 try {
+				 JSONObject jobjpasseddownerror = new JSONObject(passeddownerror);
+				 String msg = jobjpasseddownerror.getString("message");
+				 if(msg.length() > 0 )
+					 ajaxresultHtml = msg+ ", workflow completed successfully";
+				jobjpasseddownerror.put("message",ajaxresultHtml);
+				jobjpasseddownerror.put("workflowurl",ServletActionContext.getRequest().getContextPath()+ url);
+				if(errorList.size() > 0)
+				jobjpasseddownerror.put("error",errorList);
+				 ajaxresultHtml = jobjpasseddownerror.toString();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		 }
+		 	 
+		 inputStream = new StringBufferInputStream(ajaxresultHtml);
+		 
 		return returnStr;
 	}
 
