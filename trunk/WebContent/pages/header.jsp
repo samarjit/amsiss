@@ -35,6 +35,10 @@ location.href=url;
 	 response.sendRedirect(url);
  }
 %>
+<script>
+var userId =  '<%= userDTO.getUserid() %>' 
+</script>
+
 Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
         DateFormat.MEDIUM, DateFormat.SHORT).format(new Date()) %>
 </div>
