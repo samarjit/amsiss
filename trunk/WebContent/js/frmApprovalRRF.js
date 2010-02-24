@@ -9,8 +9,7 @@ function populate()
 		// prompt("url",url);	
 		sendAjaxGet(url, approvalRRFCallBack);
 	}	
-	alert("In populate");
-	System.out.println("in populate..");
+	//alert("In populate");
 }
 
 function clearWhereClause(){
@@ -22,42 +21,50 @@ var screenMode = "insert";
 
 function approvalRRFCallBack(p){
 	//alert("Got from ajax:"+p);
-	disable_fields();
-	document.getElementById("rrfcomments").disabled=false;
+	//disable_fields();
+	var json = JSON.parse(p);	
+	if(json.error !=null ){
+		showerror(json.error);
+	}
+	else {
+		p = decodeURIComponent(json.message);
+		disable_fields();
+		document.getElementById("rrfcomments").disabled=false;
 	
-	document.getElementById("retreivedetailsdiv").innerHTML = p;	
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	//alert(panelsTable.length);
-	detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+		document.getElementById("retreivedetailsdiv").innerHTML = p;	
+		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+		//alert(panelsTable.length);
+		detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
 
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		//alert(detailTable[i].id);			
-		if (detailTable[i].id == 'buttonPanel')	continue;
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
-			//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
+		for ( var i=0; i<detailTable.length ; i++)
+		{
+			//alert(detailTable[i].id);			
+			if (detailTable[i].id == 'buttonPanel')	continue;
+			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
+				//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
 
-			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			
-			//comVal = detailTable[i].rows[1].cells[k].innerText;	  
-			for(var l = 0; l<panelsTable.length; l++)
-			{
-				//alert(panelsTable[i].id);
-				if (panelsTable[l].id == 'buttonPanel')
-					continue;
-				if(detailTable[i].id == panelsTable[l].id)
+				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+				//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
+				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
+
+				//comVal = detailTable[i].rows[1].cells[k].innerText;	  
+				for(var l = 0; l<panelsTable.length; l++)
 				{
-					var input = panelsTable[l].getElementsByTagName("input");
-					//alert(input.length);
-
-					for( var m = 0 ; m < input.length; m++)
+					//alert(panelsTable[i].id);
+					if (panelsTable[l].id == 'buttonPanel')
+						continue;
+					if(detailTable[i].id == panelsTable[l].id)
 					{
-						if(input[m].id == comStr)
+						var input = panelsTable[l].getElementsByTagName("input");
+						//alert(input.length);
+
+						for( var m = 0 ; m < input.length; m++)
 						{
-							//alert(comStr +"   "+comVal +"   " +panelsTable[l].id + " " + detailTable[i].id);
-							input[m].value = comVal;
+							if(input[m].id == comStr)
+							{
+								//alert(comStr +"   "+comVal +"   " +panelsTable[l].id + " " + detailTable[i].id);
+								input[m].value = comVal;
+							}
 						}
 					}
 				}
@@ -182,7 +189,9 @@ function prepareInsertData() {
 		//alert(myJSONText);	
 		return myJSONText;			
 }
+
 var rrfid= null;
+
 function makeWhereClause(){
 	 
 	// alert("in make url,selectedIdx:"+selectedIdx);
@@ -218,34 +227,57 @@ function makeWhereClause(){
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 		//alert(">>>whereClause in MakeWhereClause::"+whereClause);
 		 		
-	}
-	
+	}	
 	return whereClause;	 
 
 }
-function approvalRrfSave() 
+function approvalRrf() 
 {
+	alert("In approval");
+	
+	//var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
+	var applicationid = document.getElementById("rrfrfq").value;
+	alert(applicationid);
+	
+	//var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	//var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var actionid =  document.getElementById("wflactiondesc").value;
+	var wflid= document.getElementById("wflid").value;
+	var rrfid= document.getElementById("rrfid").value;
+	//alert(rrfid);
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF"+"&rrfid="+ rrfid + "&approve=true"  ;
+	
+	alert(url);
+	//exit();
+	location.href = url;
+	
+	//exit();
+	
+	/*
     whereclause  = makeWhereClause();
 	var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApprovalRRF";
 	//prompt("url",url);	
 	url = url+ "&insertKeyValue="+ prepareInsertData();
 	//prompt("url",url);
-	//add key:vlaue to url
-	sendAjaxGet(url, saveCallBack);
+	//add key:vlaue to url*/
+	
+	//sendAjaxGet(url, approveCallBack);
 }
 
-function saveCallBackforPO(val) 
+function approveCallBack(val) 
 {
 	//show success message 
 	if(val < 0)
 		showerror("Could not save PO for this rrf : Error Occured! ");
 	else 
 	{
-		alert("Successfully saved your purchase order! ");
+		alert("Purchase order created! ");
 	}
 }
 
 var flash='0';
+
 //update the status depending on the manager approval
 function updateStatus(btnname) 
 {
@@ -271,6 +303,7 @@ function updateStatus(btnname)
 		approvalRrfSave();
 	}	
 }
+
 function getMgrId()
 {
 	
