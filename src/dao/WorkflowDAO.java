@@ -31,7 +31,8 @@ public class WorkflowDAO {
 		CachedRowSet crs2 = null;
 		String SQL = "SELECT  " +
 		"U.APPID, U.USERID, U.STATUS  " +
-		"FROM  USER_WFLID_APPID U where U.STATUS='S' and U.USERID='"+userid+"'";
+		//"FROM  USER_WFLID_APPID U where U.STATUS='S' and U.USERID='"+userid+"'";
+		"FROM  USER_WFLID_APPID U where U.STATUS='S'";
 		
 		String wflid="";
 		String appid="";
@@ -48,7 +49,8 @@ public class WorkflowDAO {
 				
 				SQL2 = "SELECT  " +
 				"U.WFLID, U.USERID, U.STATUS, U.APPID " +
-				"FROM  USER_WFLID_APPID U where U.STATUS='S' and U.USERID='"+userid+"'";
+				//"FROM  USER_WFLID_APPID U where U.STATUS='S' and U.USERID='"+userid+"'";
+				"FROM  USER_WFLID_APPID U where U.STATUS='S'";
 				if(applicationId != null && !"".equals(applicationId)){
 					SQL2+= " AND U.APPID='"+applicationId+"'";
 				}
@@ -146,7 +148,8 @@ public class WorkflowDAO {
 		if(wherein.charAt(0)== ','   ){
 			wherein = wherein.substring(1);
 		}
-		SQL1 = "delete from USER_WFLID_APPID  where WFLID="+id+" AND  USERID='"+userid+"' AND APPID ='"+appid+"' AND WFLACTIONID in ("+wherein+") ";
+		//SQL1 = "delete from USER_WFLID_APPID  where WFLID="+id+" AND  USERID='"+userid+"' AND APPID ='"+appid+"' AND WFLACTIONID in ("+wherein+") ";
+		SQL1 = "delete from USER_WFLID_APPID  where WFLID="+id+" AND APPID ='"+appid+"' AND WFLACTIONID in ("+wherein+") ";
 		try {
 			if(wherein.length() > 0){
 				debug(1,SQL1);
@@ -221,7 +224,7 @@ public class WorkflowDAO {
 			  DBConnector db = new DBConnector(); 
 				String SQL = "update  USER_WFLID_APPID SET STATUS ='"+status+"' where   " +
 						" WFLID = '" +String.valueOf(id)+"'"+
-						" AND USERID = '" +userid+"'"+
+					//	" AND USERID = '" +userid+"'"+
 						" AND APPID='" +appid+"'"+
 						" AND WFLACTIONID='"+action+"'"+
 						"   ";
@@ -261,7 +264,7 @@ public class WorkflowDAO {
 				if(crs.next()){
 					String SQL = "update  USER_WFLID_APPID SET STATUS ='"+status+"' where   " +
 					" WFLID = '" +String.valueOf(id)+"'"+
-					" AND USERID = '" +userid+"'"+
+				//	" AND USERID = '" +userid+"'"+
 					" AND APPID='" +appid+"'"+
 					" AND WFLACTIONID='"+action+"'"+
 					"   ";
@@ -310,7 +313,8 @@ public class WorkflowDAO {
 		if(wherein.charAt(0)== ','   ){
 			wherein = wherein.substring(1);
 		}
-		SQL1 = "delete from USER_WFLID_APPID  where WFLID='"+wflName+"' AND  USERID='"+userid+"' AND APPID ='"+appid+"' AND WFLACTIONDESC in ("+wherein+") ";
+		//SQL1 = "delete from USER_WFLID_APPID  where WFLID='"+wflName+"' AND  USERID='"+userid+"' AND APPID ='"+appid+"' AND WFLACTIONDESC in ("+wherein+") ";
+		SQL1 = "delete from USER_WFLID_APPID  where WFLID='"+wflName+"'  AND APPID ='"+appid+"' AND WFLACTIONDESC in ("+wherein+") ";
 		try {
 			if(wherein.length() > 0){
 				debug(1,SQL1);
@@ -353,7 +357,7 @@ public class WorkflowDAO {
 			  DBConnector db = new DBConnector(); 
 				String SQL = "update  USER_WFLID_APPID SET STATUS ='"+status+"' where   " +
 						" WFLID = '" +wflid+"'"+
-						" AND USERID = '" +userid+"'"+
+					//	" AND USERID = '" +userid+"'"+
 						" AND APPID='" +appid+"'"+
 						" AND WFLACTIONDESC='"+doString+"'"+
 						"   ";
@@ -384,7 +388,7 @@ public class WorkflowDAO {
 				if(crs.next()){
 					String SQL = "update  USER_WFLID_APPID SET STATUS ='"+status+"' where   " +
 					" WFLID = '" +wflid+"'"+
-					" AND USERID = '" +userid+"'"+
+				//	" AND USERID = '" +userid+"'"+
 					" AND APPID='" +appid+"'"+
 					" AND WFLACTIONDESC='"+action+"'"+
 					"   ";
