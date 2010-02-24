@@ -9,8 +9,7 @@ function search(){
 		url=url+'&srequesttype='+document.getElementById("srequesttype").value;
 	if(document.getElementById("srequeststatus"))
 		url=url+'&srequeststatus='+document.getElementById("srequeststatus").value;
-	if(document.getElementById("smanagerid"))
-		url=url+'&smanagerid='+document.getElementById("smanagerid").value;
+	
 	if(document.getElementById("smanagername"))
 		url=url+'&smanagername='+document.getElementById("smanagername").value;
 	if(document.getElementById("sempid"))
@@ -18,12 +17,13 @@ function search(){
 	if(document.getElementById("sempname"))
 		url=url+'&sempname='+document.getElementById("sempname").value;
 	if(document.getElementById("sdepartmentname"))
-		url=url+'&sdepartmentname='+document.getElementById("sdepartmentname").value;			
+		url=url+'&sdepartmentname='+document.getElementById("sdepartmentname").value;
 	
+	url=url+'&smanagerid='+userId;
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
-	//alert("Got from ajax:"+p);
+	//alert("Got from ajax:"+userId);
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
 }
