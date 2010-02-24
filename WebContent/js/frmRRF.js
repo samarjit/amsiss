@@ -30,71 +30,80 @@ jQuery(function() {
 
 
 function rrfCallBack(p){
-	//alert("Got from ajax:"+p);	
-	document.getElementById("retreivedetailsdiv").innerHTML = p;	
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	//alert(panelsTable.length);
+	//alert("Got from ajax:");	
 	
-	detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+	var json = JSON.parse(p);	
+	if(json.error !=null ){
+		showerror(json.error);
+	}
+	else {
+		p = decodeURIComponent(json.message);
+	//prompt('sam',p);
+		document.getElementById("retreivedetailsdiv").innerHTML = p;	
+		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+		//alert(panelsTable.length);
 
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		//alert(detailTable[i].id);			
-		if (detailTable[i].id == 'buttonPanel')
-			continue;
-		if(detailTable[i].id == 'panelFields' && screenMode == "createrrf")
+		detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+
+		for ( var i=0; i<detailTable.length ; i++)
 		{
-			document.getElementById("status").value='NEW';
-			document.getElementById("rrfdate").value='10/02/2010';
-			document.getElementById("status").disabled=true;
-			continue;
-		}
-		//alert(detailTable[i].rows[0].cells.length);
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
-			//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
-			
-			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			//alert(comStr);
-			//alert(comVal);
-			if(comStr == "status" && (comVal == "APPROVED" || comVal == "PENDAPPROVAL")){
-				document.getElementById("modify").disabled=true;
-				document.getElementById("delete").disabled=true;
-				document.getElementById("submit").disabled=true;				
-				document.getElementById("save").disabled=true;				
-			}
-			if(comStr == "status" && comVal == "NEW"){
-				document.getElementById("save").disabled=true;
-				document.getElementById("cancel").disabled=true;				
-			}			
-				
-			if(comStr == "status" && comVal == "CANCELLED"){
-				document.getElementById("save").disabled=true;
-				document.getElementById("cancel").disabled=true;	
-				document.getElementById("modify").disabled=true;
-				document.getElementById("delete").disabled=true;
-				document.getElementById("submit").disabled=true;
-			}	
-			
-			//comVal = detailTable[i].rows[1].cells[k].innerText;	  
-			for(var l = 0; l<panelsTable.length; l++)
+			//alert(detailTable[i].id);			
+			if (detailTable[i].id == 'buttonPanel')
+				continue;
+			if(detailTable[i].id == 'panelFields' && screenMode == "createrrf")
 			{
-				//alert(panelsTable[i].id);
-				if (panelsTable[l].id == 'buttonPanel')
-					continue;
-				if (panelsTable[l].id == 'panelFields' && screenMode=="createrrf")
-					continue;
-				if(detailTable[i].id == panelsTable[l].id)
-				{ 
-/*					var input = panelsTable[l].getElementsByTagName("input");*/
-					var query = jQuery(panelsTable[l]).find(" :input");
-					var elem = 	jQuery(query);					
-					jQuery.each(elem, function(index, item) {						
-					 	if(item.id == comStr){
-						 jQuery(item).val(comVal);						 
-					 	}
-					});
+				document.getElementById("status").value='NEW';
+				document.getElementById("rrfdate").value='10/02/2010';
+				document.getElementById("status").disabled=true;
+				continue;
+			}
+			//alert(detailTable[i].rows[0].cells.length);
+			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
+				//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
+
+				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+				//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
+				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
+				//alert(comStr);
+				//alert(comVal);
+				if(comStr == "status" && (comVal == "APPROVED" || comVal == "PENDAPPROVAL")){
+					document.getElementById("modify").disabled=true;
+					document.getElementById("delete").disabled=true;
+					document.getElementById("submit").disabled=true;				
+					document.getElementById("save").disabled=true;				
+				}
+				if(comStr == "status" && comVal == "NEW"){
+					document.getElementById("save").disabled=true;
+					document.getElementById("cancel").disabled=true;				
+				}			
+
+				if(comStr == "status" && comVal == "CANCELLED"){
+					document.getElementById("save").disabled=true;
+					document.getElementById("cancel").disabled=true;	
+					document.getElementById("modify").disabled=true;
+					document.getElementById("delete").disabled=true;
+					document.getElementById("submit").disabled=true;
+				}	
+
+				//comVal = detailTable[i].rows[1].cells[k].innerText;	  
+				for(var l = 0; l<panelsTable.length; l++)
+				{
+					//alert(panelsTable[i].id);
+					if (panelsTable[l].id == 'buttonPanel')
+						continue;
+					if (panelsTable[l].id == 'panelFields' && screenMode=="createrrf")
+						continue;
+					if(detailTable[i].id == panelsTable[l].id)
+					{ 
+						/*					var input = panelsTable[l].getElementsByTagName("input");*/
+						var query = jQuery(panelsTable[l]).find(" :input");
+						var elem = 	jQuery(query);					
+						jQuery.each(elem, function(index, item) {						
+							if(item.id == comStr){
+								jQuery(item).val(comVal);						 
+							}
+						});
+					}
 				}
 			}
 		}
@@ -228,7 +237,7 @@ function backToList(){
 function rrfSave() {
 	
 	if(document.getElementById("requestid").value == 'select'){		
-		document.getElementById("requestid").value=" ";
+		document.getElementById("requestid").value=" ";		
 	}
 	
 	if(document.getElementById("approvarid").value == 'select'){		
@@ -346,6 +355,7 @@ function prepareInsertData() {
 	//exit();
 	//get the quotation id from quotation fileds
 	document.getElementById("quotationid").value=document.getElementById("rrfquotationid").value;
+	document.getElementById("rrfrfqid").value=document.getElementById("rfqid").value;
 	
 
 	
