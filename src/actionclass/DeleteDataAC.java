@@ -24,18 +24,27 @@ import dao.CrudDAO;
 
 
 public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
-
+	private void debug(int priority, String s){
+		if(priority > 1){
+			System.out.println("DeleteDataAC:"+s);
+		}
+	}
+	
 	private InputStream inputStream;
 	private String screenName;
 	private String whereclause;
 	private HttpServletRequest servletRequest;
 	private HashMap retBLhm = null;
 	
-	private void debug(int priority, String s){
-		if(priority > 1){
-			System.out.println("UpdateData:"+s);
-		}
+	public HashMap getRetBLhm() {
+		return retBLhm;
 	}
+
+	public void setRetBLhm(HashMap retBLhm) {
+		this.retBLhm = retBLhm;
+	}
+
+	
 	
     public InputStream getInputStream() {
         return inputStream;
@@ -54,7 +63,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 	public String execute() throws Exception {
 		HashMap metadata = new HashMap();
     	DeleteData delete = new DeleteData();
-    	
+    	retBLhm = new HashMap();
     	if(servletRequest!=null)
     	debug(0,"query string RD : " + servletRequest.getQueryString());
     	
@@ -107,11 +116,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 			debug(5,e.toString());
 		}
 		
-		 if(errorList.size() > 0){
-        	 return SUCCESS;
-        }
-    	
-        debug(5,"Update Result"+resultHtml);
+		debug(5,"Deleted Result"+resultHtml);
        // String resXML  = getResultXML (qry,metadata); 
         inputStream = new StringBufferInputStream(resultHtml);
     	//inputStream = new StringBufferInputStream("in view details");
@@ -125,6 +130,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 		
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
+		HashMap retBLhmtmp = new HashMap();
 		String businessLogic = cd.getBusinessLogicName(screenName);
 		try {
 			if (businessLogic != null && !"".equals(businessLogic)) {
@@ -142,14 +148,20 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 					buslogHm.put(key, values);
 				}	
 				//buslogHm = map;
-				retBLhm = basebl.postDeleteProcessBL(buslogHm);
+				retBLhmtmp = basebl.postDeleteProcessBL(buslogHm);
+				if(retBLhmtmp == null){
+					retBLhm.put("message","Unimplemented business logic");
+				}else{
+					retBLhm.put("BusinessLogicRESULT",retBLhmtmp);
+				}
 			}
 			else{
 				retBLhm.put("error", "Method not found");
 			}
 		} catch (Exception e) {
-			debug(1,"Businesslogic not found");
+			debug(1,"Businesslogic not found:"+businessLogic);
 			e.printStackTrace();
+			retBLhm.put("error","Error executing business logic");
 		}		
 		return retBLhm;
 	}

@@ -2,6 +2,8 @@ function populate()
 {
 	//alert("This alert box was called with the onload event");	
 	fnAdjustTableWidth();
+	
+	//alert(unescape(whereClause))
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
 		url=url+"&whereClause="+ whereClause;		
@@ -27,7 +29,7 @@ function clearWhereClause(){
 
 function requestCallBack(p){
 	//alert("Got from ajax:"+p);
-
+	
 	var json = JSON.parse(p);	
 	//alert("Got from ajax: message"+json.message);
 	//alert("Got from ajax: error"+json.error);
@@ -182,11 +184,11 @@ function reqSave() {
 	//alert("in save ");	
 	//alert(inserturlpart+" Mode:"+screenMode);
 	//alert("in savesdkgf ");	
-	//var url=urlpart+"?panelName=searchPanel&screenName=frmAsset"+screenName;	
+	//var url=urlpart+"?panelName=searchPanel&screenName=frmAllocation"+screenName;	
 	 
 	if(screenMode == "create"){
 	document.getElementById("assetid").value = "AUTOGEN_SEQUENCE_ID";	
-	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAsset";
+	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAllocation";
 	//prompt("url",url);	
 	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRAST&create=true";
 	//prompt("url",url);
@@ -197,7 +199,7 @@ function reqSave() {
 	
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
-		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmAsset";
+		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmAllocation";
 		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 
@@ -214,9 +216,9 @@ function reqSave() {
 function deleteData(){
 	
 	whereclause  = makeWhereClause();
-	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmAsset";
-//	prompt("url",url);	
-	
+	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmAllocation";
+//	prompt("url",unescape(url));	
+//	alert("in update!!!!!!! url" +url);
 	//prompt("url",url);
 	//add key:vlaue to url
 	
@@ -227,7 +229,7 @@ function deleteData(){
 
 function saveCallBack(val) {
 	//show success message 
-
+	alert(val);
 	var json = JSON.parse(val);
 	
 	if(json.error !=null ){
@@ -347,7 +349,7 @@ function updateData(obj){
 	
 //dnid,hidspace,assetid,assetname,assettype,vendorid,make,tag,config,allocstatus,warranty,quantity,remarks,
 	//Status,wflactionid,wflactiondesc,wflid,
-var updateonar = "dnid,assetname,assettype,vendorid,make,tag,config,allocstatus,warranty,quantity,remarks,btnSave".split(",");
+var updateonar = "assetno,assethost,username,assetip,btnSave".split(",");
 for ( var i = 0; i < updateonar.length; i++) {
 	var arelm = updateonar[i];
 	jQuery("#" + arelm).removeAttr('disabled');

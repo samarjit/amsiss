@@ -144,6 +144,7 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
 		retBLhm = new HashMap();
+		HashMap retBLhmtmp = new HashMap();
 		String businessLogic = cd.getBusinessLogicName(screenName);
 		try {
 			if (businessLogic != null && !"".equals(businessLogic)) {
@@ -161,7 +162,12 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 					buslogHm.put(key, values);
 				}	
 				//buslogHm = map;
-				retBLhm = basebl.postUpdateProcessBL(buslogHm);
+				retBLhmtmp = basebl.postUpdateProcessBL(buslogHm);
+				if(retBLhmtmp == null){
+					retBLhm.put("message","Unimplemented business logic");
+				}else{
+					retBLhm.put("BusinessLogicRESULT",retBLhmtmp);
+				}
 			}
 			else{
 				//retBLhm.put("error", "BL Class not defined");

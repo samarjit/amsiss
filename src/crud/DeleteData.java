@@ -13,7 +13,7 @@ import dao.CrudDAO;
 
 public class DeleteData {
 	private void debug(int priority, String s){
-		if(priority >0)
+		if(priority >-1)
 		System.out.println(s);
 	}
 	/**
@@ -79,9 +79,11 @@ public class DeleteData {
 		}else{
 			splWhereClause =" ";
 		}
+		
+		debug(0,"joiner:"+joiner+";scrname:"+scrname+";panelName:"+panelName+";hmWherePanel:"+hmWherePanel);
 		//process where clause
 		String strWhereQuery  = cd.createWhereClause(joiner,scrname,panelName,hmWherePanel,true);
-		debug(0,"strWhereQuery="+strWhereQuery+"table name:"+tableName);
+		debug(0,"strWhereQuery="+strWhereQuery+";table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && strWhereQuery!=null && strWhereQuery.length()>0)
 		{
@@ -91,5 +93,14 @@ public class DeleteData {
 			debug(0, "Incomplete query was:"+"DELETE " + " FROM "+tableName+splWhereClause+strWhereQuery);
 		}
 		return delQuery;
+	}
+	public static void main(String[] args) throws JSONException {
+		CrudDAO cd = new CrudDAO();
+		String whereClause="{\"json\":[{\"key\":\"username\",\"value\":\"samarjit3\"},{\"key\":\"assethost\",\"value\":\"234\"},{\"key\":\"assetid\",\"value\":\"1\"}]}";
+		System.out.println("whereClause:"+whereClause);
+		HashMap hmWhere = Utility.extractWhereClause(whereClause);
+		System.out.println("hmWhere:"+hmWhere);
+		String strWhereQuery  = cd.createWhereClause(" WHERE ","frmAllocation","panelFields",hmWhere,true);
+		System.out.println("strWhereQuery="+strWhereQuery+";table name:");
 	}
 }

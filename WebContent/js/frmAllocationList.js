@@ -6,6 +6,7 @@ function search(obj){
 	}catch(e){}
 }
 jQuery(document).ready(function($) { 
+	jQuery('.paneltable').find('tr:first').find('td').css("border-bottom","1px #618C04 solid");
 search1();
 search2();
 search3();
@@ -221,7 +222,7 @@ function viewdetails(btnname){
 	//There will be only one table in search screen 'search div'
 	//alert(btnname.id);
 	
-	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
+	listTable = document.getElementById("searchdiv3").getElementsByTagName("table")[0];
 
 	whereClause = "panelFields1WhereClause=";
 	if(listTable != null && selectedIdx != -1){
@@ -231,10 +232,10 @@ function viewdetails(btnname){
 		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
 		{  
 			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
-			if(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
-				name = jQuery("#searchdiv").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
+			if(jQuery("#searchdiv3").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
+				name = jQuery("#searchdiv3").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
 				name = jQuery.trim(name);
-				value = jQuery("#searchdiv").find(" table tbody tr").eq(selectedIdx).find(" td").eq(i).text();
+				value = jQuery("#searchdiv3").find(" table tbody tr").eq(selectedIdx).find(" td").eq(i).text();
 				value = jQuery.trim(value);
 				whereClause = whereClause + name + "!" + value + "~#";
 				requestar[j] = new KeyValue(name, value);				
@@ -249,15 +250,9 @@ function viewdetails(btnname){
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
 		
-		if(btnname.id == 'capturequotation'){			
-			//alert("in Create rrf");
-			document.getElementById("formwhere").screenName.value = "frmQuotation";	
-			document.getElementById("screenMode").value= "capturequotation";
-			//document.getElementById("formwhere").submit();
-		}
-		else {
+		{
 			//alert("in view details");			
-			document.getElementById("formwhere").screenName.value = "frmAsset";
+			document.getElementById("formwhere").screenName.value = "frmAllocation";
 			document.getElementById("screenMode").value= "view";
 			//document.getElementById("formwhere").submit();
 		}
