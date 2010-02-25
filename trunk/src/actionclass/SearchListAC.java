@@ -29,7 +29,7 @@ import dbconn.DBConnector;
 public class SearchListAC extends ActionSupport {
 
 	private void debug(int priority, String s){
-		if(priority > 0){
+		if(priority > 1){
 			System.out.println("SearchListAC:"+s);
 		}
 	}
@@ -244,7 +244,7 @@ public class SearchListAC extends ActionSupport {
 				}
 			}
 		}
-		debug(1,"searchQuery:"+searchQuery+"  \ncount query:"+recCountQuery);
+		debug(2,"searchQuery-"+ panelName+":"+searchQuery+"  \ncount query:"+recCountQuery);
 		return searchQuery;
     }
     

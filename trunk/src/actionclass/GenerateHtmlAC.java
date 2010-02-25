@@ -214,7 +214,8 @@ public void setPassword(String password) {
 		 
 		if(templateName.equalsIgnoreCase("")){
 			setErrorMessage("The template was not found for this page!");
-			templateName = "failure"; //redirects to index.jsp
+			addActionError("The template was not found for this page!");
+			templateName = "failure"; //redirects to pages/unknownerror.jsp
 		}
 		
 //		try {

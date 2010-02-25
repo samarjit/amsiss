@@ -33,7 +33,7 @@ public class Createhtml {
 	
 
 	private void debug( int priority,String s){
-		if(priority > -1)
+		if(priority > 1)
 		System.out.println("Createhtml:"+s);
 	}
 	
@@ -211,7 +211,7 @@ public class Createhtml {
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
 				if("LABEL".equalsIgnoreCase(htmlelm)){
-					elmStr = lblname;
+					elmStr = "<strong>"+lblname+"</strong>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
@@ -250,7 +250,7 @@ public class Createhtml {
 				}
 			
 			}
-			//debug(0,htable.toString());
+			 debug(1,htable.toString());
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
