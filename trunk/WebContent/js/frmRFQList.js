@@ -12,7 +12,16 @@ function search(){
 	if(document.getElementById("vendor"))
 		url=url+'&vendor='+document.getElementById("vendor").value;
 	if(document.getElementById("status"))
-		url=url+'&status='+document.getElementById("status").value;			
+		url=url+'&status='+document.getElementById("status").value;		
+	
+	var pagesize = jQuery('.searchdiv .pagesize').val();
+	var pageno = jQuery('.searchdiv .pageno').val();
+	
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
+	
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){

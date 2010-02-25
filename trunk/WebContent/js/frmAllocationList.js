@@ -1,6 +1,16 @@
-
-
-function search(){
+function search(obj){
+	try{//will cause error while loading
+		if(obj.parentNode.id == 'searchdiv')search1();
+	if(obj.parentNode.id == 'searchdiv2')search2();
+	if(obj.parentNode.id == 'searchdiv3')search3();
+	}catch(e){}
+}
+jQuery(document).ready(function($) { 
+search1();
+search2();
+search3();
+});
+function search1(){
 	 
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
 	if(document.getElementById("assetid"))
@@ -15,6 +25,14 @@ function search(){
 		url=url+'&assetversion='+document.getElementById("assetversion").value;	
 	if(document.getElementById("allocstatus"))
 		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
+	
+	var pagesize = jQuery('#searchdiv .pagesize').val();
+	var pageno = jQuery('#searchdiv .pageno').val();
+	
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
 	
 	sendAjaxGet(url,mycall);
 }
@@ -41,6 +59,14 @@ function search2(){
 	if(document.getElementById("allocstatus"))
 		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
 	
+	var pagesize = jQuery('#searchdiv2 .pagesize').val();
+	var pageno = jQuery('#searchdiv2 .pageno').val();
+	
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
+	
 	sendAjaxGet(url,mycall2);
 }
 function mycall2(p){
@@ -64,6 +90,14 @@ function search3(){
 		url=url+'&assetversion='+document.getElementById("assetversion").value;	
 	if(document.getElementById("allocstatus"))
 		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
+	
+	var pagesize = jQuery('#searchdiv3 .pagesize').val();
+	var pageno = jQuery('#searchdiv3 .pageno').val();
+	
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
 	
 	sendAjaxGet(url,mycall3);
 }
