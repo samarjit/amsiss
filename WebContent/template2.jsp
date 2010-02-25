@@ -73,7 +73,7 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 
 <%--input type="button" onclick="search()" value="send ajax" />
 <div class="clear" ><a href="#" class="button" name='search' id='search'    onclick="search();" ><SPAN>Search</SPAN></a></div--%>
-<div id="searchdiv"></div>
+<div id="searchdiv"  class="searchdiv"></div>
  
 </div> <!-- id = page -->
 </body>

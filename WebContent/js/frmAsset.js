@@ -226,14 +226,21 @@ function deleteData(){
 }
 
 function saveCallBack(val) {
-	//show success message
+	//show success message 
+
 	var json = JSON.parse(val);
 	
-	if(json.error !=null )showerror(json.error);
-	else {
+	if(json.error !=null ){
+		showerror(json.error);
+	}else {
 		showalert(json.message);
-		populate();
+		if(json.workflowurl != null){
+			location.href = json.workflowurl ;
+		}else{
+			populate();
+		}
 	}
+	
 }
 
 

@@ -37,7 +37,33 @@ public class SearchListAC extends ActionSupport {
     public InputStream getInputStream() {
         return inputStream;
     }
-    /**
+    private String recCountQuery;
+    private int reccount;
+    private int pagesize = 10;
+    private int pageno = 0;
+    
+    
+    public int getPagesize() {
+		return pagesize;
+	}
+
+
+	public void setPagesize(int pagesize) {
+		this.pagesize = pagesize;
+	}
+
+
+	public int getPageno() {
+		return pageno;
+	}
+
+
+	public void setPageno(int pageno) {
+		this.pageno = pageno;
+	}
+
+
+	/**
      * Related Panel concept is used because some fields in main details table say reqdate can be actually 
      * two dates from and todate in search panel. 
      * @param metadata
@@ -90,6 +116,7 @@ public class SearchListAC extends ActionSupport {
 	        		if(!val.equalsIgnoreCase("")){
 	        			val = val.toUpperCase();
 	        			searchQueryWhere +=joiner+"UPPER("+dbcol+") like '%"+val+"%'";
+	        			joiner = " AND ";
 	        		}
 	        	}
 	        	crs.close();
@@ -162,7 +189,7 @@ public class SearchListAC extends ActionSupport {
 			e.printStackTrace();
 		}
 		
-		searchQuery = "SELECT "+searchQuery + " FROM "+tableName+ searchQueryWhere ;
+		searchQuery = "SELECT rownum rn,"+searchQuery + " FROM "+tableName+ searchQueryWhere ;
 		
 		CrudDAO cd = new CrudDAO();
 		String predefQuery = "";
@@ -174,18 +201,51 @@ public class SearchListAC extends ActionSupport {
 		 */
 		predefQuery = cd.findPreDefQuery(scrname, relatedPanel);
 		if(predefQuery!=null && predefQuery.length() > 0 ){
-			searchQuery =predefQuery+" "+searchQueryWhere;
+			searchQuery =predefQuery+" "+searchQueryWhere;//.replaceFirst("(?i:SELECT)", "SELECT rownum rn, ")+" "+searchQueryWhere;
 			debug(1,"searching ffrom predef query");
 		}
 		
 		
 		if(null != splWhereClause && !"".equalsIgnoreCase(splWhereClause)){
 			searchQuery+= joiner + splWhereClause;
+			joiner = " AND ";
 		}
 		
+		recCountQuery = searchQuery.replaceFirst(".*(?i:FROM)", "SELECT count('x') countrec FROM ");
 		
-		debug(1,"searchQuery:"+searchQuery);
-    	return searchQuery;
+    	
+		CachedRowSet crs = null;
+		String partialPageQuery = "";
+		try {
+			db = new DBConnector();
+			crs = db.executeQuery(recCountQuery);
+			int recfrom , recto;
+			if(crs.next()){
+				reccount = crs.getInt("countrec");
+			}
+			debug(1,"joiner="+joiner);
+			if(reccount > pagesize){
+				recfrom = pageno * pagesize;
+				recto = recfrom + pagesize;
+				partialPageQuery = " rownum > "+recfrom+" and rownum < "+recto;
+				//Applying SQL hint Oracle specific also rownum is an oracle specific pseudocolumn
+				searchQuery = "select * from (select /*+ FIRST_ROWS(n) */  rownum rnum,a.* from ("+searchQuery+") a where ROWNUM <="+recto+" ) where rnum > "+recfrom;
+				
+				//searchQuery = searchQuery.replaceFirst("(.*)(?i:WHERE)(.)", "$1 WHERE "+partialPageQuery +"  AND $2  ");
+			}//else just use the original query without doing anything
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (crs != null) {
+				try {
+					crs.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		debug(1,"searchQuery:"+searchQuery+"  \ncount query:"+recCountQuery);
+		return searchQuery;
     }
     
     
@@ -225,11 +285,26 @@ public class SearchListAC extends ActionSupport {
 					 html += "</tr>";
 				
 				}
+				
+				String temphtml="";
 				if(html== null || "".equals(html))
 				{
 					html="No data found";
+				}else{
+				
+				int maxpageno = (int) Math.ceil((double)reccount / pagesize); 
+				temphtml = "Page Size:<input style='width:30px;padding:0px' type=\"text\" value='"+pagesize+"' class=\"pagesize\" name=\"pagesize\" onchange=\"javascript:document.getElementById('pageno').value=0;search(this);\" />";
+				temphtml+="<select class=\"pageno\" id='pageno' onchange=\"search(this);\">";
+					for (int i = 0; i < maxpageno; i++) {
+						if(i == pageno)
+							temphtml+="<option value=\""+i+"\" selected>"+i+"</option>";
+						else
+							temphtml+="<option value=\""+i+"\">"+i+"</option>";	
+					}
+				 temphtml+="</select>";
 				}
-				html = "<table border=1>"+tableHeader+html+"</table>";
+				
+				html = temphtml+"<table border=1>"+tableHeader+html+"</table>";
 			crs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
