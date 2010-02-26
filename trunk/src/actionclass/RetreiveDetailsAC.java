@@ -134,6 +134,7 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
     public HashMap preRetreiveProcessBL(String screenName) {
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
+		HashMap retBLhmtmp = new HashMap();
 		String businessLogic = cd.getBusinessLogicName(screenName);
 		try {
 			if (businessLogic != null && !"".equals(businessLogic)) {
@@ -157,11 +158,16 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 					System.out.println("ID"+id);
 					buslogHm.put("userDTO", usr);
 					
-				retBLhm = basebl.preRetreiveProcessBL(buslogHm);
-				if(retBLhm == null){
-					retBLhm = new HashMap();
-					retBLhm.put("error",null);
-				}			
+					retBLhmtmp = basebl.preRetreiveProcessBL(buslogHm);
+					if(retBLhmtmp == null){
+						retBLhm.put("message","Unimplemented business logic");
+					}else{
+						retBLhm.put("BusinessLogicRESULT",retBLhmtmp);
+					}		
+			}
+			else{
+				retBLhm.put("message", "Business logic not defined");
+				debug(1," BL Class from DB not defined");
 			}
 		} catch (Exception e) {
 			debug(1,"Businesslogic not found");
@@ -177,6 +183,7 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 	public HashMap postRetreiveProcessBL(String screenName) {
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
+		HashMap retBLhmtmp = new HashMap();
 		String businessLogic = cd.getBusinessLogicName(screenName);
 		try {
 			if (businessLogic != null && !"".equals(businessLogic)) {
@@ -193,11 +200,21 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 					buslogHm.put(key, values);
 				}
 				
-				retBLhm = basebl.postRetreiveProcessBL(buslogHm);
+				retBLhmtmp = basebl.postRetreiveProcessBL(buslogHm);
+				if(retBLhmtmp == null){
+					retBLhm.put("message","Unimplemented business logic");
+				}else{
+					retBLhm.put("BusinessLogicRESULT",retBLhmtmp);
+				}		
+			}
+			else{
+				retBLhm.put("message", "Business logic not defined");
+				debug(1," BL Class from DB not defined");
 			}
 		} catch (Exception e) {
 			debug(1,"Businesslogic not found");
 			e.printStackTrace();
+			retBLhm.put("error","Error executing business logic");
 		}
 		return retBLhm;
 	}
