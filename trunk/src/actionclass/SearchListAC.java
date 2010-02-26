@@ -210,8 +210,7 @@ public class SearchListAC extends ActionSupport {
 			searchQuery+= joiner + splWhereClause;
 			joiner = " AND ";
 		}
-		
-		recCountQuery = searchQuery.replaceFirst(".*(?i:FROM)", "SELECT count('x') countrec FROM ");
+		recCountQuery = searchQuery.replaceFirst("([\\S\\s])*(?ims:FROM)", "SELECT count('x') countrec FROM ");
 		
     	
 		CachedRowSet crs = null;

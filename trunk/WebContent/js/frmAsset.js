@@ -194,8 +194,8 @@ function reqSave() {
 	if(screenMode == "create"){
 	document.getElementById("assetid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAsset";
-	//prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRAST&create=true";
+	//prompt("url","action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid);	
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=false&activityname=CRAST&action=true";
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
