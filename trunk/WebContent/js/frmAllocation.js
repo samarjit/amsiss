@@ -8,7 +8,7 @@ function populate()
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
 		url=url+"&whereClause="+ whereClause;		
 		//alert("In message: whereClause=" + whereClause);
-		// prompt("url",url);	
+		//prompt("url",url);	
 		sendAjaxGet(url, requestCallBack);
 	}
 	if(screenMode == "create"){
@@ -162,11 +162,18 @@ function disable_fields(){
 		}
 		 
 		
-	}//btnRead,btnSave,btnModify,btnDelete,btnSubmit,btnSubmitselAll
+	}//btnRead,btnSave,btnModify,btnDelete,btnModify,btnSubmitselAll
 	var updateonar = "dnid,Status,wflactionid,wflactiondesc,wflid,btnSave".split(",");
 	for ( var i = 0; i < updateonar.length; i++) {
 		var arelm = updateonar[i];
 		jQuery("#"+ arelm).attr('disabled','disabled');
+	}
+	if(screenMode == "view"){
+		updateonar = "btnModify,btnSubmit,btnDelete".split(",");
+		for ( var i = 0; i < updateonar.length; i++) {
+			var arelm = updateonar[i];
+			jQuery("#"+ arelm).removeAttr('disabled');
+		}
 	}
 }
 
@@ -190,7 +197,7 @@ function reqSave() {
 	document.getElementById("assetid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAllocation";
 	//prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CRAST&create=true";
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=false&activityname=CRAST&create=true";
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
@@ -217,7 +224,7 @@ function deleteData(){
 	
 	whereclause  = makeWhereClause();
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmAllocation";
-//	prompt("url",unescape(url));	
+// 	url = prompt("url",url);	
 //	alert("in update!!!!!!! url" +url);
 	//prompt("url",url);
 	//add key:vlaue to url
@@ -229,7 +236,8 @@ function deleteData(){
 
 function saveCallBack(val) {
 	//show success message 
-	alert(val);
+	//alert(val);
+	screenMode="view";
 	var json = JSON.parse(val);
 	
 	if(json.error !=null ){
@@ -238,8 +246,14 @@ function saveCallBack(val) {
 		showalert(json.message);
 		if(json.workflowurl != null){
 			location.href = json.workflowurl ;
-		}else{
-			whereClause = prepareInsertData();
+		}else{//extracting all fields whereclause form insert key value pair of each panel
+			var allfields = prepareInsertData();
+			var json = JSON.parse(allfields);
+			var valuesar = json.json[0].valuesar;
+			var k = new Object();
+			k.json = valuesar;
+			var myJSONText = JSON.stringify(k, replacer,"");
+			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
 			populate();
 		}
 	}
@@ -292,7 +306,7 @@ function prepareInsertData() {
 		var k = new Object();
 		k.json = pclass
 		var myJSONText = JSON.stringify(k, replacer,"");
-		alert(myJSONText );	
+		//alert(myJSONText );	
 		return myJSONText;			
 }
 

@@ -29,7 +29,10 @@ import dao.CrudDAO;
 import dto.UserDTO;
 
 public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAware{
-
+	private void debug( int priority,String s){
+		if(priority > 0)
+		System.out.println("RetreiveDetailsAC:"+s);
+	}
 	private InputStream inputStream;
 	private String whereClause;
 	private HttpServletRequest servletRequest;
@@ -52,13 +55,10 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 		return servletRequest;
 	}
  
-	private void debug( int priority,String s){
-		if(priority > 0)
-		System.out.println("RetreiveDetailsAC:"+s);
-	}
+	
 	 
 	
-	public String execute() throws Exception {
+	public String execute()   {
     	HashMap metadata = new HashMap();
     	RetreiveData retrive = new RetreiveData();
     	
@@ -71,34 +71,36 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
     	
     	//panelFields1WhereClause = request1.getParameter("panelFields1WhereClause");
     	URLDecoder decoder =  new URLDecoder();
-    	
-    	
-    	whereClause = decoder.decode(request1.getParameter("whereClause"));
-    	
-    	debug(0,whereClause);
-    	
-    	HashMap retPreBL = preRetreiveProcessBL(screenName);
-    	
-    	//RequestBL is used here for creating query for create Request Screen
-
-
-    	String resultHtml = "No Records found";
-    	ArrayList errorList = new ArrayList();
-    	JSONObject jobj = new JSONObject();
-    	
-    	if(whereClause != null || (!"".equals(whereClause)))
-    		resultHtml  = retrive.doRetrieveData(screenName,whereClause);
-    	 
-    	HashMap retPostBL = postRetreiveProcessBL(screenName);
-    	//System.out.println("-----------------"+retPostBL.get("error"));
-    	
-  
-    	if(retPostBL.get("error")!= null){
-    		System.out.println("-----------------"+retPostBL.get("error"));
-			errorList.add("Post Business Logic error occured");
-		}
-    	    	   	 
-    	try {
+			    	
+			    	
+	    	String resultHtml;
+	    	ArrayList errorList = new ArrayList();
+	    	resultHtml = "No Records found";
+			
+	    	JSONObject jobj = new JSONObject();
+			    	try {
+						whereClause = decoder.decode(request1
+								.getParameter("whereClause"));
+						debug(0, whereClause);
+						HashMap retPreBL = preRetreiveProcessBL(screenName);
+						
+						debug(2,whereClause);
+						if (whereClause != null || (!"".equals(whereClause)))
+							resultHtml = retrive.doRetrieveData(screenName,
+									whereClause);
+						HashMap retPostBL = postRetreiveProcessBL(screenName);
+						//System.out.println("-----------------"+retPostBL.get("error"));
+						if (retPostBL.get("error") != null) {
+							System.out.println("-----------------"
+									+ retPostBL.get("error"));
+							errorList.add("Post Business Logic error occured");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						debug(5,e.getMessage());
+						errorList.add("error:"+e.getMessage());
+					}
+		try {
         	
 			if (errorList.size() > 0) {
 				

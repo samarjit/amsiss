@@ -166,6 +166,13 @@ function disable_fields(){
 		var arelm = updateonar[i];
 		jQuery("#"+ arelm).attr('disabled','disabled');
 	}
+	if(screenMode == "view"){
+		updateonar = "btnModify,btnSubmit,btnDelete".split(",");
+		for ( var i = 0; i < updateonar.length; i++) {
+			var arelm = updateonar[i];
+			jQuery("#"+ arelm).removeAttr('disabled');
+		}
+	}
 }
 
 function insertData() {
@@ -236,8 +243,14 @@ function saveCallBack(val) {
 		showalert(json.message);
 		if(json.workflowurl != null){
 			location.href = json.workflowurl ;
-		}else{
-			whereClause = prepareInsertData();
+		}else{//extracting all fields whereclause form insert key value pair of each panel
+			var allfields = prepareInsertData();
+			var json = JSON.parse(allfields);
+			var valuesar = json.json[0].valuesar;
+			var k = new Object();
+			k.json = valuesar;
+			var myJSONText = JSON.stringify(k, replacer,"");
+			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
 			populate();
 		}
 	}
@@ -290,7 +303,7 @@ function prepareInsertData() {
 		var k = new Object();
 		k.json = pclass
 		var myJSONText = JSON.stringify(k, replacer,"");
-		alert(myJSONText );	
+		//alert(myJSONText );	
 		return myJSONText;			
 }
 

@@ -32,7 +32,7 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 	private String insertKeyValue;
 	private String screenName;
 	private String whereclause;
-	private HashMap retBLhm = null;
+	private HashMap retBLhm = new HashMap();
 	
 	private HttpServletRequest servletRequest;
 	
@@ -170,7 +170,7 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 				}
 			}
 			else{
-				//retBLhm.put("error", "BL Class not defined");
+				retBLhm.put("message", "Business logic not defined");
 				debug(1," BL Class from DB not defined");
 			}
 		} catch (Exception e) {
