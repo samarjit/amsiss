@@ -14,19 +14,16 @@ search3();
 function search1(){
 	 
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
-	if(document.getElementById("assetid"))
-		url=url+'&assetid='+document.getElementById("assetid").value;
-	if(document.getElementById("assetname"))
-		url=url+'&assetname='+document.getElementById("assetname").value;
-	if(document.getElementById("assettype"))
-		url=url+'&assettype='+document.getElementById("assettype").value;
-	if(document.getElementById("make"))
-		url=url+'&make='+document.getElementById("make").value;
-	if(document.getElementById("assetversion"))
-		url=url+'&assetversion='+document.getElementById("assetversion").value;	
-	if(document.getElementById("allocstatus"))
-		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
-	
+	if(document.getElementById("reqid"))
+		url=url+'&reqid='+document.getElementById("reqid").value;
+	if(document.getElementById("reqtype"))
+		url=url+'&reqtype='+document.getElementById("reqtype").value;
+	if(document.getElementById("empid"))
+		url=url+'&empid='+document.getElementById("empid").value;
+	var status = jQuery('#searchdiv #status').val();
+	if(status)
+		url=url+'&status='+status;
+	 
 	var pagesize = jQuery('#searchdiv .pagesize').val();
 	var pageno = jQuery('#searchdiv .pageno').val();
 	
@@ -47,18 +44,21 @@ function mycall(p){
 function search2(){
 	 
 	var url=urlpart+"?panelName=searchPanelAsst&screenName="+screenName;
-	if(document.getElementById("assetid"))
-		url=url+'&assetid='+document.getElementById("assetid").value;
+	 
+	var assetid = jQuery('#searchdiv2 #assetid').val();
+	if(assetid)
+		url=url+'&assetid='+assetid;
+	
 	if(document.getElementById("assetname"))
 		url=url+'&assetname='+document.getElementById("assetname").value;
 	if(document.getElementById("assettype"))
 		url=url+'&assettype='+document.getElementById("assettype").value;
 	if(document.getElementById("make"))
 		url=url+'&make='+document.getElementById("make").value;
-	if(document.getElementById("assetversion"))
-		url=url+'&assetversion='+document.getElementById("assetversion").value;	
-	if(document.getElementById("allocstatus"))
-		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
+
+	var status = jQuery('#searchdiv2 #status').val();
+	if(status)
+		url=url+'&status='+status;
 	
 	var pagesize = jQuery('#searchdiv2 .pagesize').val();
 	var pageno = jQuery('#searchdiv2 .pageno').val();
@@ -79,16 +79,16 @@ function mycall2(p){
 function search3(){
 	 
 	var url=urlpart+"?panelName=searchPanelAlloc&screenName="+screenName;
-	if(document.getElementById("assetid"))
-		url=url+'&assetid='+document.getElementById("assetid").value;
-	if(document.getElementById("assetname"))
-		url=url+'&assetname='+document.getElementById("assetname").value;
-	if(document.getElementById("assettype"))
-		url=url+'&assettype='+document.getElementById("assettype").value;
-	if(document.getElementById("make"))
-		url=url+'&make='+document.getElementById("make").value;
-	if(document.getElementById("assetversion"))
-		url=url+'&assetversion='+document.getElementById("assetversion").value;	
+	var assetid = jQuery('#searchdiv3 #assetid').val();
+	if(assetid)url=url+'&assetid='+assetid;
+	if(document.getElementById("assetno"))
+		url=url+'&assetno='+document.getElementById("assetno").value;
+	if(document.getElementById("assethost"))
+		url=url+'&assethost='+document.getElementById("assethost").value;
+	if(document.getElementById("username"))
+		url=url+'&username='+document.getElementById("username").value;
+	if(document.getElementById("assetip"))
+		url=url+'&assetip='+document.getElementById("assetip").value;	
 	if(document.getElementById("allocstatus"))
 		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
 	

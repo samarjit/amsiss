@@ -183,16 +183,23 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 				e.printStackTrace();
 			}
 		debug(1,"Redirecting to workflow with invokewfl="+invokewfl);
-        if(invokewfl.equals("worlkflow")){
-        	redirectUrl = request1.getContextPath()+"/workflow.action?ajaxflag=true&appid="+autogenId+"&activityname="+activityname+"&create="+create+"&passeddownerror="+resultHtml;
-        	debug(1,redirectUrl);
-        	return "workflow";
-        	
-        }else if(invokewfl.equals("scrflow")){
-        	redirectUrl = request1.getContextPath()+"/scrworkflow.action?ajaxflag=true&appid="+autogenId+"&activityname="+activityname+"&create="+create+"&passeddownerror="+resultHtml;
-        	debug(1,redirectUrl);
-        	return "workflow";
+        if(invokewfl != null){
+        	if(invokewfl.equals("worlkflow")){
+	        
+	        	redirectUrl = request1.getContextPath()+"/workflow.action?ajaxflag=true&appid="+autogenId+"&activityname="+activityname+"&create="+create+"&passeddownerror="+resultHtml;
+	        	debug(1,redirectUrl);
+	        	return "workflow";
+	        	
+	        }else if(invokewfl.equals("scrflow")){
+	        	redirectUrl = request1.getContextPath()+"/scrworkflow.action?ajaxflag=true&appid="+autogenId+"&activityname="+activityname+"&create="+create+"&passeddownerror="+resultHtml;
+	        	debug(1,redirectUrl);
+	        	return "workflow";
+	        }else{
+	        	//unknown workflow request
+	        	return SUCCESS;
+	        }
         }else{
+        	//no workflow associated with this save action
         	return SUCCESS;
         }
 	}
