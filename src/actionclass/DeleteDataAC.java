@@ -34,7 +34,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 	private String screenName;
 	private String whereclause;
 	private HttpServletRequest servletRequest;
-	private HashMap retBLhm = null;
+	private HashMap retBLhm = new HashMap();
 	
 	public HashMap getRetBLhm() {
 		return retBLhm;
@@ -63,7 +63,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 	public String execute() throws Exception {
 		HashMap metadata = new HashMap();
     	DeleteData delete = new DeleteData();
-    	retBLhm = new HashMap();
+    	
     	if(servletRequest!=null)
     	debug(0,"query string RD : " + servletRequest.getQueryString());
     	
@@ -94,7 +94,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
     	if(resultHtml.length() >1){
 			errorList.add(resultHtml);
 		}
-    	   	
+    	  	
     	HashMap retPostBL = postDeleteProcessBL(screenName);
     	
     	if(retPostBL.get("error")!= null){
@@ -106,10 +106,10 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 			if (errorList.size() > 0) {
 				
 				jobj.put("error", errorList);
-				jobj.put("message", "Record saved successfully");
+				jobj.put("message", "Record deleted successfully");
 				resultHtml = jobj.toString();
 			}else{
-				jobj.put("message", "Record saved successfully");
+				jobj.put("message", "Record deleted successfully");
 				resultHtml = jobj.toString();
 			}
 		} catch (Exception e) {
@@ -156,7 +156,8 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 				}
 			}
 			else{
-				retBLhm.put("error", "Method not found");
+				retBLhm.put("message", "Business logic not defined");
+				debug(1," BL Class from DB not defined");
 			}
 		} catch (Exception e) {
 			debug(1,"Businesslogic not found:"+businessLogic);

@@ -182,7 +182,7 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 				debug(5,"Unknown Exception:"+e);
 				e.printStackTrace();
 			}
-		debug(1,"Redirecting to workflow");
+		debug(1,"Redirecting to workflow with invokewfl="+invokewfl);
         if(invokewfl.equals("worlkflow")){
         	redirectUrl = request1.getContextPath()+"/workflow.action?ajaxflag=true&appid="+autogenId+"&activityname="+activityname+"&create="+create+"&passeddownerror="+resultHtml;
         	debug(1,redirectUrl);
@@ -230,8 +230,8 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 					
 			}
 			else{
-				//retBLhm.put("error", "Method not found");
-				debug(1,"Method not defined");
+				retBLhm.put("message", "Business logic not defined");
+				debug(1," BL Class from DB not defined");
 			}
 		} catch (Exception e) {
 			debug(1,"Businesslogic not found");
