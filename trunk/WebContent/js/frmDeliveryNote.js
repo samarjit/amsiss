@@ -1,5 +1,5 @@
-var screenMode = "insert";
-
+var screenAction = "insert";
+var dnid=null;
 function populate()
 {
 	if(!(whereClause == ""))
@@ -16,6 +16,25 @@ function dnCallBack(p)
 	
 	
 	disable_fields();
+
+	document.getElementById("btnSave").disabled=true;
+	
+	document.getElementById("retreivedetailsdiv").innerHTML = p;	
+	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+	detailTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+	for ( var i=0; i<detailTable.length ; i++)
+	{
+		if (detailTable[i].id == 'buttonPanel')	continue;
+		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) 
+		{			
+			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
+			
+			for(var l = 0; l<panelsTable.length; l++)
+			{
+				if (panelsTable[l].id == 'buttonPanel')	continue;
+				if(detailTable[i].id == panelsTable[l].id)
+
 	
 	var json = JSON.parse(p);	
 	if(json.error !=null ){
@@ -36,6 +55,7 @@ function dnCallBack(p)
 				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
 
 				for(var l = 0; l<panelsTable.length; l++)
+
 				{
 					if (panelsTable[l].id == 'buttonPanel')	continue;
 					if(detailTable[i].id == panelsTable[l].id)
@@ -69,6 +89,25 @@ function disable_fields()
 	}
 }
 
+jQuery(function() {
+	
+	jQuery('#receiveddate').datepicker({
+		changeMonth: true,
+		changeYear: true,
+		dateFormat:'dd/mm/yy'
+	});
+	jQuery('#deliverydate').datepicker({
+		changeMonth: true,
+		changeYear: true,
+		dateFormat:'dd/mm/yy'
+	});
+	jQuery('#warrantydate').datepicker({
+		changeMonth: true,
+		changeYear: true,
+		dateFormat:'dd/mm/yy'
+	});
+});
+
 function clearWhereClause()
 {
 	document.getElementById("panelFieldsWhereClause").Value = "";
@@ -81,17 +120,22 @@ function insertData()
 
 function dnSave() 
 {
-	if(screenMode == "insert")
-	{
-			var url=inserturlpart+"?panelName=searchPanel&screenName=frmDeliveryNote";
-			prompt("url",url);	
-			url = url+ "&insertKeyValue="+ prepareInsertData();
-			//prompt("url",url);
-			//add key:value to url
-			sendAjaxGet(url, saveCallBack); //call this method in commonjs.js.
+	if(screenAction == "insert"){
+		document.getElementById("deliverynoteid").value = "AUTOGEN_SEQUENCE_ID";
+		var url=inserturlpart+"?panelName=searchPanel&screenName=frmDeliveryNote";
+		//prompt("url",url);	
+		url = url + "&itemid=" + document.getElementById("itemid").value;
+		url = url + "&itemquantity=" + document.getElementById("itemquantity").value;
+		//url = url + "&dnpurchaseorderid=" + document.getElementById("dnpurchaseorderid").value;
+		url = url+ "&insertKeyValue="+ prepareInsertData();
+		//prompt("url",url);
+		//alert(url);
+		//add key:vlaue to url	
+		sendAjaxGet(url, saveCallBack);
+		//changeStatus();
 	}
 	
-	if(screenMode == "modify")
+	if(screenAction == "modify")
 	{
 		whereclause  = makeWhereClause();
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmDeliveryNote";
@@ -99,6 +143,12 @@ function dnSave()
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 		sendAjaxGet(url, saveCallBack); //call this method in commonjs.js.
 	}
+}
+function changeStatus()
+{
+	var url = jsrpcurlpart+"?screenName=frmDeliveryNote&poid="+dnid+"&rpcid=requeststatus";
+	sendAjaxGet(url, saveCallBack);	
+
 }
 
 //delete the record
@@ -118,7 +168,7 @@ function deleteCallBack(val) {
 	//show success message 
 	if(val < 0){
 		
-		alert("Error while deleting! ");
+		showerror("Could not delete : Error Occured! ");
 	}
 	else{
 		location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
@@ -130,14 +180,18 @@ function deleteCallBack(val) {
 function saveCallBack(val) 
 {
 	//show success message 
-	if(val < 0)alert("Error while saving! ");
+	if(val < 0)
+		showerror("Could not save : Error Occured! ");
 	else 
 	{
 		location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
 		alert("Successfully saved your deliverynote! ");
 	}
 }
-
+function backtolist()
+{
+	location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
+}
 function KeyValue(a,b) 
 {
 	this.key=a;
@@ -149,7 +203,6 @@ function panelClass(a,b)
 	this.name = a;
 	this.valuesar = b;
 }
-
 function replacer(key, value) {
 	if (typeof value === 'number' && !isFinite(value)) 
 	{
@@ -185,7 +238,10 @@ function prepareInsertData()
 
 function updateData(obj)
 {
-	screenMode = "modify";
+	screenAction = "modify";
+	document.getElementById("btnSave").disabled=false;
+	document.getElementById("btnModify").disabled=true;
+	
 	//There will be only one table in search screen 'search div'
 	//document.requestFrm.submit();
 	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
@@ -242,6 +298,7 @@ function makeWhereClause()
 				name = jQuery.trim(name);
 				value = jQuery("#retreivedetailsdiv").find(" table tbody tr").eq(1).find(" td").eq(i).text();
 				value = jQuery.trim(value);
+				dnid=value;
 				whereClause = whereClause + name + "!" + value + "~#";
 				requestar[j] = new KeyValue(name, value);				
 				j++;		
