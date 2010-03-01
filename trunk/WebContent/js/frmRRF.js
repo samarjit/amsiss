@@ -245,14 +245,16 @@ function rrfSave() {
 		exit();
 	}
 	//alert("in save ");	
-	//alert(inserturlpart);
+	//alert(screenAction);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;
 	if(screenAction == "insert"){
 		document.getElementById("rrfid").value = "AUTOGEN_SEQUENCE_ID";
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRRF";
-		//prompt("url",url);	
+		//prompt("url",url);
+		
 		url = url + "&quotationid=" + document.getElementById("rrfquotationid").value;;
+		
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 		//prompt("url",url);
 		//alert(url);
@@ -265,6 +267,7 @@ function rrfSave() {
 		//prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 		//prompt("url",url);
+		//alert(url);
 	}
 	sendAjaxGet(url, saveCallBack);
 }
@@ -355,7 +358,7 @@ function prepareInsertData() {
 	//exit();
 	//get the quotation id from quotation fileds
 	document.getElementById("quotationid").value=document.getElementById("rrfquotationid").value;
-	document.getElementById("rrfrfqid").value=document.getElementById("rfqid").value;
+	//document.getElementById("rrfrfqid").value=document.getElementById("rfqid").value;
 	
 
 	
