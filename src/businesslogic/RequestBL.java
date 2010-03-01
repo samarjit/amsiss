@@ -13,13 +13,13 @@ import dto.UserDTO;
 import dto.PrepstmtDTO.DataType;
 
 public class RequestBL implements BaseBL{
-	
-	
+
+
 	private void debug(int priotiry, String s){
 		if(priotiry > 0)
 			System.out.println("RequestBL:"+s);
 	}
-	
+
 	@Override
 	public HashMap postRetreiveProcessBL(Map buslogHm) {
 		debug(1,"Post Request Business logic");
@@ -33,13 +33,13 @@ public class RequestBL implements BaseBL{
 		UserDTO usr = (UserDTO) buslogHm.get("userDTO");
 		String empid = usr.getUserid();
 		debug(1,"Pre Request Business logic");
-		
+
 		if(buslogHm.containsKey("screenName")){
-			
+
 			if(rpcid.equals("createRequest")){
-				
+
 				String query = "SELECT EMPID, EMPNAME FROM AMS_EMPLOYEE where empid=?";
-			
+
 				CachedRowSet crs = null;
 				DBConnector db = new DBConnector();
 				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
@@ -54,20 +54,20 @@ public class RequestBL implements BaseBL{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
-			 finally {
-				if (crs != null) {
-					try {
-						crs.close();
-					} catch (Exception e) {
+
+				finally {
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+
 					}
-				
-			}
-			}
+				}
 				String query1 = "SELECT to_char(sysdate,'dd/mm/yyyy') reqdate from dual";
-			CachedRowSet crs1 = null;
+				CachedRowSet crs1 = null;
 				DBConnector db1 = new DBConnector();
-			
+
 				try {
 					crs1 = db1.executeQuery(query1);
 					while(crs1.next()){
@@ -77,18 +77,18 @@ public class RequestBL implements BaseBL{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
-			 finally {
-				if (crs != null) {
-					try {
-						crs.close();
-					} catch (Exception e) {
+
+				finally {
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+
 					}
-				
-			}
-		}
-			 
-			 
+				}
+
+
 				String query2 = "select empid mgrid from ams_employee where roleid='MANAGER'";
 				CachedRowSet crs2 = null;
 				DBConnector db2 = new DBConnector();
@@ -98,8 +98,8 @@ public class RequestBL implements BaseBL{
 					StringBuffer sb = new StringBuffer();
 					while(crs2.next()){
 						if(count==0){
-						sb = sb.append(crs2.getString("MGRID"));
-						count++;
+							sb = sb.append(crs2.getString("MGRID"));
+							count++;
 						}
 						else{
 							sb = sb.append(",");
@@ -111,38 +111,38 @@ public class RequestBL implements BaseBL{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
-			 finally {
-				 System.out.println("*********COUNT** "+count);
-				if (crs != null) {
-					try {
-						crs.close();
-					} catch (Exception e) {
+
+				finally {
+					System.out.println("*********COUNT** "+count);
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+
 					}
-				
-			}
-			}
-			 
-			 
-			 
-			 
-			 
-			 
+				}
+
+
+
+
+
+
 				String query5 = "select REQID REF_REQID from AMS_REQUEST where empid=? AND reqdate > (SELECT to_char(sysdate - numtoyminterval(6, 'MONTH')) FROM dual)";
 
 				CachedRowSet crs5 = null;
 				DBConnector db5 = new DBConnector();
 				PrepstmtDTOArray arPrepstmt5 = new PrepstmtDTOArray();
 				arPrepstmt5.add(DataType.STRING, empid);
-				
+
 				int count1 = 0;
 				try {
 					crs5 = db5.executePreparedQuery(query5, arPrepstmt5);
 					StringBuffer sb1 = new StringBuffer();
 					while(crs5.next()){
 						if(count1==0){
-						sb1 = sb1.append(crs5.getString("REF_REQID"));
-						count1++;
+							sb1 = sb1.append(crs5.getString("REF_REQID"));
+							count1++;
 						}
 						else{
 							sb1 = sb1.append(",");
@@ -154,59 +154,57 @@ public class RequestBL implements BaseBL{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
-			 finally {
-				 System.out.println("*********COUNT** "+count);
-				if (crs != null) {
-					try {
-						crs.close();
-					} catch (Exception e) {
-					}
-				
-			}
-			}
-			 
-			 
-			 
-			 
-			 
-			 
-			 
-			}
-			 if(rpcid.equals("getManager")){
-				 String[] tmp = (String[]) buslogHm.get("empid");
-					String empid1 = (String)(tmp[0]);
-				 String queryy = "SELECT empname mgrname FROM ams_employee where empid=?";
-				 CachedRowSet crs = null;
-					DBConnector db = new DBConnector();
-					PrepstmtDTOArray arPrepstmt4 = new PrepstmtDTOArray();
-					arPrepstmt4.add(DataType.STRING, empid1);
-					try {
-						crs = db.executePreparedQuery(queryy, arPrepstmt4);
-						while(crs.next()){
-							result.put("mgrname", (String)crs.getString("mgrname"));
-						}
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				
-				 finally {
+
+				finally {
+					System.out.println("*********COUNT** "+count);
 					if (crs != null) {
 						try {
 							crs.close();
 						} catch (Exception e) {
 						}
-					
+
+					}
 				}
+
+				String transferType = "One Way,Two Way";
+				result.put("transfertype", transferType);
+
+
+			}
+			if(rpcid.equals("getManager")){
+				String[] tmp = (String[]) buslogHm.get("empid");
+				String empid1 = (String)(tmp[0]);
+				String queryy = "SELECT empname mgrname FROM ams_employee where empid=?";
+				CachedRowSet crs = null;
+				DBConnector db = new DBConnector();
+				PrepstmtDTOArray arPrepstmt4 = new PrepstmtDTOArray();
+				arPrepstmt4.add(DataType.STRING, empid1);
+				try {
+					crs = db.executePreparedQuery(queryy, arPrepstmt4);
+					while(crs.next()){
+						result.put("mgrname", (String)crs.getString("mgrname"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				
-					
-				} 
-				
-		
-	
-	}
+
+				finally {
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+
+					}
+				}
+
+
+			} 
+
+
+
+		}
 		return (HashMap) result;
 	}
 
@@ -237,8 +235,8 @@ public class RequestBL implements BaseBL{
 
 	@Override
 	public HashMap preInsertProcessBL(Map buslogHm) {
-		// TODO Auto-generated method stub
 		return null;
+		
 	}
 
 	@Override
@@ -254,14 +252,37 @@ public class RequestBL implements BaseBL{
 	}
 
 	@Override
-	public HashMap preSubmitProcessBL(Map hm) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap preSubmitProcessBL(Map buslogHm) {
+		String[] delquotarr = (String[]) buslogHm.get("appid");
+		if(delquotarr == null)
+			return (HashMap) buslogHm;
+		String appid = (String)(delquotarr[0]);
+		debug(1, appid);
+		String SQL = "update ams_request set status='Submitted' where reqid=? ";
+
+		CachedRowSet crs = null;
+		try {
+			DBConnector db = new DBConnector();
+			PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+			arPrepstmt.add(DataType.INT, appid);			
+			debug(1,arPrepstmt.toString(SQL));
+
+			crs = db.executePreparedQuery(SQL, arPrepstmt );
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (crs != null) {
+				try {
+					crs.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+		return (HashMap)buslogHm;
 	}
 
 	@Override
 	public HashMap postUpdateProcessBL(Map buslogHm) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
