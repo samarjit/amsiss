@@ -3,15 +3,23 @@
 function search(){
 	 
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
-	if(document.getElementById("sempid"))
-		url=url+'&sempid='+document.getElementById("sempid").value;
+	/*if(document.getElementById("sempid"))
+		url=url+'&sempid='+document.getElementById("sempid").value; */
 	if(document.getElementById("sempname"))
 		url=url+'&sempname='+document.getElementById("sempname").value;
 	if(document.getElementById("srequestid"))
 		url=url+'&srequestid='+document.getElementById("srequestid").value;
-	if(document.getElementById("requesttype"))
-		url=url+'&requesttype='+document.getElementById("requesttype").value;
-				
+	if(document.getElementById("srequesttype"))
+		url=url+'&srequesttype='+document.getElementById("srequesttype").value;
+	var pagesize = jQuery('.searchdiv .pagesize').val();
+	var pageno = jQuery('.searchdiv .pageno').val();
+	url=url+'&sempid='+userId;
+
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
+	
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
@@ -19,8 +27,6 @@ function mycall(p){
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
 }
-
-
 
 var selectedIdx = -1;
 
