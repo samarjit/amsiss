@@ -26,8 +26,6 @@ public class ApprovalRrfBL implements BaseBL{
 	private static final long serialVersionUID = 1L;
 	private Map session;
 	
-	
-	
 	@Override
 	public HashMap preSubmitProcessBL(Map buslogHm) {
 		// TODO Auto-generated method stub
@@ -62,13 +60,9 @@ public class ApprovalRrfBL implements BaseBL{
 						}
 					}
 				}
-				//buslogHm.put("nextAction", "CreateRRF");
-			}						
-		}					
-		else{
-			
-			String approve = (String)(apprarr[0]);
-			if(approve.equals("true")){
+			}//buslogHm.put("nextAction", "CreateRRF");
+													
+			else if(approve.equals("false")){
 							
 				String[] rrfidarr = (String[]) buslogHm.get("rrfid");
 				if(rrfidarr == null)
@@ -97,6 +91,7 @@ public class ApprovalRrfBL implements BaseBL{
 				//buslogHm.put("nextAction", "CreateRRF");
 			}
 		}
+		
 			
 			
 			//update the status of rrf.
