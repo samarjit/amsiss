@@ -1,42 +1,271 @@
+window.onload = refresh;
+
+function refresh() {
+}
+
+
+
+var New_Hardware = 1;
+var New_Software = 2;
+var Hardware_Upgrade = 3;
+var Software_Upgrade = 4;
+var AMC_Renewal = 5;
+var Pc_Transfer = 6;
+var Release_Resource = 7;
+var Software_Transfer = 8;
+
+
 function populate()
 {
-	alert(screenName);
-	if(screenName=='frmRequest'){
-		//var url = prepopulateurlpart+"?panelName=searchPanel&prepopulate=true&screenName="+screenName;
+
+	if((!(whereClause == ""))){
+		//whereclause = decodeURIComponent(whereClause);
 		var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=createRequest";
 		sendAjaxGet(url, requestCallBack);
-		//alert("This alert box was called with the onload event");	
+		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
+		url=url+"&whereClause="+ whereClause;		
+		// alert("In message: whereClause=" + whereClause);
+		// prompt("url",url);
+		sendAjaxGet(url, requestCallBackview);
+
+			
+		
+	}	
+	else {
+		// var url =
+		// prepopulateurlpart+"?panelName=searchPanel&prepopulate=true&screenName="+screenName;
+		var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=createRequest";
+		sendAjaxGet(url, requestCallBack);
+		// alert("This alert box was called with the onload event");
 	}
+	
 
 }
 var screenMode = "insert";
 
 
 function requestCallBack(parm){
+	fnAdjustTableWidth();
+
 	var jobj = JSON.parse(parm);
 	if(jobj.error != null ){
-	alert(jobj.error);return;
+		alert(jobj.error);return;
 	} 
 	document.getElementById("empid").value = jobj.empid;
-	
+
 	document.getElementById("empname").value = jobj.empname;
 	document.getElementById("reqdate").value = jobj.reqdate;
-	
+
 	var mgrid = (jobj.mgrid).split(",");
 	for(var i=0;i<mgrid.length;i++){
-		
-	AddSelectOption(document.getElementById("mgrid"),mgrid[i],mgrid[i],false);
-	}
-	
 
-		var ref_reqid = (jobj.REF_REQID).split(",");
-	for(var i=0;i<ref_reqid.length;i++){
-		
-	AddSelectOption(document.getElementById("refreqid"),ref_reqid[i],ref_reqid[i],false);
+		AddSelectOption(document.getElementById("mgrid"),mgrid[i],mgrid[i],false);
 	}
-	
+
+
+	var ref_reqid = (jobj.REF_REQID).split(",");
+	for(var i=0;i<ref_reqid.length;i++){
+
+		AddSelectOption(document.getElementById("refreqid"),ref_reqid[i],ref_reqid[i],false);
+	}
+	var transferType = (jobj.transfertype).split(",");
+	for(var i=0;i<transferType.length;i++){
+		AddSelectOption(document.getElementById("transfertypesel"),transferType[i],transferType[i],false);
+	}
 
 }
+
+function requestCallBackview(p){
+	fnAdjustTableWidth();
+	//alert("Got from ajax:"+p);
+	var json = JSON.parse(p);
+	//alert(json.message);
+	if(json.error !=null ){
+		showerror(json.error);
+	}
+	else {
+		//alert(jason.message);
+		p = decodeURIComponent(json.message);
+		alert(p);
+		document.getElementById("retreivedetailsdiv").innerHTML = p;	
+		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+		// alert(panelsTable.length);
+
+
+		detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+
+		for ( var i=0; i<detailTable.length ; i++)
+		{
+			if (detailTable[i].id == 'buttonPanel' || detailTable[i].rows.length==0)
+				continue;
+			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
+			// detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];
+
+				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+				// alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
+				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
+
+				// comVal = detailTable[i].rows[1].cells[k].innerText;
+				for(var l = 0; l<panelsTable.length; l++)
+				{ 
+					// alert(panelsTable[i].id);
+					if (panelsTable[l].id == 'buttonPanel')
+						continue;
+					if(detailTable[i].id == panelsTable[l].id)
+					{ 
+						/* var input = panelsTable[l].getElementsByTagName("input"); */
+						var query = jQuery(panelsTable[l]).find(" :input");
+						var elem = 	jQuery(query);
+
+						jQuery.each(elem, function(index, item) {
+
+							if(item.id == comStr){
+								jQuery(item).val(comVal);
+							}
+						});
+//						for( var m = 0 ; m < input.length; m++)
+//						{
+//						if(input[m].id == comStr)
+//						{
+//						//alert(comStr +" "+comVal +" " +panelsTable[l].id + " " +
+//						detailTable[i].id);
+//						input[m].value = comVal;
+//						}
+//						}
+					}
+				}
+			}
+		}
+		var selType = document.getElementById("requesttype").selectedIndex;
+		if(selType==New_Hardware){
+			document.getElementById("HardwareTypes").style.display = "block";
+			if(document.getElementById("newhardwaretype").value=="PC" || document.getElementById("newhardwaretype").value=="LAP" ){
+				document.getElementById("NewHardware").style.display = "block";
+			}
+			else
+				{
+				document.getElementById("GeneralHardware").style.display = "block"; 
+				}
+
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+			document.getElementById("PcTransferType").style.display = "none";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("ReleaseResource").style.display = "none";
+			document.getElementById("SoftwareTransfer").style.display = "none";
+
+
+		} 
+
+		if(selType == New_Software || selType == Software_Upgrade){
+
+			document.getElementById("Software").style.display = "block";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+			document.getElementById("PcTransferType").style.display = "none";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("ReleaseResource").style.display = "none";
+			document.getElementById("SoftwareTransfer").style.display = "none";
+
+		}
+
+		if(selType==Hardware_Upgrade){
+
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "block";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+			document.getElementById("PcTransferType").style.display = "none";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("ReleaseResource").style.display = "none";
+			document.getElementById("SoftwareTransfer").style.display = "none";
+
+		}
+
+		if(selType==AMC_Renewal){
+
+			document.getElementById("AmcRenewal").style.display = "block";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("PcTransferType").style.display = "none";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("ReleaseResource").style.display = "none";
+			document.getElementById("SoftwareTransfer").style.display = "none";
+		}
+
+		if(selType==Pc_Transfer){
+			if(document.getElementById("transfertypeswap").value=="One Way"){
+				document.getElementById("PcOneTransfer").style.display = "block";
+			}else
+			{
+				document.getElementById("PcSwapTransfer").style.display = "block";
+
+			}
+
+			document.getElementById("PcTransferType").style.display = "block";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+			document.getElementById("ReleaseResource").style.display = "none";
+			document.getElementById("SoftwareTransfer").style.display = "none";
+		}
+
+		if(selType==Release_Resource){
+
+			document.getElementById("ReleaseResource").style.display = "block";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+			document.getElementById("PcTransferType").style.display = "none";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("SoftwareTransfer").style.display = "none";
+
+		}
+
+		if(selType==Software_Transfer){
+			document.getElementById("SoftwareTransfer").style.display = "block";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+			document.getElementById("PcTransferType").style.display = "none";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("ReleaseResource").style.display = "none";
+
+
+		}
+	}
+
+
+
+	disable_fields();
+
+
+}
+
 
 
 
@@ -46,7 +275,7 @@ function generatename(obj){
 	var empid = obj.options[selIndex].value;
 	if(selIndex!=0){
 		var url = jsrpcurlpart+"?screenName="+screenName+"&empid="+empid+"&rpcid=getManager";
-	sendAjaxGet(url, generaterequestname);
+		sendAjaxGet(url, generaterequestname);
 	}
 }
 
@@ -54,121 +283,256 @@ function generaterequestname(p){
 	var jobj = JSON.parse(p);
 	document.getElementById("mgrname").value = jobj.mgrname;	
 }
- /*
-function generatecall(obj){
-	var selIndex = obj.selectedIndex;
-	alert(selIndex);
-	scrName = obj.options[selIndex].value;
-	if(selIndex!=0){
-	var url = generateurlpart+"?screenName="+scrName+"&ajaxPopulate=true";
-	sendAjaxGet(url, generaterequest);
+/*
+ * function generatecall(obj){ var selIndex = obj.selectedIndex;
+ * alert(selIndex); scrName = obj.options[selIndex].value; if(selIndex!=0){
+ * var url = generateurlpart+"?screenName="+scrName+"&ajaxPopulate=true";
+ * sendAjaxGet(url, generaterequest); } }
+ * 
+ * function generaterequest(p){
+ * 
+ * document.getElementById("retreivedetailschilddiv").innerHTML = p; }
+ */
+
+function generatesubcallforhardware(obj){
+
+	selIndexx = obj.selectedIndex;
+	typee = obj.options[selIndexx].value;
+	if(selIndexx!=0) {
+		if(typee=='PC' || typee=='LAP'){
+			document.getElementById("NewHardware").style.display = "block";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none"; 
+			document.getElementById("GeneralHardware").style.display = "none";
+
+
+		} 
+
+		else{
+
+			document.getElementById("GeneralHardware").style.display = "block";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none"; 
+
+
+		}
+
 	}
 }
 
-function generaterequest(p){
-	
-	document.getElementById("retreivedetailschilddiv").innerHTML = p;	
-} */
+
+function generatesubcallfortransfer(obj){
+
+	selIndextrans = obj.selectedIndex;
+	typetrans = obj.options[selIndextrans].value;
+	if(selIndextrans!=0) {
+		if(typetrans=='One Way'){
+
+			document.getElementById("PcOneTransfer").style.display = "block";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+
+		} 
+
+		if(typetrans=='Two Way'){
+
+			document.getElementById("PcSwapTransfer").style.display = "block";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+
+		}
+	}
+}
+
+
 
 function generatecall(obj){
-	var selIndex = obj.selectedIndex;
-	scrName = obj.options[selIndex].value;
-	if(selIndex!=0) {
-		if(scrName=='New Hardware'){
-         document.getElementById("NewHardware").style.display = "block";
-         document.getElementById("Software").style.display = "none";
-         document.getElementById("HardwareUpgrade").style.display = "none";
+	selIndex = obj.selectedIndex;
+	type = obj.options[selIndex].value;
+	if(selIndex==0) {
 
-    } 
-		if(scrName=="New Software"){
-			 document.getElementById("NewHardware").style.display = "none";
-	         document.getElementById("Software").style.display = "block";
-	         document.getElementById("HardwareUpgrade").style.display = "none";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none"; 
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("ReleaseResource").style.display = "none";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+	}
 
-    }
-		
-		if(scrName== "Software Upgrade"){
-			 document.getElementById("NewHardware").style.display = "none";
-	         document.getElementById("Software").style.display = "block";
-	         document.getElementById("HardwareUpgrade").style.display = "none";
 
-   }
-		if(scrName=="Hardware Upgrade"){
-			 document.getElementById("NewHardware").style.display = "none";
-	         document.getElementById("Software").style.display = "none";
-	         document.getElementById("HardwareUpgrade").style.display = "block";
-	       
-	    }
+
+	if(selIndex==New_Hardware){
+
+		document.getElementById("HardwareTypes").style.display = "block";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none"; 
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("ReleaseResource").style.display = "none";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+
+
+	} 
+
+	if(selIndex == New_Software || selIndex == Software_Upgrade){
+
+		document.getElementById("Software").style.display = "block";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("ReleaseResource").style.display = "none";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+
+	}
+
+	if(selIndex==Hardware_Upgrade){
+
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "block";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("ReleaseResource").style.display = "none";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+
+	}
+
+	if(selIndex==AMC_Renewal){
+
+		document.getElementById("AmcRenewal").style.display = "block";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("ReleaseResource").style.display = "none";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+	}
+
+	if(selIndex==Pc_Transfer){
+
+		document.getElementById("PcTransferType").style.display = "block";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("ReleaseResource").style.display = "none";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+	}
+
+	if(selIndex==Release_Resource){
+
+		document.getElementById("ReleaseResource").style.display = "block";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+
+	}
+
+	if(selIndex==Software_Transfer){
+		document.getElementById("SoftwareTransfer").style.display = "block";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("ReleaseResource").style.display = "none";
+
+
+	}
 }
-}
+
+
 function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").Value = "";
 }
 /*
-function requestCallBack(p){
-	alert("Got from ajax:"+p);
-
-	document.getElementById("retreivedetailsdiv").innerHTML = p;	
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	//alert(panelsTable.length);
-
-
-	detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
-
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		//alert(detailTable[i].id);			
-		if (detailTable[i].id == 'buttonPanel')
-			continue;
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
-			//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
-
-			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			//comVal = detailTable[i].rows[1].cells[k].innerText;	  
-			for(var l = 0; l<panelsTable.length; l++)
-			{
-				//alert(panelsTable[i].id);
-				if (panelsTable[l].id == 'buttonPanel')
-					continue;
-				if(detailTable[i].id == panelsTable[l].id)
-				{
-					var elms = document.getElementById("panelsdiv").getElementsByTagName("*");
-
-					//var input = panelsTable[l].getElementsByTagName("input");
-					//alert(input.length);
-
-					for( var m = 0 ; m < elms.length; m++)
-					{ 
-						if(elms[m].id == comStr)
-						{
-							switch(elms[m].type) {
-
-							case "text":
-								elms[m].value = comVal;
-
-							case "select-one":
-							{
-								AddSelectOption(elms[m],comVal,comVal,false);
-								for(var f=2;f<detailTable[i].rows.length;f++){
-									comVal = (jQuery.trim(jQuery(detailTable[i].rows[f].cells[k]).text()));
-									AddSelectOption(elms[m],comVal,comVal,false);
-
-								}
-							}		
-
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	//disable_fields();
-
-} */
+ * function requestCallBack(p){ alert("Got from ajax:"+p);
+ * 
+ * document.getElementById("retreivedetailsdiv").innerHTML = p; panelsTable =
+ * document.getElementById("panelsdiv").getElementsByTagName("table");
+ * //alert(panelsTable.length);
+ * 
+ * 
+ * detailTable =
+ * document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
+ * 
+ * for ( var i=0; i<detailTable.length ; i++) { //alert(detailTable[i].id); if
+ * (detailTable[i].id == 'buttonPanel') continue; for(var k = 0; k<detailTable[i].rows[0].cells.length;
+ * k++) { //comStr =
+ * detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];
+ * 
+ * comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+ * //alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()); comVal =
+ * jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text()); //comVal =
+ * detailTable[i].rows[1].cells[k].innerText; for(var l = 0; l<panelsTable.length;
+ * l++) { //alert(panelsTable[i].id); if (panelsTable[l].id == 'buttonPanel')
+ * continue; if(detailTable[i].id == panelsTable[l].id) { var elms =
+ * document.getElementById("panelsdiv").getElementsByTagName("*");
+ * 
+ * //var input = panelsTable[l].getElementsByTagName("input");
+ * //alert(input.length);
+ * 
+ * for( var m = 0 ; m < elms.length; m++) { if(elms[m].id == comStr) {
+ * switch(elms[m].type) {
+ * 
+ * case "text": elms[m].value = comVal;
+ * 
+ * case "select-one": { AddSelectOption(elms[m],comVal,comVal,false); for(var
+ * f=2;f<detailTable[i].rows.length;f++){ comVal =
+ * (jQuery.trim(jQuery(detailTable[i].rows[f].cells[k]).text()));
+ * AddSelectOption(elms[m],comVal,comVal,false);
+ *  } }
+ *  } } } } } } }
+ * 
+ * //disable_fields();
+ *  }
+ */
 
 function AddSelectOption(selectObj, text, value, isSelected) 
 {
@@ -181,22 +545,68 @@ function AddSelectOption(selectObj, text, value, isSelected)
 
 function disable_fields(){
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-
 	for(var i =0; i<panelsTable.length;i++){
 
-		//	alert("panels "+ panelsTable[i].id);
-		if (panelsTable[i].id == 'panelFields'){
+		// alert("panels "+ panelsTable[i].id);
+		if (panelsTable[i].id != 'buttonPanel'){
 
-			fields = panelsTable[i].getElementsByTagName("input");
-			//	alert("inside panel panels " + fields.length);
-			for(var k = 0; k<fields.length; k++){
-				//	alert("inside panel panels " + fields[k].id);
-				fields[k].disabled = true;
+//			fields = panelsTable[i].getElementsByTagName("input");
+//			for(var k = 0; k<fields.length; k++){
 
-			}
+//			fields[k].disabled = true;
+
+//			}
+			var query = jQuery(panelsTable[i]).find(" :input");
+			var elem = 	jQuery(query);
+
+			jQuery.each(elem, function(index, item) {
+				item.disabled = true;
+			});
 
 		}
 	}
+	document.getElementById("reqid").style.visibility = 'visible'; 
+	document.getElementById("status").style.visibility = 'visible'; 
+	
+	
+	
+	if(document.getElementById("status").value=="Applied"){
+		
+		document.getElementById("btnmodify").disabled = false;
+		document.getElementById("btnSave").disabled = true;
+		document.getElementById("btnsubmit").disabled = false;
+		document.getElementById("btndelete").disabled = false;
+
+
+	}
+	
+if(document.getElementById("status").value=="Applied"){
+		
+		document.getElementById("btnmodify").disabled = true;
+		document.getElementById("btnSave").disabled = true;
+		document.getElementById("btnsubmit").disabled = true;
+		document.getElementById("btndelete").disabled = true;
+		
+
+
+	}
+	
+
+}
+
+function enable_fields(){
+	screenMode = "modify";
+
+	var updateonar = "mgrid,mgrname,departmentname,remarks,user1,assetidhu,transfertypeone,userid1,assetid1,userid2,assetid2,transfertypeswap,assetidsw,description,assetname,userid,assetidamc,hardwaretype,assetidpco,assettype,ramnh,harddisk,descriptionnh,processor,refreqid,assetidrr,software,descriptionhu,processorhu,ramhu,hdd,make,quantity,descriptiongh,hardwaretype,quantity,hardwaretype,descriptionsw,assetidst,deliverynote,descriptionamc,transfertypesel,assetid,descriptionrr,ram,processornh,btnupdate".split(",");
+	for ( var i = 0; i < updateonar.length; i++) {
+		var arelm = updateonar[i];
+		jQuery("#"+ arelm).attr('disabled','');
+	}
+	document.getElementById("btnmodify").disabled = "true";
+	document.getElementById("btndelete").disabled = "true";
+	document.getElementById("btnsubmit").disabled = "true";
+
+
 }
 
 function insertData() {
@@ -210,55 +620,66 @@ function reqSubmit() {
 }
 
 function reqSave() {
-
-
-	//alert("in savesdkgf ");	
-	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
-
-		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
-		prompt("url",url);	
-		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=worlkflow&activityname=CR&create=true";
-		alert(url);
-		//add key:vlaue to url
-		sendAjaxGet(url, saveCallBack);
-
 	
-
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
 		prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 
-		//prompt("url",url);
-		//add key:vlaue to url
+		// prompt("url",url);
+		// add key:vlaue to url
 
 
 		sendAjaxGet(url, saveCallBack);
+	} else {
+
+
+	// alert("in savesdkgf ");
+	// var
+	// url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;
+
+	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
+	prompt("url",url);	
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CR&create=";
+	alert(url);
+	// add key:vlaue to url
+	sendAjaxGet(url, saveCallBack);
+
 	}
+
+	
 
 }
 
 function deleteData(){
 
 	whereclause  = makeWhereClause();
+	alert(decodeURIComponent(whereClause));
+	
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
-	prompt("url",url);	
-	alert("in update!!!!!!! url" +url);
-	//prompt("url",url);
-	//add key:vlaue to url
-
-
+	alert(decodeURIComponent(url));	
+	// prompt("url",url);
+	// add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
 
 }
-
 function saveCallBack(val) {
 	//show success message 
-	if(val < 0)alert("Error while saving! ");
-	else alert("Successfully saved your request! ");
-}
 
+	var json = JSON.parse(val);
+	if(json.error !=null ){
+		showerror(json.error);
+	}else {
+		showalert(json.message);
+		if(json.workflowurl != null){
+			location.href = json.workflowurl ;
+		}else{
+			populate();
+		}
+	}
+	
+}
 
 function KeyValue(a,b) {
 	this.key=a;
@@ -279,45 +700,116 @@ function replacer(key, value) {
 
 
 function prepareInsertData() {
-
-	//var array = {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
+	// var array =
+	// {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	var pclass = new Array();
+	var panelDataTable = new Array();
+	var selIndex = document.getElementById("requesttype").selectedIndex;
+	var typee = document.getElementById("hardwaretype").value;
+	var typetrans = document.getElementById("transfertypesel").value;
+
+	if(selIndex == New_Hardware && (typee=='PC' || typee=='LAP')){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'NewHardware';
+	}
+
+	if(selIndex == New_Hardware && (typee!='PC' && typee!='LAP')){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'GeneralHardware';
+	}
+
+	if(selIndex == Hardware_Upgrade){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'HardwareUpgrade';
+	}
+
+	if(selIndex == AMC_Renewal){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'AmcRenewal';
+	}
+
+	if(selIndex == Release_Resource){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'ReleaseResource';
+
+	}
+
+	if(selIndex == Pc_Transfer && typetrans == 'One Way'){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'PcOneTransfer';
+
+	}
+
+	if(selIndex == Pc_Transfer && typetrans == 'Two Way'){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'PcSwapTransfer';
+
+	}
+
+	if(selIndex == New_Software || selIndex == Software_Upgrade){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'Software';
+	}
+
+	if(selIndex == Software_Transfer){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'SoftwareTransfer';
+	}
+
+	panelDataTable[panelDataTable.length] = 'statusFields';
 
 
-	//alert(dataTable.length);		
-	for (var i=0; i<dataTable.length; i++) {
+	// alert(dataTable.length);
+	for (var i=0; i<panelDataTable.length; i++) {
 
-		var query = "#panelsdiv #" + dataTable[i].id + " :input";
+
+		query = "#panelsdiv #" + panelDataTable[i] + " :input";
+		alert(query);
 		var requestar = new Array();
-	
+
 		var elem = 	jQuery(query); 
 		var j = 0;
 		jQuery.each(elem, function(index, item) {	
-		
+
 			var val = item.id;
 
-			if(item.type=="hidden" && val.substring(val.length-2,val.length)=='id'){
+			if(screenMode != "modify"){
+
+			if(val=='reqid'){
 				item.value = "AUTOGEN_SEQUENCE_ID";}
+			}
+			if(item.type=="hidden" && ((val=='hardwaretype') || (val=='hardwaretypegeneral') || (val=='newhardwaretype'))){
+				item.value = typee;}
+			if(item.type=="hidden" && ((val=='transfertypeone') || (val=='transfertypeswap'))){
+				item.value = typetrans;}
+			if(val=='status'){
+				item.value = 'Applied';
+			}
+
+
 
 			requestar[j] = new KeyValue(item.id, item.value);				
 			j++;						
 		});
 
-		pclass[i] = new panelClass(dataTable[i].id,requestar);					
+		pclass[i] = new panelClass(panelDataTable[i],requestar);					
 	}	
+
 	var k = new Object();
 	k.json = pclass;
 	var myJSONText = JSON.stringify(k, replacer,"");
+	alert("myjson "+myJSONText);
 	return myJSONText;			
 }
 
 
-function updateData(obj){
-	//obj.disabled = true;
+function updateData(){
+	alert("aaa");
+	// obj.disabled = true;
 	screenMode = "modify";
-	//There will be only one table in search screen 'search div'
-	//document.requestFrm.submit();
+	// There will be only one table in search screen 'search div'
+	// document.requestFrm.submit();
 	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
@@ -327,9 +819,9 @@ function updateData(obj){
 		if (panelsTable[m].id == 'panelFields'){
 
 			fields = panelsTable[m].getElementsByTagName("input");
-			//alert("inside update panel panels " + fields.length);
+			// alert("inside update panel panels " + fields.length);
 			for(var k = 0; k<fields.length; k++){
-				//	alert("inside panel panels " + fields[k].id);
+				// alert("inside panel panels " + fields[k].id);
 				for (i = 0; i <listTable.rows[0].cells.length ; i++ )
 				{
 					// alert(fields[k].id);
@@ -342,7 +834,7 @@ function updateData(obj){
 						}
 					}
 
-					//for date
+					// for date
 					if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE')) {
 
 						if(jQuery(listTable.rows[0].cells[i]).text().split(',')[3] == fields[k].id){
@@ -361,10 +853,10 @@ function updateData(obj){
 }
 
 function makeWhereClause(){
-
+	 
 	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
-
+	
 	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 	whereClause = "panelFields1WhereClause=";
@@ -389,17 +881,16 @@ function makeWhereClause(){
 		var k = new Object();
 		k.json = requestar;
 		var myJSONText = JSON.stringify(k, replacer,"");
-
+		//alert(myJSONText);
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
-
-
-
+		 
+		 
+		
 	}
-
+	
 	return whereClause;	 
 
 }
-
 
 function submitactivity(){
 	alert("here in submit activity");
@@ -409,11 +900,51 @@ function submitactivity(){
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 
-	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	// document.getElementById("submitanchor").href //stealing from
+	// actionbutton.jsp its not the right way, if its coming from viewDetails
+	// this will be wrong anyway!
 	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 
 }
 
+function fnAdjustTableWidth() {
+	var tdwidthar = new Array();
+	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
+		 
+		var query = jQuery(elem).eq(0).find("tr").eq(0).find("td ");
+		jQuery.each(query, function(index, item) {
+		//	alert(elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width());
+			if(!tdwidthar[index])tdwidthar[index]  = jQuery(item).width();
+			else if(   tdwidthar[index] < jQuery(item).width())			{
+				tdwidthar[index]  = jQuery(item).width();
+			}
+			 
+				
+		});
+	});
+	var j = 0 ;
+	var maxtd = tdwidthar.length;
+
+
+	var tblar = document.getElementById("panelsdiv").getElementsByTagName("table") ;
+	for (var i=0; i<tblar.length; i++) {
+		query = jQuery(tblar[i]).find("tr").eq(0).find("td");
+		elem = 	jQuery(query);
+
+		jQuery.each(query, function(index, item) {
+			jQuery(item).width(tdwidthar[j]);
+			j++;
+			if(maxtd == j)j=0;
+
+		});
+
+	}
+
+
+
+}
+
+/*
 function submitScreenFlowactivity(){
 	alert("here in submit activity");
 	location.href ="workflow.action?activityname=CR&create=true";
@@ -423,7 +954,24 @@ function submitScreenFlowactivity(){
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 
-	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	// document.getElementById("submitanchor").href //stealing from
+	// actionbutton.jsp its not the right way, if its coming from viewDetails
+	// this will be wrong anyway!
 	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 
-}
+} */
+
+function submitScreenFlowactivity(){
+	//alert("here in submit activity")
+	//alert(wflcontrollerurl);
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
+	alert(applicationid);
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName;
+	alert(url);
+	location.href = url;
+		
+	}
