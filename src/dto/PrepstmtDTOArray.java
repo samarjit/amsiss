@@ -22,6 +22,7 @@ public String	toString(String SQL){
 		PrepstmtDTO itr =  ardto.get(i);
 		retval = retval + sqlar[i] +" '"+itr.getData() +"'";
 	}
+	if(i+1 == sqlar.length)
 	retval = retval + sqlar[i];
 	return retval;
 }
