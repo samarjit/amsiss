@@ -51,8 +51,17 @@ function quotationCallBack(p){
 			if(detailTable[i].id == 'panelFields' && screenMode == "capturequotation")
 			{			
 				document.getElementById("qtstatus").value='NEW';
-				document.getElementById("quotationdate").value='10/11/2010';
-				document.getElementById("dateofdelivery").value='10/12/2010';
+				
+				var date = new Date();
+				var curr_date = date.getDate();
+				var curr_month = date.getMonth();
+				curr_month = curr_month + 1;
+				var curr_year = date.getFullYear();
+				date= curr_date + '/'+ curr_month + '/'+ curr_year;
+				//alert(date);
+				
+				document.getElementById("quotationdate").value=date;
+				document.getElementById("dateofdelivery").value=date;
 				document.getElementById("qtstatus").disabled=true;
 				document.getElementById("totalamount").disabled=true;
 				document.getElementById("totalamount").value='0';
