@@ -12,7 +12,14 @@ function search(){
 		if(document.getElementById("spodate"))
 			url=url+'&spodate='+document.getElementById("spodate").value;
 	
-						
+		var pagesize = jQuery('.searchdiv .pagesize').val();
+		var pageno = jQuery('.searchdiv .pageno').val();
+		
+		if(pagesize)
+			url=url+'&pagesize='+pagesize;
+		if(pageno)
+			url=url+'&pageno='+pageno;
+		
 		sendAjaxGet(url,mycall);
 }
 
