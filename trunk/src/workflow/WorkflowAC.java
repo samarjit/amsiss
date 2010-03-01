@@ -290,10 +290,21 @@ public String executeScrflow(){
 		 if("true".equals(ajaxflag)){
 			 returnStr = "ajaxwflsuccess";
 			 try {
-				 JSONObject jobjpasseddownerror = new JSONObject(passeddownerror);
-				 String msg = jobjpasseddownerror.getString("message");
-				 if(msg.length() > 0 )
+				 JSONObject jobjpasseddownerror = null;
+				 String msg= "";
+				 if(passeddownerror ==null){
+					 jobjpasseddownerror = new JSONObject();
+					  
+				 }else{
+					 jobjpasseddownerror = new JSONObject(passeddownerror);
+					  msg = jobjpasseddownerror.getString("message");
+				 }
+				 
+				 if(null!=msg && msg.length() > 0 )
 					 ajaxresultHtml = msg+ ", workflow completed successfully";
+				 else
+					 ajaxresultHtml = " workflow completed successfully";
+				 
 				jobjpasseddownerror.put("message",ajaxresultHtml);
 				jobjpasseddownerror.put("workflowurl",ServletActionContext.getRequest().getContextPath()+ url);
 				if(errorList.size() > 0)
