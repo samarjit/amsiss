@@ -79,7 +79,7 @@ function mycall2(p){
 function search3(){
 	 
 	var url=urlpart+"?panelName=searchPanelAlloc&screenName="+screenName;
-	var assetid = jQuery('#searchdiv3 #assetid').val();
+	var assetid = jQuery('#searchPanelAlloc #assetid').val();
 	if(assetid)url=url+'&assetid='+assetid;
 	if(document.getElementById("assetno"))
 		url=url+'&assetno='+document.getElementById("assetno").value;
@@ -89,9 +89,7 @@ function search3(){
 		url=url+'&username='+document.getElementById("username").value;
 	if(document.getElementById("assetip"))
 		url=url+'&assetip='+document.getElementById("assetip").value;	
-	if(document.getElementById("allocstatus"))
-		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
-	
+	 
 	var pagesize = jQuery('#searchdiv3 .pagesize').val();
 	var pageno = jQuery('#searchdiv3 .pageno').val();
 	
