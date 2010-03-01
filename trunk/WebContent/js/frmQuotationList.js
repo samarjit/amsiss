@@ -14,7 +14,15 @@ function search(){
 			url=url+'&squotationref='+document.getElementById("squotationref").value;
 		if(document.getElementById("sdateofdelivery"))
 			url=url+'&sdateofdelivery='+document.getElementById("sdateofdelivery").value;
-						
+					
+		var pagesize = jQuery('.searchdiv .pagesize').val();
+		var pageno = jQuery('.searchdiv .pageno').val();
+		
+		if(pagesize)
+			url=url+'&pagesize='+pagesize;
+		if(pageno)
+			url=url+'&pageno='+pageno;
+		
 		sendAjaxGet(url,mycall);
 }
 
