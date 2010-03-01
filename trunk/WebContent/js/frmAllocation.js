@@ -48,10 +48,14 @@ function requestCallBack(p){
 
 
 		detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
-
+		
+		
 		for ( var i=0; i<detailTable.length ; i++)
 		{
-			//alert(detailTable[i].id);			
+			if(detailTable[0].rows && detailTable[0].rows.length==0){
+				clearFields(detailTable[0]);
+				return;
+			}
 			if (detailTable[i].id == 'buttonPanel')
 				continue;
 			if(detailTable[i].rows[0])
@@ -100,7 +104,11 @@ function requestCallBack(p){
 	//createVendorDropdownAjax();
 	
 }
-
+function clearFields(tab){
+	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+	var query = jQuery("#panelsdiv #"+ tab.id).find(":input");
+	jQuery.each(query,function(index,item){item.value="";});
+}
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
 	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
@@ -421,20 +429,22 @@ function makeWhereClause(){
 
 function submitactivity(){
 	alert("here in submit activity")
-	alert(wflcontrollerurl);
+	
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
 	alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	var url  = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	alert(url);
+	location.href = url;
 		
 	}
 
 function submitScreenFlowactivity(){
-	alert("here in submit activity")
-	alert(wflcontrollerurl);
+	alert("submit screenflow activity")
+	
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
 	alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
@@ -442,6 +452,7 @@ function submitScreenFlowactivity(){
 	
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	alert(url);
 	location.href = url;
 		
 	}
