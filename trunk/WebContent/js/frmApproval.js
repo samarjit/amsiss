@@ -33,7 +33,17 @@ function approvalReqCallBack(p)
 
 		detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
 		//alert("DetailTable's Length : "+detailTable.length);
-
+		//alert(comStr);
+		//alert(comVal);
+		if(comStr == "reqstatus" && (comVal == "APPROVED" || comVal == "Applied")){
+			document.getElementById("btnforwardtonextlevel").disabled=true;
+		}
+		if(comStr == "reqstatus" && (comVal == "APPROVED" || comVal == "REJECTED")){
+			document.getElementById("btnforwardtonextlevel").disabled=true;
+			document.getElementById("btnapprove").disabled=true;
+			document.getElementById("btnreject").disabled=true;				
+		}
+		
 		for ( var i=0; i<detailTable.length ; i++)
 		{
 			if (detailTable[i].id == 'buttonPanel')
