@@ -13,6 +13,15 @@ function search(){
 	if(document.getElementById("srrfstatus"))
 		url=url+'&srrfstatus='+document.getElementById("srrfstatus").value;
 	url=url+'&srrfaprv='+userId;
+	
+	var pagesize = jQuery('.searchdiv .pagesize').val();
+	var pageno = jQuery('.searchdiv .pageno').val();
+	
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
+	
 	sendAjaxGet(url,mycall);
 }
 function mycall(p)
