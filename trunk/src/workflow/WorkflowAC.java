@@ -51,7 +51,7 @@ private String cancel;
 
 private String approve;
 private String activityname;
-private HashMap retBLhm = null;
+private HashMap retBLhm = new HashMap();
 private String navigateto;
 
 private String action;
@@ -139,7 +139,7 @@ public void setPasseddownerror(String passeddownerror) {
 
 /**
  * /workflow.action?activityname=CR&create=true
- * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+ * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName;
  */
 public String executeScrflow(){
 	String returnStr=SUCCESS;
@@ -289,7 +289,7 @@ public String executeScrflow(){
 		String ajaxresultHtml = "";
 		 if("true".equals(ajaxflag)){
 			 returnStr = "ajaxwflsuccess";
-			 try {
+			  try {
 				 JSONObject jobjpasseddownerror = null;
 				 String msg= "";
 				 if(passeddownerror ==null){
@@ -299,7 +299,6 @@ public String executeScrflow(){
 					 jobjpasseddownerror = new JSONObject(passeddownerror);
 					  msg = jobjpasseddownerror.getString("message");
 				 }
-				 
 				 if(null!=msg && msg.length() > 0 )
 					 ajaxresultHtml = msg+ ", workflow completed successfully";
 				 else
@@ -334,7 +333,9 @@ private void preSubmitProcessBL(String screenName) {
 
 	Class aclass = null;
 	CrudDAO cd = new CrudDAO();
+	HashMap retBLhmtmp = new HashMap();
 	String businessLogic = cd.getBusinessLogicName(screenName);
+	System.out.println("BusinessLogic*************************************************** "+businessLogic);
 	HttpServletRequest servletRequest =  ServletActionContext.getRequest();
 	try {
 		if (businessLogic != null && !"".equals(businessLogic)) {
@@ -347,14 +348,20 @@ private void preSubmitProcessBL(String screenName) {
 			String id = usr.getUserid();
 			//System.out.println("ID"+id);
 			buslogHm.put("userDTO", usr);			
-			retBLhm = basebl.preSubmitProcessBL(buslogHm);
+			retBLhmtmp = basebl.preSubmitProcessBL(buslogHm);
+			if(retBLhmtmp == null){
+				retBLhm.put("message","Unimplemented business logic");
+			}else{
+				retBLhm.put("BusinessLogicRESULT",retBLhmtmp);
+			}
 		}
 		else{
-			retBLhm.put("error", "Method not found");
-		}
+			retBLhm.put("message", "Business logic not defined");
+			debug(1," BL Class from DB not defined");		}
 	} catch (Exception e) {
 		debug(1,"Businesslogic not found");
 		e.printStackTrace();
+		retBLhm.put("error","Error executing business logic");
 	}
 	
 }
