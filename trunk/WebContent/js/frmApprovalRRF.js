@@ -13,7 +13,7 @@ function populate()
 }
 
 function clearWhereClause(){
-	alert(">>>Calling clearWhereClause...");
+	//alert(">>>Calling clearWhereClause...");
 	document.getElementById("panelFieldsWhereClause").value = "";
 }
 
@@ -47,6 +47,15 @@ function approvalRRFCallBack(p){
 				//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
 				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
 
+				if(comStr == "rrfstatus" && (comVal == "APPROVED" || comVal == "PENDAPPROVAL")){
+					document.getElementById("btnforwardtonextlevel").disabled=true;
+				}
+				if(comStr == "rrfstatus" && (comVal == "APPROVED" || comVal == "REJECTED")){
+					document.getElementById("btnforwardtonextlevel").disabled=true;
+					document.getElementById("btnapprove").disabled=true;
+					document.getElementById("btnreject").disabled=true;				
+				}
+				
 				//comVal = detailTable[i].rows[1].cells[k].innerText;	  
 				for(var l = 0; l<panelsTable.length; l++)
 				{
@@ -79,7 +88,7 @@ function disable_fields(){
 	for(var i =0; i<paneltables.length;i++){
 		
 	//	alert("panels "+ panelsTable[i].id);
-		if (paneltables[i].id == 'panelFields'){
+		if (paneltables[i].id == 'panelFields' || paneltables[i].id == 'rfqFields'){
 			
 		fields = paneltables[i].getElementsByTagName("input");
 		//	alert("inside panel panels " + fields.length);
@@ -87,18 +96,26 @@ function disable_fields(){
 			//	alert("inside panel panels " + fields[k].id);
 				fields[k].disabled = true;
 			
-			}
-		
+			}		
 		}
 	}
+	
+	
+	
 }
+
+
+function backToList(){
+	location.href= ctxpath+"/template1.action?screenName=frmApprovalRRFList"
+}
+
+
 
 function insertData() {
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 }
 
 function reqSubmit() {
-	
 	prepareInsertData();
 }
 
@@ -113,33 +130,7 @@ function deleteData(){
 	sendAjaxGet(url, saveCallBack);
 }
 
-//Error/Successful Message for saving
-function saveCallBack(val) {
-	//show success message 
-	if(val < 0)
-	{ 
-		showerror("Could not update : Error Occured! "); 
-	}
-	
-	else
-	{
-		if(flash=='1')
-		{ 
-			location.href= ctxpath+"/template1.action?screenName=frmApprovalRRFList";
-			alert("Successfully sent your rrf to the next level! ");	
-		}
-		else if(flash=='2')
-		{  
-			location.href= ctxpath+"/template1.action?screenName=frmApprovalRRFList";
-			alert("Successfully saved your approval rrf! "); 
-		}
-		else if(flash=='3')
-		{  
-			location.href= ctxpath+"/template1.action?screenName=frmApprovalRRFList";
-			alert("Successfully saved your rejected rrf! "); 
-		}
-	}
-}
+
 
 function KeyValue(a,b) {
 	this.key=a;
@@ -231,50 +222,112 @@ function makeWhereClause(){
 	return whereClause;	 
 
 }
+
 function approvalRrf() 
 {
-	alert("In approval");
+	//alert("In approval");
 	
-	//var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
 	var applicationid = document.getElementById("rrfrfq").value;
 	alert(applicationid);
 	
-	//var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
-	//var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	var actionid =  document.getElementById("wflactiondesc").value;
 	var wflid= document.getElementById("wflid").value;
 	var rrfid= document.getElementById("rrfid").value;
-	//alert(rrfid);
-	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF"+"&rrfid="+ rrfid + "&approve=true"  ;
+	//alert(rrfid); 	
+	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF"+"&rrfid="+ rrfid + "&approve=true&ajaxflag=true"  ;
+		
+	//location.href = url;
 	
-	alert(url);
-	//exit();
-	location.href = url;
+	sendAjaxGet(url, approvalCallBack);
 	
-	//exit();
-	
-	/*
-    whereclause  = makeWhereClause();
-	var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmApprovalRRF";
-	//prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData();
-	//prompt("url",url);
-	//add key:vlaue to url*/
-	
-	//sendAjaxGet(url, approveCallBack);
 }
 
-function approveCallBack(val) 
+var workflowurl;
+
+function approvalCallBack(val)
 {
 	//show success message 
-	if(val < 0)
-		showerror("Could not save PO for this rrf : Error Occured! ");
-	else 
-	{
-		alert("Purchase order created! ");
+	//alert("RRF approved");
+	//alert(val);
+	var json = JSON.parse(val);
+	alert(json.workflowurl);
+	if(json.error !=null ){
+		showerror(json.error);
+	}else {
+		//showalert(json.message);
+		workflowurl = json.workflowurl;
+		if(json.workflowurl != null){
+			
+			var  pclass = new Array();
+			
+			var requestar = new Array();
+			//alert(query);
+			//var elem = 	jQuery(query); 
+			//var j = 0;
+			//jQuery.each(elem, function(index, item) {	
+				//alert(j);
+				//alert(item.id);
+				//alert(item.value);		
+				
+			requestar[0] = new KeyValue("poid", "AUTOGEN_SEQUENCE_ID");
+			requestar[1] = new KeyValue("porrfid", document.getElementById("rrfid").value);
+			var date = new Date();
+			var curr_date = date.getDate();
+			var curr_month = date.getMonth();
+			curr_month = curr_month + 1;
+			var curr_year = date.getFullYear();
+			date= curr_date + '/'+ curr_month + '/'+ curr_year;
+			//alert(date);
+			requestar[2] = new KeyValue("podate", date);
+			requestar[3] = new KeyValue("postatus", "NEW");
+
+			pclass[0] = new panelClass("panelFields",requestar);	
+			var k = new Object();
+			k.json = pclass
+			var myJSONText = JSON.stringify(k, replacer,"");
+			//alert(myJSONText );	
+			//return myJSONText;	
+			var url=inserturlpart+"?panelName=searchPanel&screenName=frmPO";
+			//prompt("url",url);	
+			//url = url + "&poid=AUTOGEN_SEQUENCE_ID&porrfid="+document.getElementById("rrfid").value;
+			url = url+ "&insertKeyValue="+ myJSONText;
+			alert(url);
+			//exit();
+			sendAjaxGet(url, savePOCallBack);
+			
+		}
 	}
 }
+
+function savePOCallBack(val) {
+	//show success message
+	alert("in save PO");
+	//alert(workflowurl);
+	location.href = ctxpath+"/template1.action?screenName=frmApprovalRRFList";
+
+}
+
+
+
+
+function rejectRrf() 
+{ 
+	//alert("In reject");
+	var applicationid = document.getElementById("rrfrfq").value;
+	//alert(applicationid);	
+	var actionid =  document.getElementById("wflactiondesc").value;
+	var wflid= document.getElementById("wflid").value;
+	var rrfid= document.getElementById("rrfid").value;
+	//alert(rrfid); 	
+	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF"+"&rrfid="+ rrfid + "&approve=false"  ;
+	
+	location.href = url;
+	
+}
+
+
+
+
 
 var flash='0';
 
