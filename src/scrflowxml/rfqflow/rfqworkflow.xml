@@ -31,11 +31,13 @@
 	<decision name="RRFApproval">
 		<handler></handler>
 		<transition to="CreatePO" name="approved"></transition>
-		<transition to="CreateRRF" name="rejected"></transition>
+		<transition to="End" name="rejected"></transition>
 	</decision>
 
 
 	<end-state name="end-state1"></end-state>
+
+	<end-state name="End"></end-state>
 
 
 </process-definition>
