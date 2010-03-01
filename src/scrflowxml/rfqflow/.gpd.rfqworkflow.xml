@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container width="615" height="434">
+<root-container width="711" height="446">
   <node name="RFQCreate" x="96" y="25" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="CreateRRF" x="109" y="90" width="132" height="36">
+  <node name="CreateRRF" x="101" y="83" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
       <bendpoint w1="36" h1="50" w2="59" h2="-49"/>
     </edge>
   </node>
-  <node name="CreatePO" x="99" y="262" width="123" height="36">
+  <node name="CreatePO" x="179" y="253" width="123" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="CreateDN" x="292" y="248" width="132" height="36">
+  <node name="CreateDN" x="357" y="233" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
@@ -27,19 +27,19 @@
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="Allocate" x="455" y="294" width="132" height="36">
+  <node name="Allocate" x="493" y="312" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="RRFApproval" x="97" y="178" width="132" height="36">
+  <node name="RRFApproval" x="141" y="156" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
     <edge>
-      <label x="-50" y="-11"/>
-      <bendpoint w1="-34" h1="-52" w2="-57" h2="47"/>
+      <label x="5" y="-10"/>
     </edge>
   </node>
   <node name="end-state1" x="438" y="397" width="132" height="36"/>
+  <node name="End" x="13" y="250" width="132" height="36"/>
 </root-container>
