@@ -41,12 +41,10 @@ function populate()
 	
 
 }
-var screenMode = "insert";
+//var screenMode = "insert";
 
 
 function requestCallBack(parm){
-	fnAdjustTableWidth();
-
 	var jobj = JSON.parse(parm);
 	if(jobj.error != null ){
 		alert(jobj.error);return;
@@ -72,11 +70,11 @@ function requestCallBack(parm){
 	for(var i=0;i<transferType.length;i++){
 		AddSelectOption(document.getElementById("transfertypesel"),transferType[i],transferType[i],false);
 	}
-
+	fnAdjustTableWidth();
 }
 
 function requestCallBackview(p){
-	fnAdjustTableWidth();
+	
 	//alert("Got from ajax:"+p);
 	var json = JSON.parse(p);
 	//alert(json.message);
@@ -86,7 +84,7 @@ function requestCallBackview(p){
 	else {
 		//alert(jason.message);
 		p = decodeURIComponent(json.message);
-		alert(p);
+		//alert(p);
 		document.getElementById("retreivedetailsdiv").innerHTML = p;	
 		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 		// alert(panelsTable.length);
@@ -260,7 +258,7 @@ function requestCallBackview(p){
 	}
 
 
-
+	fnAdjustTableWidth();
 	disable_fields();
 
 
@@ -911,11 +909,12 @@ function submitactivity(){
 
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
+	var alertstr="";
 	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
 		 
 		var query = jQuery(elem).eq(0).find("tr").eq(0).find("td ");
 		jQuery.each(query, function(index, item) {
-		//	alert(elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width());
+			//alertstr += (elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width())+"<br/>";
 			if(!tdwidthar[index])tdwidthar[index]  = jQuery(item).width();
 			else if(   tdwidthar[index] < jQuery(item).width())			{
 				tdwidthar[index]  = jQuery(item).width();
@@ -926,7 +925,7 @@ function fnAdjustTableWidth() {
 	});
 	var j = 0 ;
 	var maxtd = tdwidthar.length;
-
+	//showerror(alertstr);
 
 	var tblar = document.getElementById("panelsdiv").getElementsByTagName("table") ;
 	for (var i=0; i<tblar.length; i++) {
