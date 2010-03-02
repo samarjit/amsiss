@@ -40,12 +40,19 @@ public class ApprovalRrfBL implements BaseBL{
 				if(rrfidarr == null)
 					return (HashMap) buslogHm;
 				String rrfid = (String)(rrfidarr[0]);
-				String RRFSQL = "update ams_rrf set rrf_status='APPROVED' where rrf_id=? ";
+				
+				String[] rrfcomarr = (String[]) buslogHm.get("rrfcomments");
+				if(rrfcomarr == null)
+					return (HashMap) buslogHm;
+				String rrfcomment = (String)(rrfcomarr[0]);
+				
+				String RRFSQL = "update ams_rrf set rrf_status='APPROVED', rrf_comments=? where rrf_id=? ";
 
 				CachedRowSet rrfcrs = null;
 				try {
 					DBConnector db = new DBConnector();
 					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+					arPrepstmt.add(DataType.STRING, rrfcomment);
 					arPrepstmt.add(DataType.STRING, rrfid);			
 					debug(1,arPrepstmt.toString(RRFSQL));
 
@@ -68,12 +75,19 @@ public class ApprovalRrfBL implements BaseBL{
 				if(rrfidarr == null)
 					return (HashMap) buslogHm;
 				String rrfid = (String)(rrfidarr[0]);
-				String RRFSQL = "update ams_rrf set rrf_status='REJECTED' where rrf_id=? ";
+				
+				String[] rrfcomarr = (String[]) buslogHm.get("rrfcomments");
+				if(rrfcomarr == null)
+					return (HashMap) buslogHm;
+				String rrfcomment = (String)(rrfcomarr[0]);
+				
+				String RRFSQL = "update ams_rrf set rrf_status='REJECTED' , rrf_comments=? where rrf_id=? ";
 
 				CachedRowSet rrfcrs = null;
 				try {
 					DBConnector db = new DBConnector();
 					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+					arPrepstmt.add(DataType.STRING, rrfcomment);	
 					arPrepstmt.add(DataType.STRING, rrfid);			
 					debug(1,arPrepstmt.toString(RRFSQL));
 
