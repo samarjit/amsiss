@@ -41,68 +41,6 @@ function cleanUp()
 	}
 }
 
-/*////////////////////////
-document.onclick = function(e){
-	var targ;
-	selectedIdx = -1;
-	cleanUp();
-
-	if (!e)
-	  {
-	  var e=window.event;
-	  }
-	if (e.target)
-	  {
-	  targ=e.target;
-	  }
-	else if (e.srcElement)
-	  {
-	  targ=e.srcElement;
-	  }
-	if (targ.nodeType==3) // defeat Safari bug
-	  {
-	  targ = targ.parentNode;
-	  }
-	var tname;
-	tname=targ.tagName;
-	var obj  = targ;
-	if(obj.tagName)
-	while( obj  != null && obj.tagName != "TR" && obj.tagName != "BODY"   ){
-	obj = obj.parentNode;
-	}
-	var flag = false;
-	var objtest = obj;
-	while( objtest  != null && objtest.tagName != "BODY"   ){
-	if(objtest.id == "searchdiv")flag=true;
-	objtest = objtest.parentNode;
-
-	}
-
-	if(obj != null && (obj.tagName == "tr" || obj.tagName == "TR" )  && flag ){
-//	  if(!(jQuery(obj).find("th").is("th")) ) {
-//	  selectedIdx  = obj.rowIndex;
-//	  obj.style.backgroundColor= "#a0b0a0";
-//	  alert("inside jquery");
-//	  }
-	  
-
-//	 prototype 
-//	var nodes = $A(obj.getElementsByTagName("TH"));
-//
-//			nodes.each(function(node){
-//					alert(node.nodeName + ': ' + node.innerHTML);
-//				});
-//	 
-	var arTH = obj.getElementsByTagName("TH");
-	 if(arTH.length == 0 ){
-		 selectedIdx  = obj.rowIndex;
-	  obj.style.backgroundColor= "#C5FF60";
-	 }
-
-	}
-}
-*/
-
 function addSelectEvents(){
 	var srchdv = document.getElementById("searchdiv").getElementsByTagName("TR");
 	for (var i =0;i< srchdv.length;i++) {
@@ -131,8 +69,8 @@ function replacer(key, value) {
 }
 
 function viewdetails(){
-	 
-	// alert("in make url,selectedIdx:"+selectedIdx);
+
+	//alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
 	//alert("Calling View Details Method");
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
