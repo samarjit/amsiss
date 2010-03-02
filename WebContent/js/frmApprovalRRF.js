@@ -1,15 +1,16 @@
 function populate()
 {
 	//alert("This alert box was called with the onload event");	
-
+	//alert("In populate");
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
 		url=url+"&whereClause="+ whereClause;		
 		//alert("In message: whereClause=" + whereClause);
-		// prompt("url",url);	
+		 //prompt("url",url);	
+		
 		sendAjaxGet(url, approvalRRFCallBack);
 	}	
-	//alert("In populate");
+	
 }
 
 function clearWhereClause(){
@@ -47,13 +48,16 @@ function approvalRRFCallBack(p){
 				//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
 				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
 
-				if(comStr == "rrfstatus" && (comVal == "APPROVED" || comVal == "PENDAPPROVAL")){
+				if(comStr == "rrfstatus" && comVal == "PENDAPPROVAL"){
 					document.getElementById("btnforwardtonextlevel").disabled=true;
+					
 				}
 				if(comStr == "rrfstatus" && (comVal == "APPROVED" || comVal == "REJECTED")){
+					
 					document.getElementById("btnforwardtonextlevel").disabled=true;
 					document.getElementById("btnapprove").disabled=true;
 					document.getElementById("btnreject").disabled=true;				
+					document.getElementById("rrfcomments").disabled=true;
 				}
 				
 				//comVal = detailTable[i].rows[1].cells[k].innerText;	  
@@ -118,18 +122,6 @@ function insertData() {
 function reqSubmit() {
 	prepareInsertData();
 }
-
-function deleteData(){
-	
-	whereclause  = makeWhereClause();
-	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmApprovalRRF";
-	prompt("url",url);	
-	//alert("in update!!!!!!! url" +url);
-	//prompt("url",url);
-	//add key:vlaue to url
-	sendAjaxGet(url, saveCallBack);
-}
-
 
 
 function KeyValue(a,b) {
@@ -233,9 +225,10 @@ function approvalRrf()
 	var actionid =  document.getElementById("wflactiondesc").value;
 	var wflid= document.getElementById("wflid").value;
 	var rrfid= document.getElementById("rrfid").value;
+	var comments= document.getElementById("rrfcomments").value;
+	
 	//alert(rrfid); 	
-	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF"+"&rrfid="+ rrfid + "&approve=true&ajaxflag=true"  ;
-		
+	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF&rrfcomments="+comments+"&rrfid="+ rrfid + "&approve=true&ajaxflag=true"  ;
 	//location.href = url;
 	
 	sendAjaxGet(url, approvalCallBack);
@@ -301,13 +294,11 @@ function approvalCallBack(val)
 
 function savePOCallBack(val) {
 	//show success message
-	alert("in save PO");
+	//alert("in save PO");
 	//alert(workflowurl);
 	location.href = ctxpath+"/template1.action?screenName=frmApprovalRRFList";
 
 }
-
-
 
 
 function rejectRrf() 
@@ -318,8 +309,9 @@ function rejectRrf()
 	var actionid =  document.getElementById("wflactiondesc").value;
 	var wflid= document.getElementById("wflid").value;
 	var rrfid= document.getElementById("rrfid").value;
+	var comments= document.getElementById("rrfcomments").value;
 	//alert(rrfid); 	
-	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF"+"&rrfid="+ rrfid + "&approve=false"  ;
+	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF&rrfcomments="+comments+"&rrfid="+ rrfid + "&approve=false&ajaxflag=true"  ;
 	
 	location.href = url;
 	
@@ -327,84 +319,3 @@ function rejectRrf()
 
 
 
-
-
-var flash='0';
-
-//update the status depending on the manager approval
-function updateStatus(btnname) 
-{
-	
-	if(btnname=="btnforwardtonextlevel")
-	{
-		flash=='1';	
-		document.getElementById("rrfstatus").value = "Fw To Next Level";	
-		approvalRrfSave();
-		savePO();
-	}
-	else if(btnname=="btnapprove")
-	{
-		flash=='2';
-		document.getElementById("rrfstatus").value = "Approved";	
-		approvalRrfSave();
-		getMgrId();
-	}
-	else if (btnname=="btnreject")
-	{
-		flash=='3';
-		document.getElementById("rrfstatus").value = "Rejected";	
-		approvalRrfSave();
-	}	
-}
-
-function getMgrId()
-{
-	
-	var url = jsrpcurlpart+"?screenName=frmApprovalRRF&rrfid="+rrfid+"&rpcid=getmanagerid";
-	sendAjaxGet(url, saveCallBack);
-	/*jQuery.ajax({
-		   type: "GET",
-		   url: "jsrpc.action?screenName=frmApprovalRRF&rrfid="+rrfid+"&rpcid=getmanagerid",
-		   success:  saveCallBackforPO
-
-		 });*/
-}
-
-function savePO()
-{
-	alert("in testjsrpc method...");
-	alert(">>RRFid>>>>"+rrfid);
-	jQuery.ajax({
-		   type: "GET",
-		   url: "jsrpc.action?screenName=frmApprovalRRF&rrfid="+rrfid+"&rpcid=purchaseorder",
-		   success:  saveCallBackforPO
-
-		 });
-}
-
-
-function submitactivity(){
-	//alert("here in submit activity");
-	alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	//alert(applicationid);
-	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
-	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	
-	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
-		
-	}
-
-function submitScreenFlowactivity(){
-	//alert("here in submit activity")
-	alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	//alert(applicationid);
-	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
-	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	
-	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
-		
-	}
