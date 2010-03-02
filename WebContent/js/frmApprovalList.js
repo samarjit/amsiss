@@ -1,57 +1,68 @@
+
+
 function search(){
 	 
+	
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
+	/*if(document.getElementById("sempid"))
+		url=url+'&sempid='+document.getElementById("sempid").value; */
+	
 	if(document.getElementById("srequestid"))
 		url=url+'&srequestid='+document.getElementById("srequestid").value;
 	if(document.getElementById("srequestdate"))
 		url=url+'&srequestdate='+document.getElementById("srequestdate").value;
 	if(document.getElementById("srequesttype"))
 		url=url+'&srequesttype='+document.getElementById("srequesttype").value;
+	
 	if(document.getElementById("srequeststatus"))
 		url=url+'&srequeststatus='+document.getElementById("srequeststatus").value;
-	
-	if(document.getElementById("smanagername"))
-		url=url+'&smanagername='+document.getElementById("smanagername").value;
 	if(document.getElementById("sempid"))
 		url=url+'&sempid='+document.getElementById("sempid").value;
-	if(document.getElementById("sempname"))
-		url=url+'&sempname='+document.getElementById("sempname").value;
-	if(document.getElementById("sdepartmentname"))
-		url=url+'&sdepartmentname='+document.getElementById("sdepartmentname").value;
-	
+		
+	var pagesize = jQuery('.searchdiv .pagesize').val();
+	var pageno = jQuery('.searchdiv .pageno').val();
 	url=url+'&smanagerid='+userId;
+		
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
+	//alert(url);
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
-	//alert("Got from ajax:"+userId);
+	//alert("Got from ajax:"+p);
+	//exit();
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
 }
+
 var selectedIdx = -1;
 
 function cleanUp() {
 	var arobj = document.getElementById("searchdiv").getElementsByTagName("TR");
+
 	for (var i =1 ; i < arobj.length; i++) {
 		arobj[i].style.backgroundColor= "#E7FFBF";
 	}
 }
 
-function addSelectEvents()
-{
+function addSelectEvents(){
+ 
 	var srchdv = document.getElementById("searchdiv").getElementsByTagName("TR");
-	for (var i =0;i< srchdv.length;i++) 
-	{
-		if(srchdv[i].childNodes[0].tagName != "TH")
-		{ 
-			srchdv[i].onclick=function(p)
-			{
-			  cleanUp();
-			  selectedIdx  = this.rowIndex;
+
+	for (var i =0;i< srchdv.length;i++) {
+	if(srchdv[i].childNodes[0].tagName != "TH"){ 
+			srchdv[i].onclick=function(p){
+			 cleanUp();
+			 selectedIdx  = this.rowIndex;
 			  this.style.backgroundColor= "#D6F1A3";
-			};
+				}
+			}
 		}
-	}
 }
+ 
+
 //create url with where clause
 function KeyValue(a,b) {
 	this.key=a;
@@ -67,11 +78,12 @@ function replacer(key, value) {
 
 
 function viewdetails(){
-	 
-	// alert("in make url,selectedIdx:"+selectedIdx);
+ 
+	//alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
-	//alert("Calling View Details Method");
+	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
+
 	whereClause = "panelFields1WhereClause=";
 	if(listTable != null && selectedIdx != -1){
 		//poplate wher clause url
@@ -96,6 +108,8 @@ function viewdetails(){
 		var myJSONText = JSON.stringify(k, replacer,"");
 		
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
+		 
+		 
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
 		document.getElementById("formwhere").screenName.value = "frmApproval";
 		document.getElementById("formwhere").submit();
@@ -104,11 +118,11 @@ function viewdetails(){
 		return false;
 	}
 	return true;	 
+
 }
 
 //create url with where clause
-function clearWhereClause()
-{
+function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").value="";
 }
 
