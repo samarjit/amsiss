@@ -580,12 +580,14 @@ function disable_fields(){
 
 	}
 	
-if(document.getElementById("status").value=="Applied"){
+if(document.getElementById("status").value=="Submitted"){
 		
 		document.getElementById("btnmodify").disabled = true;
 		document.getElementById("btnSave").disabled = true;
 		document.getElementById("btnsubmit").disabled = true;
 		document.getElementById("btndelete").disabled = true;
+		document.getElementById("btncancel").disabled = false;
+
 		
 
 
