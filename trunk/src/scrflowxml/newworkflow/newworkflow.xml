@@ -11,8 +11,8 @@
 		</event>
    </start-state>
    <decision name="Approve">
-		<transition to="end" name="Rejected"></transition>
-		<transition to="Allocate" name="Accepted"></transition>
+		<transition to="end" name="rejected"></transition>
+		<transition to="Allocate" name="approved"></transition>
 	</decision>
 
 	<task-node name="Allocate"></task-node>
