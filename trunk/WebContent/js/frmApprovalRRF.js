@@ -119,11 +119,6 @@ function insertData() {
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 }
 
-function reqSubmit() {
-	prepareInsertData();
-}
-
-
 function KeyValue(a,b) {
 	this.key=a;
 	this.value=b;
@@ -296,6 +291,7 @@ function savePOCallBack(val) {
 	//show success message
 	//alert("in save PO");
 	//alert(workflowurl);
+	alert("The record is approved successfully");
 	location.href = ctxpath+"/template1.action?screenName=frmApprovalRRFList";
 
 }
@@ -312,9 +308,20 @@ function rejectRrf()
 	var comments= document.getElementById("rrfcomments").value;
 	//alert(rrfid); 	
 	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApprovalRRF&rrfcomments="+comments+"&rrfid="+ rrfid + "&approve=false&ajaxflag=true"  ;
+	//alert("The record is rejected successfully");
+	//location.href = url;
+	sendAjaxGet(url, rejectCallBack);
 	
-	location.href = url;
-	
+}
+
+function rejectCallBack(val) {
+	//show success message
+	//alert("in save PO");
+	//alert(workflowurl);
+	//showalert("The record is rejected successfully");
+	alert("The record is rejected successfully");
+	location.href = ctxpath+"/template1.action?screenName=frmApprovalRRFList";
+
 }
 
 
