@@ -82,6 +82,11 @@ function viewdetails(){
 	//alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
 	
+	if(selectedIdx == -1)
+	{
+		showerror("Please select a record");
+	}
+	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
 
 	whereClause = "panelFields1WhereClause=";
