@@ -263,14 +263,19 @@ public String executeScrflow(){
 				decision="rejected";
 			}
 			hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
-			if ("".equals(url) && hmActions.size() > 0) {
-				String actionname = (String) hmActions.get(0);
+			String actionname = null;
+			if ("".equals(url) && hmActions.size() > 0) {	
+				actionname = (String) hmActions.get(0);
 				url = wflBean.getScreenId(actionname);
 //					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
 //					appdto.setCurrentAction(actionname);
 			}
 			//}
 			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
+			if(actionname.equals("End"))
+			{				
+				wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", "End");//'C' for close
+			}			
 		}
 		
 	} catch (Exception e) {
