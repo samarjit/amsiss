@@ -557,9 +557,6 @@ function reqSubmit() {
 
 function reqApproval() {
 
-	alert("in approval");
-	
-
 	var applicationid = document.getElementById("reqid").value;
 //	alert(applicationid);
 	var actionid =  document.getElementById("wflactiondesc").value;
@@ -581,6 +578,8 @@ function reqApproval() {
 function approvalCallBack(val) {
 	//show success message
 	//alert(workflowurl);
+	//showalert("The record is approved successfully");
+	alert("The record is approved successfully");
 	location.href = ctxpath+"/template1.action?screenName=frmApprovalList";
 }
 
@@ -595,6 +594,8 @@ function reqReject() {
 	var comments= document.getElementById("remarks").value;
 	//alert(rrfid);
 	var url = "scrworkflow.action?doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmApproval&reqcomments="+comments+"&reqid="+ reqid + "&approve=false&ajaxflag=false"  ;
+	//alert(url);
+	//exit();
 	sendAjaxGet(url, rejectCallBack);
 	
 }
@@ -608,6 +609,8 @@ function rejectCallBack(val) {
 	//show success message
 	//alert("in save PO");
 	//alert(workflowurl);
+	//showalert("The record is rejected successfully");
+	alert("The record is rejected successfully");
 	location.href = ctxpath+"/template1.action?screenName=frmApprovalList";
 
 }
