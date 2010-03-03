@@ -102,6 +102,11 @@ function viewdetails(btnname){
 	//There will be only one table in search screen 'search div'	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
 	
+	if(selectedIdx == -1)
+	{
+		showerror("Please select a record");
+	}
+	
 	whereClause = "panelFields1WhereClause=";
 	if(listTable != null && selectedIdx != -1){
 		//poplate wher clause url
@@ -155,8 +160,10 @@ function viewdetails(btnname){
 		document.getElementById("formwhere").submit();
 	}
 	else {
+		
 		return false;
 	}
+	
 	return true;	 
 
 }
