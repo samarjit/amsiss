@@ -258,7 +258,7 @@ public class RequestBL implements BaseBL{
 			return (HashMap) buslogHm;
 		String appid = (String)(delquotarr[0]);
 		debug(1, appid);
-		String SQL = "update ams_request set status='Submitted' where reqid=? ";
+		String SQL = "update ams_request set status='PENDAPPROVAL' where reqid=? ";
 
 		CachedRowSet crs = null;
 		try {
