@@ -31,12 +31,24 @@ private String panelFieldsWhereClause;
 private String screenMode;
 private String ajaxPopulate = "";
 private InputStream inputStream;
+private String passedonvalues;
 
 
 private void debug( int priority,String s){
 	if(priority > 0)
 	System.out.println("GenerateHtml:"+s);
 }
+
+
+public String getPassedonvalues() {
+	return passedonvalues;
+}
+
+
+public void setPassedonvalues(String passedonvalues) {
+	this.passedonvalues = passedonvalues;
+}
+
 
 public String getScreenTitle() {
 	return screenTitle;
