@@ -11,7 +11,7 @@
 		</event>
    </start-state>
    <decision name="Approve">
-		<transition to="end" name="rejected"></transition>
+		<transition to="End" name="rejected"></transition>
 		<transition to="Allocate" name="approved"></transition>
 	</decision>
 
