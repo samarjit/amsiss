@@ -2,7 +2,7 @@ function populate()
 {
 	//alert("This alert box was called with the onload event");	
 	fnAdjustTableWidth();
-	
+	if(vpassedonvalues != null && vpassedonvalues.trim() != "")prepopulate(vpassedonvalues);
 	//alert(unescape(whereClause))
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
@@ -11,17 +11,23 @@ function populate()
 		//prompt("url",url);	
 		sendAjaxGet(url, requestCallBack);
 	}
-	if(screenMode == "create"){
-		jQuery('#btnModify').attr('disabled','disabled');
-		jQuery('#btnDelete').attr('disabled','disabled');
-		jQuery('#btnSubmit').attr('disabled','disabled');
-	}
+	disable_fields();
 }
 //var screenMode = "insert";
 function $F(p){
 	if(document.getElementById(p))
 	return document.getElementById(p).value;
 	return "";
+}
+
+function prepopulate(param){
+	var json = JSON.parse(param);
+	var empid= json.empid;
+	var assetid = json.assetid;
+	
+	jQuery("#panelsdiv #username").val(empid);
+	jQuery("#panelsdiv #assetid").val(assetid);
+ 
 }
 function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").value = "";
@@ -150,23 +156,12 @@ function disable_fields(){
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 
 	for(var i =0; i<panelsTable.length;i++){
-		
-	//	alert("panels "+ panelsTable[i].id);
 		if (panelsTable[i].id == 'panelFields'){
-//			
-//		fields = panelsTable[i].getElementsByTagName("input");
-//			for(var k = 0; k<fields.length; k++){
-//			
-//				fields[k].disabled = true;
-//			
-//			}
 			var query = jQuery(panelsTable[i]).find(" :input");
 			var elem = 	jQuery(query);
-		
 			jQuery.each(elem, function(index, item) {
 				item.disabled = true;
 			});
-		
 		}
 		 
 		
@@ -176,11 +171,31 @@ function disable_fields(){
 		var arelm = updateonar[i];
 		jQuery("#"+ arelm).attr('disabled','disabled');
 	}
+	
+	if(screenMode == "create"){
+		var updateonar = "assetid,assetno,assethost,username,assetip,btnSave".split(",");
+		for ( var i = 0; i < updateonar.length; i++) {
+			var arelm = updateonar[i];
+			jQuery("#" + arelm).removeAttr('disabled');
+		}
+		jQuery('#btnModify').attr('disabled','disabled');
+		jQuery('#btnDelete').attr('disabled','disabled');
+		jQuery('#btnSubmit').attr('disabled','disabled');
+		jQuery("#btnSave").removeAttr('disabled');
+	}
+	
 	if(screenMode == "view"){
 		updateonar = "btnModify,btnSubmit,btnDelete".split(",");
 		for ( var i = 0; i < updateonar.length; i++) {
 			var arelm = updateonar[i];
 			jQuery("#"+ arelm).removeAttr('disabled');
+		}
+	}
+	if(screenMode == "modify"){
+		var updateonar = "assetid,assetno,assethost,username,assetip,btnSave".split(",");
+		for ( var i = 0; i < updateonar.length; i++) {
+			var arelm = updateonar[i];
+			jQuery("#" + arelm).removeAttr('disabled');
 		}
 	}
 }
@@ -202,13 +217,17 @@ function reqSave() {
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmAllocation"+screenName;	
 	 
 	if(screenMode == "create"){
-	document.getElementById("assetid").value = "AUTOGEN_SEQUENCE_ID";	
+	document.getElementById("allocid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAllocation";
-	//prompt("url",url);
+	
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	prompt("url","action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid);
 	//workflow for create activityname=CRAST&create=true
-	//workflow for continuation action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid
-	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	//workflow for continuation &invokewfl=scrflow&action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid
+	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=false&action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
@@ -456,256 +475,4 @@ function submitScreenFlowactivity(){
 	location.href = url;
 		
 	}
-
  
-
-function populateVendors(){
-	var url = ctxpath+"/vendormap.action?command=selectall"+"&rfqid="+document.getElementById("rfqid").value+"";
-	sendAjaxGet(url, popvendorcallback);
-}
-function deleteVendor(vendorid){
-	var url = ctxpath+"/vendormap.action?command=delete"+"&rfqid="+document.getElementById("rfqid").value  +
-			"&vendorid="+vendorid;
-	//alert(url);
-	sendAjaxGet(url, popvendorcallback);
-}
-
-
-/**
- * This method is called by cmd:selectall initial populate vendors and delete and insert mapall
- */
-function popvendorcallback(parm){
-	if(/^ERROR/.test(parm)){
-		showerror(parm.substring(6));
-		return;
-	}
-	jQuery(document.getElementById("vendorlist")).html(parm);
-	try {
-	//alert("creating dynamic table");	
-	var jsonob  = JSON.parse(parm);
-	var jsonobdata =  jsonob.SELECTDATA;
-	var error  = jsonob.ERROR;
-	var rfqStatus = jsonob.RFQSTATUSUPDATE;
-	if(rfqStatus != "" && typeof( rfqStatus) != 'undefined')
-		jQuery("#rfqstatus").val(rfqStatus);
-		
-	if(error != "" && typeof(error )!= 'undefined')	{
-	alert("here");	showerror(error);
-		return;
-	}
-	
-	
-	var strTable = "<table ><tr><th>Vendor ID</th>" +
-			"<th>Vendor Name</th>" +
-			"<th>Type of notfication</th>" +
-			"<th>Individual Status</th>" +
-			"<th>Vendor Rating</th>" +
-			"<th>Suggested Delivery Time</th>" +
-			"<th>Vendor Email</th>" +
-			"<th>Delete Record</th></tr>";
-	for ( var i = 0; i < jsonobdata.length; i++) {
-		var obj = jsonobdata[i];
-		strTable +="<tr><td>"+obj.vendor_id+"</td>";
-		strTable +="<td>"+obj.vendor_name+"</td>";
-		var type = obj.TYPE_NOTIFY.split("~");
-		strTable +="<td>";
-		if(type.length == 4){
-			if(type[0]=='E' && isNumeric(type[1])){
-				strTable +="<input type='checkbox' checked='checked' onclick='enableEmail(0,\""+obj.vendor_id+"\")'/>" +
-						"<a href='javascript:sendEmail(\""+obj.vendor_id+"\")' >" +
-						"<img src='"+ctxpath+"/css/images/email.gif' alt='email' />"+"</a>"+type[1];	
-			}else{
-				strTable +="<input type='checkbox' onclick='enableEmail(1,\""+obj.vendor_id+"\")'/>" +
-						"<img src='"+ctxpath+"/css/images/email.gif' alt='email' />"+type[1];
-			}
-			if(type[2] == 'P' && isNumeric(type[3])){
-				strTable +="<input type='checkbox' checked='checked' onclick='enablePrint(0,\""+obj.vendor_id+"\")'/><a href='javascript:sendPrint(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />"+"</a>"+type[3];	
-			}else{
-				strTable +="<input type='checkbox' onclick='enablePrint(1,\""+obj.vendor_id+"\")'/><img src='"+ctxpath+"/css/images/printer.gif' alt='print' />"+type[3];
-			}
-		}
-		strTable +="<input type='hidden' id='"+$F("rfqid")+"$#"+obj.vendor_id+"' value='"+obj.TYPE_NOTIFY+"' />";
-		strTable +="</td>";
-		strTable +="<td>"+obj.INDV_STATUS+"</td>";
-		strTable +="<td>"+obj.vendor_rating+"</td>";
-		strTable +="<td>"+obj.SUGGEST_DLV_TIME+"</td>";
-		strTable +="<td>"+obj.vendor_email+"</td>";
-		strTable +="<td><a href='javascript:deleteVendor(\""+obj.vendor_id+"\")' ><img src='"+ctxpath+"/css/images/delete.png' alt='delete' />"+"</a></td></tr>";
-	}
-	strTable +="</table>";
-	jQuery(document.getElementById("vendorlist")).html(strTable);
-	} catch (e) {
-		alert(e);
-	}
-	
-}
-
-function calculateIndvStatus(url, type){ 
-	try { 
-		var ststus = 'NotAttended';
-		var res1 = true,res2 = true, docare = false;
-		if(type[0]=='E'){
-			if (isNumeric(type[1]) && parseInt(type[1]) > 0 ) {
-				 res1= true;
-				 
-			} else {
-				res1= false;
-			}
-		docare  = true;
-		}
-		
-		if(type[2]=='P'){
-			if(isNumeric(type[3])	&& parseInt(type[3]) > 0){
-				 res2= true;  
-			} else {
-				res2= false;
-			}
-		docare  = docare || true;
-		}
-		if(docare && res1 && res2 ){
-			url += "&indvstatus=Attended";
-		} else {
-			url += "&indvstatus=NotAttended";
-		}
-		 
-	} catch (e) {
-		alert(e);
-	}
-	return url;
-}
-function enableEmail(status,vendorid){
-	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
-	"&vendorid="+vendorid+"&status="+status;
-	//get the hidden field's value corresponding to each row
-	var str = $F($F("rfqid")+"$#"+vendorid);
-	type  = str.split("~");
-	if(status == 0){
-		type[0]='x';
-	}	
-	else if(status == 1){
-		if(!isNumeric(type[3]))type[3]="0";
-		type[0]='E';
-	}
-	
-	url = calculateIndvStatus(url, type);
-	url+="&typenotify="+type.join("~");
-
-	sendAjaxGet(url, popvendorcallback);
-}
-function enablePrint(status,vendorid){
-	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
-	"&vendorid="+vendorid+"&status="+status;
-	//get the hidden field's value corresponding to each row
-	var str = $F($F("rfqid")+"$#"+vendorid);
-	type  = str.split("~");
-	if(status == 0){
-		type[2]='x';
-		
-	}	
-	else if(status == 1){
-		if(!isNumeric(type[3]))type[3]="0";
-		type[2]='P';
-	}else{
-		return;
-	}
-	
-	
-	url = calculateIndvStatus(url, type);
-	url+="&typenotify="+type.join("~");
-	
-	sendAjaxGet(url, popvendorcallback);
-}
-
-var childwindow;
-function sendEmail(vendorid){
-  childwindow = window.open("rfqsendemail.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500,scrollbars=1");
-}
-function populateEmailPage(parm){
- childwindow.populateCallbackValues($F("rfqid"),$F("itemtype"),$F("itemdesc"),$F("quantity"));
- 
-}
-var childwindow2;
-function sendPrint(vendorid){
- childwindow2 = window.open("rfqsendprint.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500");
-}
-function populatePrintPage(parm){
-	 childwindow2.populateCallbackValues($F("rfqid"),$F("itemtype"),$F("itemdesc"),$F("quantity"));
-	 
-}
-
-function rfqemailSent(vendorid){
-	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
-	"&vendorid="+vendorid+"&status="+status;
-	//get the hidden field's value corresponding to each row
-	var str = $F($F("rfqid")+"$#"+vendorid);
-	type  = str.split("~");
-	if(isNumeric(type[1])){
-		type[1]=parseInt(type[1] )+1 ;
-	}else{
-		return;
-	}
-	
-	url = calculateIndvStatus(url, type);
-	url+="&typenotify="+type.join("~");
-		
-	sendAjaxGet(url, popvendorcallback);
-}
-
-function rfqPrinted(vendorid){
-	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
-	"&vendorid="+vendorid+"&status="+status;
-	//get the hidden field's value corresponding to each row
-	var str = $F($F("rfqid")+"$#"+vendorid);
-	type  = str.split("~");
-	if(isNumeric(type[3])){
-		type[3]=parseInt(type[3]) +1 ;
-	}else{
-		return;
-	}
-	
-	url = calculateIndvStatus(url, type);
-	url+="&typenotify="+type.join("~");
-		
-	sendAjaxGet(url, popvendorcallback);
-}
-
-function insertVendor(parm){
-	var url = ctxpath+"/vendormap.action?command=insert"+"&rfqid="+document.getElementById("rfqid").value
-	+"&vendorid="+document.getElementById("rfqvendorlist").value+"&typenotify="+
-	escape($F("typenotify"))+"&suggestdelvtime="+$F("suggestdelvtime");
-	
-	//alert(url);
-	sendAjaxGet(url, popvendorcallback);
-}
-function fnMapVendors(){
-	var url = ctxpath+"/vendormap.action?command=initialmap"+"&rfqid="+$F("rfqid")+
-	"&typenotify="+escape("E~0~x~0")+"&suggestdelvtime=10&department="+$F("department");
-	 
-	alert(url);
-	sendAjaxGet(url, popvendorcallback);
-}
-
-function createVendorDropdownAjax(){
-	var url = ctxpath+"/vendormap.action?command=vendorlist"+"&department="+document.getElementById("department").value+"";
-	//alert("dropdown gtting called");
-	sendAjaxGet(url, createVendorDropdownCallback);
-}
-function createVendorDropdownCallback(parm){
-
-	try {
-
-	var xmlDoc = parseXMLDocFromString(parm); 
-
-		var elm = xmlDoc.getElementsByTagName("tr");
-		document.getElementById("rfqvendorlist").options.length =0 ;
-		for (var i=0; i<elm.length; i++) {
-		document.getElementById("rfqvendorlist").options[i]= new Option();
-		document.getElementById("rfqvendorlist").options[i].value = elm[i].childNodes[0].childNodes[0].nodeValue;
-		document.getElementById("rfqvendorlist").options[i].text = elm[i].childNodes[1].childNodes[0].nodeValue;
-		}
-	} catch (e) {
-		alert(e);
-		// TODO: handle exception
-	}	
-	
-}

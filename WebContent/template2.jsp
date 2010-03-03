@@ -66,6 +66,7 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 <input type="hidden" name="screenName" id="screenName" />
 <input type="hidden" id="screenMode" name="screenMode" value="insert">
 <input type="hidden" id="panelFieldsWhereClause" name="panelFieldsWhereClause" value="">
+<input type="hidden" id="passedonvalues" name="passedonvalues" value="" />
 <input type="submit" value="view" onclick="return viewdetails()" />
 <input type="submit" value="Create Request" onclick="clearWhereClause()"/>
 </form>

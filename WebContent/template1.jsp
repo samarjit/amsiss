@@ -48,6 +48,7 @@ var updateurlpart='<s:property value="%{#updateurl}"/>';
 var deleteurlpart='<s:property value="%{#deleteurl}"/>';
 var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
 var screenMode= '<s:property value="%{#parameters.screenMode}"/>';
+var vpassedonvalues= '<s:property value="%{#parameters.passedonvalues}" escape="false" />';
 var ctxpath = "<%= ctxpath %>";
 </script>
 

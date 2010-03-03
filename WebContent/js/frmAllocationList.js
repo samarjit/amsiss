@@ -8,8 +8,8 @@ function search(obj){
 jQuery(document).ready(function($) { 
 	jQuery('.paneltable').find('tr:first').find('td').css("border-bottom","1px #618C04 solid");
 search1();
-search2();
-search3();
+//search2();
+//search3();
 });
 function search1(){
 	 
@@ -107,7 +107,7 @@ function mycall3(p){
 }
 
 
-var selectedIdx = -1;
+var selectedIdx = new Array();
 
 function cleanUp(obj) {
 	/*var arobj = document.getElementById("searchdiv").getElementsByTagName("TR");
@@ -122,68 +122,7 @@ function cleanUp(obj) {
 	
 }
 
-/*////////////////////////
-document.onclick = function(e){
-	var targ;
-	selectedIdx = -1;
-	cleanUp();
 
-	if (!e)
-	  {
-	  var e=window.event;
-	  }
-	if (e.target)
-	  {
-	  targ=e.target;
-	  }
-	else if (e.srcElement)
-	  {
-	  targ=e.srcElement;
-	  }
-	if (targ.nodeType==3) // defeat Safari bug
-	  {
-	  targ = targ.parentNode;
-	  }
-	var tname;
-	tname=targ.tagName;
-	var obj  = targ;
-	if(obj.tagName)
-	while( obj  != null && obj.tagName != "TR" && obj.tagName != "BODY"   ){
-	obj = obj.parentNode;
-	}
-	var flag = false;
-	var objtest = obj;
-	while( objtest  != null && objtest.tagName != "BODY"   ){
-	if(objtest.id == "searchdiv")flag=true;
-	objtest = objtest.parentNode;
-
-	}
-
-	if(obj != null && (obj.tagName == "tr" || obj.tagName == "TR" )  && flag ){
-//	  if(!(jQuery(obj).find("th").is("th")) ) {
-//	  selectedIdx  = obj.rowIndex;
-//	  obj.style.backgroundColor= "#a0b0a0";
-//	  alert("inside jquery");
-//	  }
-	  
-
-//	 prototype 
-//	var nodes = $A(obj.getElementsByTagName("TH"));
-//
-//			nodes.each(function(node){
-//					alert(node.nodeName + ': ' + node.innerHTML);
-//				});
-//	 
-	var arTH = obj.getElementsByTagName("TH");
-	 if(arTH.length == 0 ){
-		 selectedIdx  = obj.rowIndex;
-	  obj.style.backgroundColor= "#C5FF60";
-	 }
-
-	}
-
-	}
-*/
 function addSelectEvents(param){
  
 	var srchdv = document.getElementById(param).getElementsByTagName("TR");
@@ -192,7 +131,7 @@ function addSelectEvents(param){
 	if(srchdv[i].childNodes[0].tagName != "TH"){ 
 			srchdv[i].onclick=function(p){
 			 cleanUp(this);
-			 selectedIdx  = this.rowIndex;
+			 selectedIdx[param]  = this.rowIndex;
 			  this.style.backgroundColor= "#D6F1A3";
 				}
 			}
@@ -223,7 +162,7 @@ function viewdetails(btnname){
 	listTable = document.getElementById("searchdiv3").getElementsByTagName("table")[0];
 
 	whereClause = "panelFields1WhereClause=";
-	if(listTable != null && selectedIdx != -1){
+	if(listTable != null && selectedIdx["searchdiv3"] != -1){
 		//poplate wher clause url
 		var j=0;
 		requestar = new Array();
@@ -233,7 +172,7 @@ function viewdetails(btnname){
 			if(jQuery("#searchdiv3").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
 				name = jQuery("#searchdiv3").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
 				name = jQuery.trim(name);
-				value = jQuery("#searchdiv3").find(" table tbody tr").eq(selectedIdx).find(" td").eq(i).text();
+				value = jQuery("#searchdiv3").find(" table tbody tr").eq(selectedIdx["searchdiv3"]).find(" td").eq(i).text();
 				value = jQuery.trim(value);
 				whereClause = whereClause + name + "!" + value + "~#";
 				requestar[j] = new KeyValue(name, value);				
@@ -265,6 +204,45 @@ function viewdetails(btnname){
 
 }
 
+function createAllocfromSel(){
+	document.getElementById("formwhere").screenName.value = "frmAllocation";
+	document.getElementById("screenMode").value= "create";
+	
+	if(typeof selectedIdx["searchdiv"] == 'undefined' ||typeof  selectedIdx["searchdiv2"] == 'undefined'){
+		alert("please select request and asset");
+		return;
+	}
+	
+	var empid = getSelectedRowData("searchdiv","empid");
+	var assetid = getSelectedRowData("searchdiv2","assetid");
+	var k = new Object();
+	k.empid = empid;
+	k.assetid = assetid;
+	var myJSONText = JSON.stringify(k, replacer,"");
+	 
+	jQuery('#passedonvalues').val(myJSONText);
+	document.getElementById("formwhere").submit();
+}
+function getSelectedRowData(searchdivId){
+	var tablerowdataar = new Array();
+	//jQuery("#searchdiv1 table th div").attr("id");
+	var query = jQuery("#"+searchdivId+" table th");
+	jQuery.each(query,function(index,item){
+		var id = jQuery(item).find("div").attr("id");
+		tablerowdataar[index] = new KeyValue(id,jQuery("#"+searchdivId+" table tr").eq(selectedIdx[searchdivId]).find("td").eq(index).text());
+	});
+	return tablerowdataar;
+}
+function getSelectedRowData(searchdivId,colname){
+	var celldata="";
+	//jQuery("#searchdiv1 table th div").attr("id");
+	var query = jQuery("#"+searchdivId+" table th");
+	jQuery.each(query,function(index,item){
+		if(colname == jQuery(item).find("div").attr("id"))
+			celldata  =  jQuery("#"+searchdivId+" table tr").eq(selectedIdx[searchdivId]).find("td").eq(index).text();
+	});
+	return celldata;
+}
 //create url with where clause
 function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").value="";
