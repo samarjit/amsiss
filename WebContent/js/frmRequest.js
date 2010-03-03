@@ -568,7 +568,7 @@ function disable_fields(){
 	
 	
 	
-	if(document.getElementById("status").value=="Applied"){
+	if(document.getElementById("status").value=="NEW"){
 		
 		document.getElementById("btnmodify").disabled = false;
 		document.getElementById("btnSave").disabled = true;
@@ -578,7 +578,7 @@ function disable_fields(){
 
 	}
 	
-if(document.getElementById("status").value=="Submitted"){
+if(document.getElementById("status").value=="PENDAPPROVAL"){
 		
 		document.getElementById("btnmodify").disabled = true;
 		document.getElementById("btnSave").disabled = true;
@@ -784,7 +784,7 @@ function prepareInsertData() {
 			if(item.type=="hidden" && ((val=='transfertypeone') || (val=='transfertypeswap'))){
 				item.value = typetrans;}
 			if(val=='status'){
-				item.value = 'Applied';
+				item.value = 'NEW';
 			}
 
 
