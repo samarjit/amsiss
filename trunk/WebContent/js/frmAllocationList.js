@@ -212,10 +212,11 @@ function createAllocfromSel(){
 		alert("please select request and asset");
 		return;
 	}
-	
+	var reqid = getSelectedRowData("searchdiv","reqid");
 	var empid = getSelectedRowData("searchdiv","empid");
 	var assetid = getSelectedRowData("searchdiv2","assetid");
 	var k = new Object();
+	k.reqid = reqid;
 	k.empid = empid;
 	k.assetid = assetid;
 	var myJSONText = JSON.stringify(k, replacer,"");

@@ -2,6 +2,7 @@ package crud;
 
 
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,9 +23,10 @@ public class InsertData {
 	 * main function is used only for testing doDelete() is the method that does 
 	 * really works
 	 * @param args
+	 * @throws SQLException 
 	 */
 	
-	public String doInsert(String screenName, String insertClause, String autogenId){
+	public String doInsert(String screenName, String insertClause, String autogenId) throws SQLException{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
 		String scrName=screenName;
@@ -39,29 +41,33 @@ public class InsertData {
 		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			debug(0, "******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
-		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
-			metadata = new HashMap();
-			//column metadata should get populated here
-			String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
-			if(sg != null && !("".equals(sg))){
-				try {
-
-					String query = sg.replaceAll("AUTOGEN_SEQUENCE_ID", autogenId);
-					debug(1,"inserted successfully:"+query);
-					insertResult  = cd.executeInsertQuery(query);
-					debug(1,"inserted successfully:"+query);
-				} catch (Exception e) {
-					debug(5,"Failed in insert"+e);
-					//e.printStackTrace();
-					insertResult  = -1;
+			
+			String storeflag = cd.getStoreFlag(screenName, panelName);
+			if( storeflag.indexOf('W') > -1){
+				debug(0, "******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
+			    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
+				metadata = new HashMap();
+				//column metadata should get populated here
+				String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
+				if(sg != null && !("".equals(sg))){
+					try {
+	
+						String query = sg.replaceAll("AUTOGEN_SEQUENCE_ID", autogenId);
+						debug(1,"inserted successfully:"+query);
+						insertResult  = cd.executeInsertQuery(query);
+						//debug(1,"inserted successfully:"+query);
+					} catch (Exception e) {
+						debug(5,"Failed in insert"+e);
+						//e.printStackTrace();
+						insertResult  = -1;
+					}
+					debug(0, "Insert query:" + sg);
+					if(insertResult <0 ){
+						html+= ","+panelName;
+					}
 				}
-				debug(0, "Insert query:" + sg);
-				if(insertResult <0 ){
-					html+= ","+panelName;
-				}
-			}						
-		}
+			}//if( storeflag
+		} //while
 		if(html.length() > 0){
 			html = html.substring(1); 
 			html = "Insert failed in "+html;

@@ -7,6 +7,7 @@
 <title>Workflow Completed</title>
 </head>
 <body>
+<%@ include file="header.jsp" %>
 Workflow Stage Completed
 
 </body>
