@@ -2,7 +2,9 @@ function populate()
 {
 	//alert("This alert box was called with the onload event");	
 	fnAdjustTableWidth();
-	if(vpassedonvalues != null && vpassedonvalues.trim() != "")prepopulate(vpassedonvalues);
+	if(vpassedonvalues != null && vpassedonvalues.trim() != ""){
+		prepopulate(vpassedonvalues);
+	}
 	//alert(unescape(whereClause))
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
@@ -22,11 +24,13 @@ function $F(p){
 
 function prepopulate(param){
 	var json = JSON.parse(param);
+	var reqid= json.reqid;
 	var empid= json.empid;
 	var assetid = json.assetid;
-	
-	jQuery("#panelsdiv #username").val(empid);
-	jQuery("#panelsdiv #assetid").val(assetid);
+	 
+	jQuery("#panelsdiv #allocid").val(reqid.trim());
+	jQuery("#panelsdiv #username").val(empid.trim());
+	jQuery("#panelsdiv #assetid").val(assetid.trim());
  
 }
 function clearWhereClause(){
@@ -216,8 +220,11 @@ function reqSave() {
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmAllocation"+screenName;	
 	 
-	if(screenMode == "create"){
-	document.getElementById("allocid").value = "AUTOGEN_SEQUENCE_ID";	
+	if(screenMode == "create"  ){
+		if(document.getElementById("allocid").value == null || document.getElementById("allocid").value ==""){
+		   document.getElementById("allocid").value = "AUTOGEN_SEQUENCE_ID";
+	     }
+	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAllocation";
 	
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
@@ -464,14 +471,17 @@ function submitactivity(){
 function submitScreenFlowactivity(){
 	alert("submit screenflow activity")
 	
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
-	alert(applicationid);
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=allocid]").attr("value");
+	 
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	
+	if(actionid == null || actionid == "" || wflid==null || wflid =="" ){
+	 showalert("This activity is performed out of workflow, so workflow wont be invoked");
+	 return;
+	}
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
-	alert(url);
+	 
 	location.href = url;
 		
 	}

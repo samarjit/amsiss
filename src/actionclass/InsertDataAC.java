@@ -141,9 +141,14 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 		    	ArrayList errorList = new ArrayList();
 		    	JSONObject jobj = new JSONObject();
 		    	
-		    	 autogenId =insert.getNewAppId();
-		    	if(insertKeyValue != null || (!"".equals(insertKeyValue)))
-		    		 insertresult    = insert.doInsert(screenName, insertKeyValue, autogenId);
+		    	 try {
+					autogenId =insert.getNewAppId();
+					if(insertKeyValue != null || (!"".equals(insertKeyValue)))
+						 insertresult    = insert.doInsert(screenName, insertKeyValue, autogenId);
+				} catch (Exception e) {
+					insertresult = "Insert failed";
+					e.printStackTrace();
+				}
 		    	
 		    	if(insertresult.length() >1){
 					errorList.add(insertresult);
