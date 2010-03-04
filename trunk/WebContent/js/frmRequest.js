@@ -41,10 +41,12 @@ function populate()
 	
 
 }
-//var screenMode = "insert";
+var screenMode = "insert";
 
 
 function requestCallBack(parm){
+	fnAdjustTableWidth();
+
 	var jobj = JSON.parse(parm);
 	if(jobj.error != null ){
 		alert(jobj.error);return;
@@ -70,11 +72,11 @@ function requestCallBack(parm){
 	for(var i=0;i<transferType.length;i++){
 		AddSelectOption(document.getElementById("transfertypesel"),transferType[i],transferType[i],false);
 	}
-	fnAdjustTableWidth();
+
 }
 
 function requestCallBackview(p){
-	
+	fnAdjustTableWidth();
 	//alert("Got from ajax:"+p);
 	var json = JSON.parse(p);
 	//alert(json.message);
@@ -84,7 +86,7 @@ function requestCallBackview(p){
 	else {
 		//alert(jason.message);
 		p = decodeURIComponent(json.message);
-		//alert(p);
+		alert(p);
 		document.getElementById("retreivedetailsdiv").innerHTML = p;	
 		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 		// alert(panelsTable.length);
@@ -258,15 +260,10 @@ function requestCallBackview(p){
 	}
 
 
-	fnAdjustTableWidth();
+fnAdjustTableWidth();
 	disable_fields();
 
-
 }
-
-
-
-
 
 function generatename(obj){
 	var selIndex = obj.selectedIndex;
@@ -597,14 +594,16 @@ if(document.getElementById("status").value=="PENDAPPROVAL"){
 function enable_fields(){
 	screenMode = "modify";
 
-	var updateonar = "mgrid,mgrname,departmentname,remarks,user1,assetidhu,transfertypeone,userid1,assetid1,userid2,assetid2,transfertypeswap,assetidsw,description,assetname,userid,assetidamc,hardwaretype,assetidpco,assettype,ramnh,harddisk,descriptionnh,processor,refreqid,assetidrr,software,descriptionhu,processorhu,ramhu,hdd,make,quantity,descriptiongh,hardwaretype,quantity,hardwaretype,descriptionsw,assetidst,deliverynote,descriptionamc,transfertypesel,assetid,descriptionrr,ram,processornh,btnupdate".split(",");
+	var updateonar = "mgrid,mgrname,departmentname,remarks,user1,assetidhu,transfertypeone,userid1,assetid1,userid2,assetid2,transfertypeswap,assetidsw,description,assetname,userid,assetidamc,hardwaretype,assetidpco,assettype,ramnh,harddisk,descriptionnh,processor,refreqid,assetidrr,software,descriptionhu,processorhu,ramhu,hdd,make,quantity,descriptiongh,hardwaretype,quantity,hardwaretype,descriptionsw,assetidst,deliverynote,descriptionamc,transfertypesel,assetid,descriptionrr,ram,processornh".split(",");
 	for ( var i = 0; i < updateonar.length; i++) {
 		var arelm = updateonar[i];
 		jQuery("#"+ arelm).attr('disabled','');
 	}
-	document.getElementById("btnmodify").disabled = "true";
-	document.getElementById("btndelete").disabled = "true";
-	document.getElementById("btnsubmit").disabled = "true";
+	document.getElementById("btnmodify").disabled = true;
+	document.getElementById("btndelete").disabled = true;
+	document.getElementById("btnsubmit").disabled = true;
+	document.getElementById("btnSave").disabled = false;
+
 
 
 }
@@ -909,12 +908,11 @@ function submitactivity(){
 
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
-	var alertstr="";
 	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
 		 
 		var query = jQuery(elem).eq(0).find("tr").eq(0).find("td ");
 		jQuery.each(query, function(index, item) {
-			//alertstr += (elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width())+"<br/>";
+		//	alert(elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width());
 			if(!tdwidthar[index])tdwidthar[index]  = jQuery(item).width();
 			else if(   tdwidthar[index] < jQuery(item).width())			{
 				tdwidthar[index]  = jQuery(item).width();
@@ -925,7 +923,7 @@ function fnAdjustTableWidth() {
 	});
 	var j = 0 ;
 	var maxtd = tdwidthar.length;
-	//showerror(alertstr);
+
 
 	var tblar = document.getElementById("panelsdiv").getElementsByTagName("table") ;
 	for (var i=0; i<tblar.length; i++) {
@@ -965,14 +963,31 @@ function submitScreenFlowactivity(){
 function submitScreenFlowactivity(){
 	//alert("here in submit activity")
 	//alert(wflcontrollerurl);
+	
+	
+	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=getEmail&mgrid="+document.getElementById("mgrid").options[document.getElementById("mgrid").selectedIndex].value;
+	sendAjaxGet(url, beforeMail);
+
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+
+}
+
+function afterMail(){
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	
-	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName;
-	alert(url);
 	location.href = url;
-		
-	}
+	
+}
+
+function beforeMail(p){
+	
+	var jobj = JSON.parse(p);
+	empemail = jobj.empemail;
+	mgremail = jobj.mgremail;
+
+	var url = mailurlpart+"?subject=Request from "+document.getElementById("empname").value+"&from="+empemail+"&sendto="+mgremail+"&msgbody=request type is "+document.getElementById("requesttype").options[document.getElementById("requesttype").selectedIndex].value;
+	sendAjaxGet(url, afterMail);
+	
+}
