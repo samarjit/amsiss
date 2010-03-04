@@ -1,96 +1,177 @@
-var screenAction = "insert";
-var dnid=null;
 function populate()
 {
+	alert("Screen Mode>>"+screenMode);
+	fnAdjustTableWidth();
+	
+	if(vpassedonvalues != null && vpassedonvalues.trim() != ""){
+		prepopulate(vpassedonvalues);
+		disable_fields();
+	}
+	
 	if(!(whereClause == ""))
 	{
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
 		url=url+"&whereClause="+ whereClause;		
-		// prompt("url",url);	
 		sendAjaxGet(url, dnCallBack); //call this method in commonjs.js.
 	}	
 }
 
+function prepopulate(param)
+{
+	var json = JSON.parse(param);
+	var poid= json.poid;
+	var postatus= json.postatus;
+	jQuery("#popanel #poid").val(poid.trim());
+	jQuery("#popanel #postatus").val(postatus.trim());
+}
+
 function dnCallBack(p)
 {
-	
-	
 	disable_fields();
-
-	document.getElementById("btnSave").disabled=true;
-	
-	document.getElementById("retreivedetailsdiv").innerHTML = p;	
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	detailTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
-	for ( var i=0; i<detailTable.length ; i++)
-	{
-		if (detailTable[i].id == 'buttonPanel')	continue;
-		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) 
-		{			
-			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
-			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			
-			for(var l = 0; l<panelsTable.length; l++)
-			{
-				if (panelsTable[l].id == 'buttonPanel')	continue;
-				if(detailTable[i].id == panelsTable[l].id)
-
-	
 	var json = JSON.parse(p);	
-	if(json.error !=null ){
+	if(json.error !=null )
+	{
 		showerror(json.error);
 	}
-	else {
+	else 
+	{
 		p = decodeURIComponent(json.message);
-
 		document.getElementById("retreivedetailsdiv").innerHTML = p;	
 		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 		detailTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
 		for ( var i=0; i<detailTable.length ; i++)
 		{
-			if (detailTable[i].id == 'buttonPanel')	continue;
-			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) 
-			{			
+			if (detailTable[i].id == 'buttonPanel' || detailTable[i].rows.length==0)
+				continue;
+			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
+			// detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];
+
 				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+				// alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
 				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
 
+				// comVal = detailTable[i].rows[1].cells[k].innerText;
 				for(var l = 0; l<panelsTable.length; l++)
-
-				{
-					if (panelsTable[l].id == 'buttonPanel')	continue;
+				{ 
+					// alert(panelsTable[i].id);
+					if (panelsTable[l].id == 'buttonPanel')
+						continue;
 					if(detailTable[i].id == panelsTable[l].id)
-					{
-						var input = panelsTable[l].getElementsByTagName("input");
-						for( var m = 0 ; m < input.length; m++)
-						{
-							if(input[m].id == comStr)
-							{
-								input[m].value = comVal;
+					{ 
+						/* var input = panelsTable[l].getElementsByTagName("input"); */
+						var query = jQuery(panelsTable[l]).find(" :input");
+						var elem = 	jQuery(query);
+
+						jQuery.each(elem, function(index, item) {
+
+							if(item.id == comStr){
+								jQuery(item).val(comVal);
 							}
-						}
+						});
+//						for( var m = 0 ; m < input.length; m++)
+//						{
+//						if(input[m].id == comStr)
+//						{
+//						//alert(comStr +" "+comVal +" " +panelsTable[l].id + " " +
+//						detailTable[i].id);
+//						input[m].value = comVal;
+//						}
+//						}
 					}
 				}
 			}
 		}
-	}//outer for loop
+	}//else
+	
 }
+
+//***making disable textboxes ***
 
 function disable_fields()
 {
-	paneltables = document.getElementById("panelsdiv").getElementsByTagName("table");
-	for(var i =0; i<paneltables.length;i++)
+panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+
+for(var i =0; i<panelsTable.length;i++){
+	
+	if (panelsTable[i].id == 'panelFields')
 	{
-		if (paneltables[i].id == 'panelFields')
-		{
-			fields = paneltables[i].getElementsByTagName("input");
-			for(var k = 0; k<fields.length; k++)
-			    fields[k].disabled = true;
-		}
+		var query = jQuery(panelsTable[i]).find(" :input");
+		var elem = 	jQuery(query);
+		jQuery.each(elem, function(index, item) {
+			item.disabled = true;
+		});
 	}
+
+}
+if(screenMode == "create")
+{
+		jQuery('#btnModify').attr('disabled','disabled');
+		jQuery('#btnCancel').attr('disabled','disabled');
+		document.getElementById("dnstatus").value = "CREATE";
+		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,invoiceno,chqno,orderno,itemid,Status,wflactionid,wflactiondesc,wflid".split(",");
+		for ( var i = 0; i < updateonar.length; i++) 
+		{
+			var arelm = updateonar[i];
+			jQuery("#" + arelm).removeAttr('disabled');
+		}
+		var updateonar1 ="poid,postatus".split(",");
+		for ( var j = 0; j < updateonar.length; j++) 
+		{
+			var arelm1 = updateonar1[j];
+			jQuery("#"+ arelm1).attr('disabled','disabled');
+		}
+}
+if (screenMode=="viewdetails")
+{
+		jQuery('#btnSave').attr('disabled','disabled');	
+		jQuery('#btnModify').removeAttr('disabled');
+		jQuery('#btnCancel').removeAttr('disabled');
+		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,chqno,invoiceno,dnstatus,orderno,itemid,poid,postatus,Status,wflactionid,wflactiondesc,wflid".split(",");
+		for ( var i = 0; i < updateonar.length; i++) 
+		{
+			var arelm = updateonar[i];
+			jQuery("#"+ arelm).attr('disabled','disabled');
+			
+		}
+}
 }
 
-jQuery(function() {
-	
+function fnAdjustTableWidth() {
+	var tdwidthar = new Array();
+	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
+		var query = jQuery(elem).eq(0).find("tr").eq(0).find("td ");
+		jQuery.each(query, function(index, item) {
+		//	alert(elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width());
+			if(!tdwidthar[index])tdwidthar[index]  = jQuery(item).width();
+			else if(   tdwidthar[index] < jQuery(item).width())			{
+				tdwidthar[index]  = jQuery(item).width();
+			}
+		});
+	});
+	var j = 0 ;
+	var maxtd = tdwidthar.length;
+
+
+	var tblar = document.getElementById("panelsdiv").getElementsByTagName("table") ;
+	for (var i=0; i<tblar.length; i++) {
+		query = jQuery(tblar[i]).find("tr").eq(0).find("td");
+		elem = 	jQuery(query);
+
+		jQuery.each(query, function(index, item) {
+			jQuery(item).width(tdwidthar[j]);
+			j++;
+			if(maxtd == j)j=0;
+
+		});
+
+	}
+
+
+
+}
+//*** date-time picker ***
+
+jQuery(function(){	
 	jQuery('#receiveddate').datepicker({
 		changeMonth: true,
 		changeYear: true,
@@ -108,34 +189,31 @@ jQuery(function() {
 	});
 });
 
-function clearWhereClause()
-{
-	document.getElementById("panelFieldsWhereClause").Value = "";
-}
-
-function insertData() 
-{
-	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-}
+//*** save() for inserting the new record and updating the existing record ***
 
 function dnSave() 
 {
-	if(screenAction == "insert"){
+	if(screenMode == "create")
+	{
+		if(document.getElementById("itemid").selectedIndex == 0){		
+			showerror("Please choose an item name.");
+		}
+		else
+		{
 		document.getElementById("deliverynoteid").value = "AUTOGEN_SEQUENCE_ID";
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmDeliveryNote";
-		//prompt("url",url);	
 		url = url + "&itemid=" + document.getElementById("itemid").value;
 		url = url + "&itemquantity=" + document.getElementById("itemquantity").value;
 		//url = url + "&dnpurchaseorderid=" + document.getElementById("dnpurchaseorderid").value;
-		url = url+ "&insertKeyValue="+ prepareInsertData();
-		//prompt("url",url);
-		//alert(url);
-		//add key:vlaue to url	
+		//alert(document.getElementById("deliverynoteid").value);
+		//action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+		//url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=true";
+		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=true";
 		sendAjaxGet(url, saveCallBack);
-		//changeStatus();
+		}
 	}
 	
-	if(screenAction == "modify")
+	else if(screenMode == "modify")
 	{
 		whereclause  = makeWhereClause();
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmDeliveryNote";
@@ -144,14 +222,48 @@ function dnSave()
 		sendAjaxGet(url, saveCallBack); //call this method in commonjs.js.
 	}
 }
-function changeStatus()
+//***for successful and error message ***
+function saveCallBack(val) 
 {
-	var url = jsrpcurlpart+"?screenName=frmDeliveryNote&poid="+dnid+"&rpcid=requeststatus";
-	sendAjaxGet(url, saveCallBack);	
-
+	var json = JSON.parse(val);
+	if(json.error !=null )
+	{
+		showerror(json.error);
+	}
+	else 
+	{
+		showalert(json.message);
+		if(json.workflowurl != null)
+		{
+			alert("workflow:"+json.workflowurl);
+			location.href = json.workflowurl ;
+		}
+		else
+		{//extracting all fields whereclause form insert key value pair of each panel
+			alert("json.workflowurl==null");
+			var allfields = prepareInsertData();
+			var json1 = JSON.parse(allfields);
+			var valuesar = json1.json1[0].valuesar;
+			var k = new Object();
+			k.json1 = valuesar;
+			var myJSONText = JSON.stringify(k, replacer,"");
+			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
+			alert(whereClause);
+			populate();
+		}
+	}
 }
+/*
+//*** cancel the existing delivery note***
+function dnCancel() 
+{
+	dnid=document.getElementById("deliverynoteid").value;
+	document.getElementById("dnstatus").value = "CANCELLED";
+	var url = jsrpcurlpart+"?screenName=frmDeliveryNote&dnid="+dnid+"&rpcid=cancel";
+	sendAjaxGet(url, cancelCallBack);
+}*/
 
-//delete the record
+//***delete the existing delivery note***
 function deleteData()
 {
 	whereclause  = makeWhereClause();
@@ -159,39 +271,31 @@ function deleteData()
 	prompt("url",url);	
 	//prompt("url",url);
 	//add key:value to url
-	sendAjaxGet(url, deleteCallBack);//call this method in commonjs.js.
+	sendAjaxGet(url, cancelCallBack);//call this method in commonjs.js.
 	
 }
 
 //Error/Successful Message for deleting
-function deleteCallBack(val) {
+function cancelCallBack(val) {
 	//show success message 
-	if(val < 0){
-		
-		showerror("Could not delete : Error Occured! ");
+	if(val < 0)
+	{
+		showerror("Could not cancel : Error Occured! ");
 	}
-	else{
+	else
+	{
 		location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
-		alert("Successfully deleted your deliverynote! ");
+		showalert("Successfully deleted your deliverynote! ");
 	}
 }
 
 //Error/Successful Message for saving
-function saveCallBack(val) 
-{
-	//show success message 
-	if(val < 0)
-		showerror("Could not save : Error Occured! ");
-	else 
-	{
-		location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
-		alert("Successfully saved your deliverynote! ");
-	}
-}
+
 function backtolist()
 {
 	location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
 }
+
 function KeyValue(a,b) 
 {
 	this.key=a;
@@ -203,6 +307,7 @@ function panelClass(a,b)
 	this.name = a;
 	this.valuesar = b;
 }
+
 function replacer(key, value) {
 	if (typeof value === 'number' && !isFinite(value)) 
 	{
@@ -211,11 +316,8 @@ function replacer(key, value) {
 	return value;
 }
 
-
 function prepareInsertData() 
 {
-	//alert("in prepare");
-	//var array = {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	var pclass = new Array();
 	for (var i=0; i<dataTable.length; i++) 
@@ -224,10 +326,11 @@ function prepareInsertData()
 		var requestar = new Array();
 		var elem = 	jQuery(query); 
 		var j = 0;
-		jQuery.each(elem,function(index,item){	
-			requestar[j] = new KeyValue(item.id, item.value);				
+		jQuery.each(elem,function(index,item)
+		{
+			requestar[j] = new KeyValue(item.id, item.value);	
 			j++;						
-			});
+		});
 		pclass[i] = new panelClass(dataTable[i].id,requestar);					
 	}	
 	var k = new Object();
@@ -238,49 +341,21 @@ function prepareInsertData()
 
 function updateData(obj)
 {
-	screenAction = "modify";
+	screenMode = "modify";
 	document.getElementById("btnSave").disabled=false;
 	document.getElementById("btnModify").disabled=true;
+	//document.getElementById("btnDelete").disabled=true;
+	document.getElementById("btnCancel").disabled=true;
 	
-	//There will be only one table in search screen 'search div'
-	//document.requestFrm.submit();
-	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
-
-	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	for(var m =0; m<panelsTable.length;m++)
+	var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,invoiceno,chqno,orderno,itemid,Status,wflactionid,wflactiondesc,wflid".split(",");
+	for ( var i = 0; i < updateonar.length; i++) 
 	{
-		if (panelsTable[m].id == 'panelFields')
-		{
-			fields = panelsTable[m].getElementsByTagName("input");
-			var query = jQuery(panelsTable[m]).find(" :input");
-			var elem = 	jQuery(query);
-			//alert("inside update panel panels " + fields.length);
-			// for(var k = 0; k<fields.length; k++){
-			jQuery.each(elem,function(k,fields)
-			{
-				for (i = 0; i <listTable.rows[0].cells.length ; i++ )
-				{
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id)
-					{
-						if(!(jQuery(listTable.rows[0].cells[i]).find("div").text().split(',')[6]  == 'Y')) 
-						{
-							fields.disabled = false;
-						}
-					}
-					//for date
-					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[2] == fields.id)
-					{
-						if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE'))
-						{
-							fields.disabled = true;
-						}
-					} 
-				}
-			});
-		}//if statement
-	}//outer for loop
+		var arelm = updateonar[i];
+		jQuery("#" + arelm).removeAttr('disabled');
+	}
 }
-
+		
+var dnid= null;
 function makeWhereClause()
 {
 	//There will be only one table in search screen 'search div'
@@ -290,7 +365,7 @@ function makeWhereClause()
 	{
 		var j=0;
 		requestar = new Array();
-		for (i = 0; i <listTable.rows[0].cells.length ; i++)
+		for (var i = 0; i <listTable.rows[0].cells.length ; i++)
 		{  
 			if(jQuery("#retreivedetailsdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") 
 			{
@@ -299,6 +374,7 @@ function makeWhereClause()
 				value = jQuery("#retreivedetailsdiv").find(" table tbody tr").eq(1).find(" td").eq(i).text();
 				value = jQuery.trim(value);
 				dnid=value;
+				alert("delivery note id>>"+dnid);
 				whereClause = whereClause + name + "!" + value + "~#";
 				requestar[j] = new KeyValue(name, value);				
 				j++;		
@@ -309,6 +385,45 @@ function makeWhereClause()
 		var myJSONText = JSON.stringify(k, replacer,"");
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 	}
+	alert(">>Where clause>>"+whereClause);
 	return whereClause;	 
 }
 
+function clearWhereClause()
+{
+	document.getElementById("panelFieldsWhereClause").Value = "";
+}
+
+function insertData() 
+{
+	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+}	
+
+/*
+function submitactivity(){
+	alert("here in submit activity");
+	alert(wflcontrollerurl);
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
+	alert(applicationid);
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+		
+	}
+
+function submitScreenFlowactivity()
+{
+	alert("here in submit activity");
+	alert(wflcontrollerurl);
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
+	alert(applicationid);
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	location.href = url;
+}*/
+	
