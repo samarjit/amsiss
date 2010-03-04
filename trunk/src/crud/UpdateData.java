@@ -83,7 +83,6 @@ public class UpdateData {
 	
 	public String createUpdateQuery(HashMap metadata,String scrname,String panelName,String insertClause,HashMap<String,String> hmWherePanel) {
 		
-		 
 		String updateQuery = "";
 		String joiner = " WHERE ";
 		CrudDAO cd = new CrudDAO();
@@ -91,7 +90,6 @@ public class UpdateData {
 		HashMap updateMap=null;
 		try {
 			HashMap<String, HashMap<String,String>> keyvvaltemp = Utility.extractKeyValPair(insertClause);
-			
 			if(keyvvaltemp.containsKey(panelName))
 				updateMap = keyvvaltemp.get(panelName);
 			else

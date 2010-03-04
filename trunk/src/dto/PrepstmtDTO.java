@@ -31,5 +31,4 @@ public void setData(String data) {
 	
 public String data;
 
-
 }
