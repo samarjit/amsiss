@@ -200,7 +200,64 @@ public class RequestBL implements BaseBL{
 				}
 
 
-			} 
+			}
+			
+			if(rpcid.equals("getEmail")){
+				
+				String[] tmp = (String[]) buslogHm.get("mgrid");
+				String mgrid1 = (String)(tmp[0]);
+				String queryy = "SELECT empemail mgremail FROM ams_employee where empid=?";
+				CachedRowSet crs = null;
+				DBConnector db = new DBConnector();
+				PrepstmtDTOArray arPrepstmt4 = new PrepstmtDTOArray();
+				arPrepstmt4.add(DataType.STRING, mgrid1);
+				try {
+					crs = db.executePreparedQuery(queryy, arPrepstmt4);
+					while(crs.next()){
+						result.put("mgremail", (String)crs.getString("mgremail"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				finally {
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+
+					}
+				}
+				
+				
+				String query = "SELECT empemail FROM ams_employee where empid=?";
+				CachedRowSet crs1 = null;
+				DBConnector db1 = new DBConnector();
+				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+				arPrepstmt.add(DataType.STRING, empid);
+				try {
+					crs1 = db1.executePreparedQuery(query, arPrepstmt);
+					while(crs1.next()){
+						result.put("empemail", (String)crs1.getString("empemail"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				finally {
+					if (crs1 != null) {
+						try {
+							crs1.close();
+						} catch (Exception e) {
+						}
+
+					}
+				}
+				
+			}
 
 
 
