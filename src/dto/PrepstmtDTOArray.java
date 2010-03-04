@@ -16,6 +16,7 @@ public void add( PrepstmtDTO.DataType dt,String data){
 }
 public String	toString(String SQL){
 	String retval = "PerpstmtDTOArray:";
+	//String[] sqlar = (SQL+" ").split("\\?");
 	String[] sqlar = SQL.split("\\?");
 	int i =0 ;
 	for ( i =0 ;i< ardto.size();i++) {

@@ -1,5 +1,6 @@
 var xmlHttpReq = false;
-function xmlhttpPost() {
+function xmlhttpPost() 
+{
 	if(xmlHttpReq)return;
     xmlHttpReq = false;
     var self = this;
@@ -13,8 +14,8 @@ function xmlhttpPost() {
     }
 }
 
-
-function sendAjaxPost(strURL,data,callbak){ 
+function sendAjaxPost(strURL,data,callbak)
+{ 
 	xmlhttpPost();
 	if(strURL == null)
 		strURL="searchlist.action";

@@ -1,4 +1,4 @@
-//for searching according with the search criteria.
+//***for searching according with the search criteria.***
 function search()
 {
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
@@ -18,17 +18,27 @@ function search()
 		url=url+'&sinvoiceno='+document.getElementById("sinvoiceno").value;
 	if(document.getElementById("sorderno"))
 		url=url+'&sorderno='+document.getElementById("sorderno").value;
+	if(document.getElementById("sstatus"))
+		url=url+'&sstatus='+document.getElementById("sstatus").value;
+	var pagesize = jQuery('.searchdiv .pagesize').val();
+	var pageno = jQuery('.searchdiv .pageno').val();
+	if(pagesize)
+		url=url+'&pagesize='+pagesize;
+	if(pageno)
+		url=url+'&pageno='+pageno;
 	
 	sendAjaxGet(url,mycall); //call this method in commonjs.js.
 }
+
+//***retrieve the data for the search criteria***
 function mycall(p)
 {
-	//retrieve the data for the search criteria
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
 }
-var selectedIdx =-1;
-//get the index of selected record
+var selectedIdx =0;
+
+//***get the index of selected record***
 function addSelectEvents()
 {
  	var srchdv = document.getElementById("searchdiv").getElementsByTagName("TR");
@@ -55,7 +65,7 @@ function cleanUp()
 	}
 }
 
-//create url with where clause
+//***create url with where clause***
 function KeyValue(a,b) 
 {
 	this.key=a;
@@ -71,23 +81,23 @@ function replacer(key, value)
 	return value;
 }
 
-//get the details of selected record from the list table.
-function viewdetails(){
+//***get the details of selected record from the list table.***
+function viewdetails()
+{
  
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
 	whereClause = "panelFields1WhereClause=";
 	
-	if(selectedIdx<=-1)//there is no record selected
+	if(selectedIdx<=0)//there is no record selected
 	{
-		alert("Please select a record");
+		showerror("Please select a record.");
 		return false;
-	}
-	
+	}		
 	else if(listTable != null && selectedIdx != -1)
 	{
 		var j=0;
 		requestar = new Array();
-		for (i=0; i <listTable.rows[0].cells.length ; i++ )
+		for (var i=0; i <listTable.rows[0].cells.length ; i++ )
 		{  
 			if(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") 
 			{
@@ -96,7 +106,9 @@ function viewdetails(){
 				value = jQuery("#searchdiv").find(" table tbody tr").eq(selectedIdx).find(" td").eq(i).text();
 				value = jQuery.trim(value);
 				whereClause = whereClause + name + "!" + value + "~#";
-				requestar[j] = new KeyValue(name, value);				
+				requestar[j] = new KeyValue(name, value);	
+				alert("name"+name);
+				alert("value"+value);
 				j++;		
 			}
 		}
@@ -107,9 +119,10 @@ function viewdetails(){
 		
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 		
-		//call the frmDeliveryNote for the details of selected record
+		//***call the frmDeliveryNote for the details of selected record***
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
 		document.getElementById("formwhere").screenName.value = "frmDeliveryNote";
+		document.getElementById("screenMode").value="viewdetails";
 		document.getElementById("formwhere").submit();
 		return true;
 	}
@@ -118,7 +131,7 @@ function viewdetails(){
 
 }//view details
 
-//clear whereclause 
+//***clear whereclause ***
 function clearWhereClause()
 {
 	document.getElementById("panelFieldsWhereClause").value="";

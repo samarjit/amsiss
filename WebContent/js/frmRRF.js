@@ -18,8 +18,6 @@ function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").Value = "";
 }
 
-
-
 jQuery(function() {
 	jQuery('#rrfdate').datepicker({
 		changeMonth: true,
@@ -339,8 +337,6 @@ function replacer(key, value) {
 
 function prepareInsertData() {
 
-	
-	
 	if(document.getElementById("approvarid").value == 'select'){		
 		showerror("Please enter Approver ID");
 		exit();

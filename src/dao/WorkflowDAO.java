@@ -7,9 +7,6 @@ import java.util.Iterator;
 
 import javax.sql.rowset.CachedRowSet;
 
-import com.opensymphony.workflow.Workflow;
-import com.opensymphony.workflow.basic.BasicWorkflow;
-
 import dbconn.DBConnector;
 
 public class WorkflowDAO {

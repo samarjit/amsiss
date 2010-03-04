@@ -23,6 +23,8 @@ function fnCreateActivity(ac) {
 	  url =url+ "screenName=frmAsset&activityname=CRAST&create=true&screenMode=create";	
 	}else if(ac=='CRALLOC'){
 		  url =url+ "screenName=frmAllocation&activityname=CRALOC&create=true&screenMode=create";	
+	}else if(ac=='CDN'){
+	  url =url+ "screenName=frmDeliveryNote&activityname=CDN&create=true&screenMode=create";
 	}
 //	alert(url);
 //document.getElementById("frmmenu").action = url;

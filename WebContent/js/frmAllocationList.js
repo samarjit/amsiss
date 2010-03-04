@@ -220,7 +220,6 @@ function createAllocfromSel(){
 	k.empid = empid;
 	k.assetid = assetid;
 	var myJSONText = JSON.stringify(k, replacer,"");
-	 
 	jQuery('#passedonvalues').val(myJSONText);
 	document.getElementById("formwhere").submit();
 }

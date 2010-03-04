@@ -38,7 +38,7 @@ jQuery(function() {
 	
 });
 
-var selectedIdx = -1;
+var selectedIdx =-1;
 
 function cleanUp() {
 	var arobj = document.getElementById("searchdiv").getElementsByTagName("TR");
@@ -120,7 +120,7 @@ function addSelectEvents(){
 			 cleanUp();
 			 selectedIdx  = this.rowIndex;
 			  this.style.backgroundColor= "#D6F1A3";
-				}
+				};
 			}
 		}
 }
@@ -140,20 +140,25 @@ function replacer(key, value) {
 }
 
 
-function viewdetails(){
+function viewdetails(btnname){
  
 	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
-	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
-	screenMode = "viewdetails";
-	
 	whereClause = "panelFields1WhereClause=";
-	if(listTable != null && selectedIdx != -1){
+	//var poid=0;
+	//alert("selectedIdx>>"+selectedIdx);
+	//alert("poid>>"+poid);
+	if(selectedIdx == -1){
+		showerror("Please select a record.");
+	}
+	
+	else if(listTable != null && selectedIdx != -1)
+	{
 		//poplate wher clause url
 		var j=0;
 		requestar = new Array();
-		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
+		for (var i = 0; i <listTable.rows[0].cells.length ; i++ )
 		{  
 			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
 			if(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
@@ -162,6 +167,7 @@ function viewdetails(){
 				value = jQuery("#searchdiv").find(" table tbody tr").eq(selectedIdx).find(" td").eq(i).text();
 				value = jQuery.trim(value);
 				whereClause = whereClause + name + "!" + value + "~#";
+			
 				requestar[j] = new KeyValue(name, value);				
 				j++;		
 				//alert(jQuery("#searchdiv table th:eq("+i+") div").text());
@@ -170,20 +176,61 @@ function viewdetails(){
 		var k = new Object();
 		k.json = requestar;
 		var myJSONText = JSON.stringify(k, replacer,"");
-		
+		alert("JSON Text>>"+myJSONText);
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
-		 
-		 
+		
+		//document.getElementById("dnpurchaseorderid").value=poid;
+		//alert("where clause>>>"+whereClause);
+		//alert("button name new >>>"+btnname.id);
+		//document.getElementById("panelFieldsWhereClause").value=whereClause;
+				
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
-		document.getElementById("screenMode").Value=screenMode;
+		document.getElementById("screenMode").value="viewdetails";
 		document.getElementById("formwhere").screenName.value = "frmPO";
-		document.getElementById("formwhere").submit();
+	    document.getElementById("formwhere").submit();
+	    
 	}
 	else {
+		
 		return false;
 	}
 	return true;	 
 
+}
+
+function createAllocfromSel()
+{
+	alert("calling createAllocfromSel method>>>>");
+	document.getElementById("formwhere").screenName.value = "frmDeliveryNote";
+	document.getElementById("screenMode").value= "create";
+	
+	if(typeof selectedIdx == 'undefined')
+	{
+		alert("please select a purchase order");
+		return;
+	}
+	var poid = getSelectedRowData("searchdiv","poid");
+	var postatus = getSelectedRowData("searchdiv","postatus");
+	
+	var k = new Object();
+	k.poid = poid;
+	k.postatus = postatus;
+	
+	var myJSONText = JSON.stringify(k, replacer,"");
+	jQuery('#passedonvalues').val(myJSONText);
+	
+	document.getElementById("formwhere").submit();
+}
+
+function getSelectedRowData(searchdivId,colname){
+	var celldata="";
+	//jQuery("#searchdiv1 table th div").attr("id");
+	var query = jQuery("#"+searchdivId+" table th");
+	jQuery.each(query,function(index,item){
+		if(colname == jQuery(item).find("div").attr("id"))
+			celldata  =  jQuery("#"+searchdivId+" table tr").eq(selectedIdx).find("td").eq(index).text();
+	});
+	return celldata;
 }
 
 //create url with where clause
