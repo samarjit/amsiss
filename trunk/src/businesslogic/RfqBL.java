@@ -15,9 +15,26 @@ public class RfqBL implements BaseBL {
 			System.out.println("RfqBL:"+s);
 		}
 	}
+	public String getParameter(Map buslogHm, String paramName){
+		String[] tmp = (String[]) buslogHm.get(paramName);
+		String parameter = (String)(tmp[0]);
+		return parameter;
+	}
 	@Override
 	public HashMap preSubmitProcessBL(Map hm) {
 		//System.out.println("In rfqsubmit()");
+		String rfqid = getParameter(hm, "rfqid");
+		String SQL = " update AMS_RFQ set RFQ_STATUS = 'CANCELLED' where RFQ_ID= '"+rfqid+"'";
+		int res = 0;
+		try {
+			DBConnector db = new DBConnector();
+			res = db.executeUpdate(SQL);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			 
+		}	
 		return null;
 	}
 

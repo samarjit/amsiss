@@ -220,7 +220,8 @@ function reqSave() {
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmAllocation"+screenName;	
 	 
-	if(screenMode == "create"  ){
+	if(screenMode == "create"  ){ //If the ApplicationID is already decided-say this screen doesnot start a workflow
+		//then application Id need not be generated use the prepopulated one to continue with application
 		if(document.getElementById("allocid").value == null || document.getElementById("allocid").value ==""){
 		   document.getElementById("allocid").value = "AUTOGEN_SEQUENCE_ID";
 	     }
@@ -290,6 +291,8 @@ function saveCallBack(val) {
 			var k = new Object();
 			k.json = valuesar;
 			var myJSONText = JSON.stringify(k, replacer,"");
+			//	In case this is callback after create, need to clear left over autogen_sequence
+			//  so that this is not included in creating where clause
 			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
 			populate();
 		}
