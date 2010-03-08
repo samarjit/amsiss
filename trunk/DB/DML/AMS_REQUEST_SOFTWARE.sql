@@ -1,0 +1,6 @@
+SET DEFINE OFF;
+Insert into AMS_REQUEST_SOFTWARE
+   (REQID, REF_REQID, ASSET_ID, SOFTWARE, DESCRIPTION)
+ Values
+   ('591', NULL, NULL, 'Oracle 9i', 'Oracle client 10g');
+COMMIT;

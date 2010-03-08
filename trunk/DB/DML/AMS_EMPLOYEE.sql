@@ -1,0 +1,26 @@
+SET DEFINE OFF;
+Insert into AMS_EMPLOYEE
+   (EMPID, EMPNAME, MGRID, EMPEMAIL, EMPDEPT, 
+    ROLEID, EMP_PH_NO, PASSWORD)
+ Values
+   ('jh123', 'john', NULL, NULL, NULL, 
+    'MANAGER', '8451888', '1234');
+Insert into AMS_EMPLOYEE
+   (EMPID, EMPNAME, MGRID, EMPEMAIL, EMPDEPT, 
+    ROLEID, EMP_PH_NO, PASSWORD)
+ Values
+   ('dav', 'David', 'jh123', NULL, NULL, 
+    'ADMIN', '8345781', '1234');
+Insert into AMS_EMPLOYEE
+   (EMPID, EMPNAME, MGRID, EMPEMAIL, EMPDEPT, 
+    ROLEID, EMP_PH_NO, PASSWORD)
+ Values
+   ('bill423', 'Bill', 'jh123', NULL, NULL, 
+    'USER', '9827272', '1234');
+Insert into AMS_EMPLOYEE
+   (EMPID, EMPNAME, MGRID, EMPEMAIL, EMPDEPT, 
+    ROLEID, EMP_PH_NO, PASSWORD)
+ Values
+   ('kar123', 'karthick', NULL, NULL, NULL, 
+    'MANAGER', NULL, '123');
+COMMIT;
