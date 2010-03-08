@@ -242,6 +242,7 @@ public String executeScrflow(){
 //					appdto.setCurrentAction(actionname);
 				}
 			}
+			if( hmActions.size() > 0)
 			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
 			
 		}

@@ -25,8 +25,10 @@ import dto.PrepstmtDTO;
 
 
 public class DBConnector { 
-private void log(String s){
-	//System.out.println(s);
+private void debug(int priority, String s){
+	if(priority>0){
+		System.out.println("DBConnecctor:"+s);
+	}
 }
 private Connection getConnection()
 {
@@ -71,7 +73,7 @@ private Connection getConnection()
         	System.err.print("Some thing wrong with connecting with database!");
         }
         
-        log ("Database connection established");
+        debug (0, "Database connection established");
         //CachedRowSet crs;
         
     }
@@ -90,7 +92,7 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
 		
 		conn = getConnection();
 		Statement stmt = conn.createStatement(); 
-		log(qry);
+		debug(0, qry);
         ResultSet rs =  stmt.executeQuery(qry);
         
          
@@ -101,6 +103,7 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
         
          
 	} catch (SQLException e) {
+		debug(5,"Exception:"+qry);
 		e.printStackTrace();
 		throw e;
 	}
@@ -112,7 +115,7 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
             {
                 conn.close ();
                 conn =null;
-               log ("Database connection terminated");
+               debug (0, "Database connection terminated");
             }
             catch (Exception e) {
             e.printStackTrace();	
@@ -132,6 +135,7 @@ public int executeUpdate(String qry) throws SQLException{
 		Statement stmt = conn.createStatement(); 
         retval  = stmt.executeUpdate(qry);
 	}catch(SQLException  e){
+		debug(5,"Exception:"+qry);
 		e.printStackTrace(); 
 		throw e;
 	}
@@ -181,7 +185,7 @@ public CachedRowSet executePreparedQuery(String qry,PrepstmtDTOArray arPrepstmt)
 			}
         	count ++;
         }
-		log(qry);
+		debug(0, qry);
         ResultSet rs =  stmt.executeQuery();
         
          
@@ -192,9 +196,11 @@ public CachedRowSet executePreparedQuery(String qry,PrepstmtDTOArray arPrepstmt)
         
          
 	} catch (SQLException e) {
+		debug(5,"Exception:"+qry);
 		e.printStackTrace();
 		throw e;
 	} catch (ParseException e) {
+		debug(5,"Exception:"+qry);
 		e.printStackTrace();
 	}
 	finally
@@ -205,7 +211,7 @@ public CachedRowSet executePreparedQuery(String qry,PrepstmtDTOArray arPrepstmt)
             {
                 conn.close ();
                 conn =null;
-               log ("Database connection terminated");
+               debug (0, "Database connection terminated");
             }
             catch (Exception e) {
             e.printStackTrace();	
@@ -250,9 +256,11 @@ public int executePreparedUpdate(String qry,PrepstmtDTOArray arPrepstmt) throws 
          
 		retval  = stmt.executeUpdate();
 	}catch(SQLException  e){
+		debug(5,"Exception:"+qry);
 		e.printStackTrace(); 
 		throw e;
 	} catch (ParseException e) {
+		debug(5,"Exception:"+qry);
 		e.printStackTrace();
 	}
 	finally

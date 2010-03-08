@@ -231,7 +231,16 @@ function saveCallBack(val) {
 		showalert(json.message);
 		if(json.workflowurl != null){
 			location.href = json.workflowurl ;
-		}else{
+		}else{//extracting all fields whereclause form insert key value pair of each panel
+			var allfields = prepareInsertData();
+			var json = JSON.parse(allfields);
+			var valuesar = json.json[0].valuesar;
+			var k = new Object();
+			k.json = valuesar;
+			var myJSONText = JSON.stringify(k, replacer,"");
+			//	In case this is callback after create, need to clear left over autogen_sequence
+			//  so that this is not included in creating where clause
+			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
 			populate();
 		}
 	}
@@ -288,7 +297,19 @@ function prepareInsertData() {
 		return myJSONText;			
 }
 
-
+function rfqCancel(){
+	screenMode = "cancel";
+	var applicationid = document.getElementById("rfqid").value;
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var rfqid= document.getElementById("rfqid").value;
+	//var qtid= document.getElementById("rrfquotationid").value;
+	//alert(actionid+" "+wflid+" "+rfqid)  	
+	var url = "scrworkflow.action?cancel=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmRFQ"+"&rfqid="+ rfqid  ;
+	//alert(url);
+	location.href = url;
+	//prepareInsertData();
+}
 function updateData(obj){
 	//obj.disabled = true;
 	screenMode = "modify";

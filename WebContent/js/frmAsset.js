@@ -250,7 +250,9 @@ function saveCallBack(val) {
 			var k = new Object();
 			k.json = valuesar;
 			var myJSONText = JSON.stringify(k, replacer,"");
-			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
+					//	In case this is callback after create, need to clear left over autogen_sequence
+					//  so that this is not included in creating where clause
+			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID",""); 
 			populate();
 		}
 	}
