@@ -9,6 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * <p><b>RetreiveData</b> will be used to test {@link RetreiveData}class</p>
+ * @author Saw Nandi
+ * @version 1.0
+ */
 public class RetreiveDataTest {
 
 	private String screenname="";
@@ -23,19 +28,31 @@ public class RetreiveDataTest {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
-
-	@Before
+	
+	/**
+	 * initialization. Executed before each test.
+	 * @throws java.lang.Exception
+	 */
+		@Before
 	public void setUp() throws Exception 
 	{
 		screenname="frmPO";
 		searchQuery="SELECT * FROM AMS_ASSET";
 		whereClause="{\"json\":[{\"key\":\"poid\",\"value\":\"7655\"}]}";
 	}
-
+	
+	/**
+	 * initialization. Executed after each test.
+	 * @throws java.lang.Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	
+	
+	/**
+	* Test method for {@link crud.RetreiveData#doRetrieveData()}.<br/>
+	*/
 	@Test
 	public void testDoRetrieveData() 
 	{
@@ -45,20 +62,23 @@ public class RetreiveDataTest {
 	    try 
 	    {
 			var= rdata.doRetrieveData(screenname,whereClause);
-			System.out.println("Return variable>>"+var);
-			if (var.length()>0) System.out.println(">>>successfully retrieved the data"); 
-			else if (var.matches("") && var.length()==0) System.out.println(">>>failed retrieving the existing records");
-			
+			if (var.length()>0) assertNotNull(">>>successfully retrieved", var);
+			else if (var.matches("") && var.length()==0) assertEquals(">>>failed retrieving the existing record.", "", var);
+				
 	    } catch (Exception e) {
 			fail(e.toString());
 		}
 	}
-
+	
+	/**
+	* Test method for {@link crud.RetreiveData#doRetrieveDataByQuery()}.<br/>
+	*/	
 	@Test
-	public void testDoRetrieveDatabyQuery() {
+	public void testDoRetrieveDatabyQuery() 
+	{
 		   searchQuery = searchQuery.replaceAll("\n"," ");
-	       searchQuery.matches(".*(?i:SELECT).+(?i:FROM).+");
-	       System.out.println("\n\nTesting CreateInsertQuery>>>"+ searchQuery.matches(".*(?i:SELECT).+(?i:FROM).+"));
+		   boolean b=searchQuery.matches(".*(?i:SELECT).+(?i:FROM).+");
+	       System.out.println("\n\nTesting DoRetrieveDatabyQuery>>>");
+	       assertTrue("Retrieve Query should be the same with SELECT FROM tablename format", b);
 	}
-
 }
