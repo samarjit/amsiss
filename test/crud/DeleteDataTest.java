@@ -1,5 +1,9 @@
 package crud;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -13,6 +17,11 @@ import dao.CrudDAO;
 
 import junit.framework.TestCase;
 
+/**
+ * <p><b>DeleteData</b> will be used to test {@link DeleteData}class</p>
+ * @author Saw Nandi
+ * @version 1.0
+ */
 public class DeleteDataTest extends TestCase {
 	
 	private String screenname="";
@@ -28,6 +37,10 @@ public class DeleteDataTest extends TestCase {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
+	/**
+	 * initialization. Executed before each test.
+	 * @throws java.lang.Exception
+	 */	
 	@Before
 	public void setUp() throws Exception 
 	{
@@ -37,11 +50,20 @@ public class DeleteDataTest extends TestCase {
 		whereClause="{\"json\":[{\"key\":\"username\",\"value\":\"tt\"},{\"key\":\"assethost\",\"value\":\"tt\"},{\"key\":\"assetid\",\"value\":\"580\"}]}";
 	}
 
+	
+	/**
+	 * initialization. Executed after each test.
+	 * @throws java.lang.Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 		
 		
 	}
+	
+	/**
+	* Test method for {@link crud.DeleteData#doDelete()}.<br/>
+	*/	
 	public void testDoDelete()  
 	{
 		System.out.println("\nTesting DoDelete method>>>");
@@ -49,21 +71,24 @@ public class DeleteDataTest extends TestCase {
 		try 
 		{
 		   var= deletedata.doDelete(screenname,whereClause);
-		   System.out.println("Return variable>>"+var);
-		   if (var.matches("1")) System.out.println("successfully deleted");
-		   else if (var.matches("0")) System.out.println("record is not existing or already deleted before");
-		  
+		   if (var.matches("1")) assertEquals(">>>successfully updated","1",var);
+		   else if (var.matches("0")) assertEquals(">>>record is not existing or already deleted before", "0", var);
+			 		  
 		} catch (JSONException e) {
 			
 			fail(e.toString());
 		}
 	}
 
+	/**
+	* Test method for {@link crud.DeleteData#createDeleteQuery()}.<br/>
+	*/
 	public void testCreateDeleteQuery() 
 	{
        searchQuery = searchQuery.replaceAll("\n"," ");
-       searchQuery.matches(".*(?i:DELETE).+(?i:FROM).+(?i:WHERE).+");
-       System.out.println("\n\nTesting CreateDeleteQuery>>>"+searchQuery.matches(".*(?i:DELETE).+(?i:FROM).+(?i:WHERE).+"));
+       boolean b=searchQuery.matches(".*(?i:DELETE).+(?i:FROM).+(?i:WHERE).+");
+       System.out.println("\n\nTesting CreateDeleteQuery>>>");
+       assertTrue("Retrieve Query should be the same with DELETE FROM tablename WHERE format", b);
    	}
 
 }
