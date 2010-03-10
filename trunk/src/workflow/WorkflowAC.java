@@ -32,6 +32,10 @@ import dao.CrudDAO;
 import dto.ApplicationDTO;
 import dto.UserDTO;
 
+/**
+ *This Action class is used to get the subsequent actions for the rquested request.
+ *
+ */
 public class WorkflowAC extends ActionSupport implements SessionAware, RequestAware, ParameterAware{
 	private void debug(int priority, String s){
 		if(priority>-1){
@@ -122,7 +126,7 @@ public WorkflowAC() {
 public String getForwardtourl() {
 	return forwardtourl;
 }
-
+ 
 public void setForwardtourl(String forwardtourl) {
 	this.forwardtourl = forwardtourl;
 }
@@ -137,10 +141,10 @@ public void setPasseddownerror(String passeddownerror) {
 	this.passeddownerror = passeddownerror;
 }
 
-/**
+/*
  * /workflow.action?activityname=CR&create=true
  * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName;
- */
+ */ 
 public String executeScrflow(){
 	String returnStr=SUCCESS;
 	UserDTO usrDTO = (UserDTO) session.get("userSessionData");	

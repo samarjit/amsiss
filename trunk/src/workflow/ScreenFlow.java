@@ -30,6 +30,10 @@ import org.xml.sax.SAXException;
 
 import businesslogic.BaseBL;
 
+/**
+ * This class is used to parse the xml file and read the data defined as workflow.
+ *
+ */
 public class ScreenFlow {
 	boolean initialized = false;
 	HashMap propertyset ;
@@ -45,6 +49,10 @@ public class ScreenFlow {
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 	}
  
+	
+/**This function parses the given file.
+ * 
+ */
 private void init(){
 	if(initialized)return;
 	initialized = true;
@@ -75,6 +83,13 @@ private void init(){
 	}
 }
 
+/**
+ * This function gets the next available action from the workflow
+ * @param scrFlowName
+ * @param currentAction
+ * @param decision
+ * @return list of next available actions
+ */
 public ArrayList<String> getNextActions(String scrFlowName, String currentAction, String decision){
 	ArrayList<String> retar = new ArrayList<String>();
 	String workflowFile = 	ScreenFlow.workflowlocationcache.get(scrFlowName);
@@ -250,6 +265,12 @@ public ArrayList<String> getNextActions(String scrFlowName, String currentAction
 }
 
 
+/**
+ * gets the screen Name
+ * @param scrFlowName
+ * @param currentAction
+ * @return screen name
+ */
 public String getActionScreenName(String scrFlowName,String currentAction){
 	String workflowFile = 	ScreenFlow.workflowlocationcache.get(scrFlowName);
 	String transitTo ="";
@@ -304,6 +325,12 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 }
 	
 
+	/**
+	 * Gets the business Logic for the current action
+	 * @param flowName
+	 * @param currentAction
+	 * @return Business Logic name
+	 */
 	public String getBusinessLogic(String flowName, String currentAction) {
 		String workflowFile = 	ScreenFlow.workflowlocationcache.get(flowName);
 		String transitTo ="";
