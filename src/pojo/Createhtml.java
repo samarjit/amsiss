@@ -11,6 +11,10 @@ import dbconn.DBConnector;
 
 
 
+/**
+ * This class constructs html code based on the data defined in the database.
+ *
+ */
 public class Createhtml {
 	private String datatype ;
 	private String dbcol ;
@@ -37,6 +41,11 @@ public class Createhtml {
 		System.out.println("Createhtml:"+s);
 	}
 	
+	/**
+	 * Gets a list of panels based on the screeName from DB
+	 * @param screenName
+	 * @return list of panel names
+	 */
 	public List<String> getPanels(String screenName){
 		String SQL = 
 			"SELECT panel_name   FROM  screen_panel where scr_name='"+screenName+"' order by SORTORDER ASC";
@@ -53,6 +62,12 @@ public class Createhtml {
 		return 	panelNames;
 	}
 	
+	
+	/**
+	 * Gets the template name from DB
+	 * @param screenName
+	 * @return template name
+	 */
 	public String getTemplateName(String screenName){
 		String SQL = 
 			"SELECT template_name   FROM  screen  where   scr_name='"+screenName+"'";
@@ -70,6 +85,12 @@ public class Createhtml {
 		return 	templName;
 	}
 	
+	/**
+	 * Generates the html code based on the data defined in DB
+	 * @param screenName
+	 * @param panelName
+	 * @return HTML 
+	 */
 	public String makehtml(String screenName, String panelName){
 		String elmStr="";
 		String panelCssClassName = "";
@@ -262,12 +283,18 @@ return (String)htable.toString();
 	/**
 	 * @param args
 	 */
+	/*
 	public static void main(String[] args) {
 		Createhtml htmlc = new Createhtml();
 		htmlc.makehtml("frmRequest","panelFields");
 
-	}
+	} */
 
+	/**
+	 * get's the Javascript,CSS, HTML files defined in DB for the screen Name to be generated.
+	 * @param screenName
+	 * @return filename
+	 */
 	public String getJsCsshtml(String screenName) {
 		 String jsStr="";
 		 String cssStr = "";
@@ -304,6 +331,11 @@ return (String)htable.toString();
 		return htmlStr;
 	}
 
+	/**
+	 * gets the screen Title for the screenName
+	 * @param screenName
+	 * @return screen Title name
+	 */
 	public String findScreenTitle(String screenName) {
 		CachedRowSet crs = null;
 		 String SQL = "select screen_title		 from screen  where   scr_name='"+screenName+"'";

@@ -3,6 +3,10 @@ package pojo;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * This class constructs a table based on the data to be filled.
+ *
+ */
 public class HTable {
 	
 	private int row;
@@ -17,6 +21,10 @@ public class HTable {
 	public void setCssClassName(String cssClassName) {
 		this.cssClassName = cssClassName;
 	}
+	/**
+	 * 
+	 * Finds the number of rows and coloumns
+	 */
 	public HTable(int row, int col) {
 		
 			tdata = new ArrayList<ArrayList<String>>();
@@ -31,6 +39,14 @@ public class HTable {
 			this.col = col;
 			
 		}
+	
+	
+	/**
+	 * Function sets data to the corresponding cell
+	 * @param row
+	 * @param col
+	 * @param val
+	 */
 	public void add(int row,int col, String val){
 		//System.out.println("adding:"+row+","+col+" val:"+val);
 		ArrayList<String> trow = tdata.get(row);
@@ -40,6 +56,7 @@ public class HTable {
 		trow.set(col, data);
 	}
 
+	
 	public String toString(){
 		String tstring ="";
 		String cssString = "";
