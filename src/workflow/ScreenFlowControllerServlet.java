@@ -22,6 +22,7 @@ import businesslogic.BaseBL;
 
 /**
  * Servlet implementation class ScreenFlowControllerServlet
+ * This class authenticates the user and generates the menu based on the role of the user.
  */
 public class ScreenFlowControllerServlet extends HttpServlet {
 	private void debug(String s){
@@ -38,6 +39,7 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 	//currentPageName
     //flowname
 
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String pageaction = request.getParameter("currentaction");
     	String flowName = request.getParameter("screenflowname");
