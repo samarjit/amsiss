@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <project basedir="." default="compile">
+<property name="serverdeploydir" value="E:\samarjit\tomcat6\webapps" />
+<property name="serverclientjars" value="E:\samarjit\tomcat6\lib" />
+	
 <property name="src" value="${basedir}\src" />
 <property name="build" value="${basedir}\antclasses" />
 <property name="deploy" value="${basedir}\antdeploy" />
@@ -11,8 +14,14 @@
 
 
     <path id="classpath">
+    	<pathelement path="${serverclientjars}"/>
+    	<fileset dir="${serverclientjars}">
+    	        <include name="**/*.jar"/>
+    	      </fileset>
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
+	 <!--property name="cp" refid="classpath"/>
+	  <echo message="Classpath is ${cp}"/-->
 
 	<target name="init">  
 			  <mkdir dir="${build}"/>
@@ -21,11 +30,10 @@
 			  <mkdir dir="${build}"/>
 			  <javac srcdir="${src}" destdir="${build}"   classpathref="classpath"/>
 	</target>
-	<target name="deploy1">  
-			  <mkdir dir="${deploy}"/>
-			  <copy file="${basedir}\ams.war" tofile="${deploy}\ams.war"/>
-	</target>
 	<target name="deploy">  
+			  <copy file="${deploy}\ams.war" tofile="${serverdeploydir}\ams.war"/>
+	</target>
+	<target name="createwar">  
 			  <mkdir dir="${deploy}"/>
 			  <copy todir="${deploy}">
 					<fileset dir="${web.dir}"  />
@@ -39,22 +47,15 @@
 	</target>
 	
 	<target name="clean">  
-	  <delete verbose="true">
+		<delete verbose="true">
+						<fileset dir="${build}"/>
+				</delete>
+				<delete dir="${build}"/>
+		<delete verbose="true">
 		<fileset dir="${deploy}"/>
 	 </delete>
 	 <delete dir="${deploy}"/>
+		
 	</target>  
 
-	<target name="run">
-	        <java jar="build/jar/HelloWorld.jar" fork="true" classpathref="classpath"/>
-	</target>
-	<target name="run1"> 
-	  <java classname="view.Createhtml">
-           <arg value="-h"/>
-           <classpath>
-             <pathelement location="dist/test.jar"/>
-             <pathelement path="${build}"/>
-           </classpath>
-          </java>
-	</target>
 </project>
