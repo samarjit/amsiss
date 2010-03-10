@@ -90,7 +90,7 @@ public class Utility {
 		
 		return whereClause;
 	}
-	
+	/*
 	public static void main(String args[]){
 		String jsontest ="{\"json\":[{\"key\":\"mgrid\",\"value\":\"1\"},{\"key\":\"empid\",\"value\":\"2\"},{\"key\":\"reqid\",\"value\":\"1812\"}]}";
 		try {
@@ -98,5 +98,5 @@ public class Utility {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	}
+	} */
 }
