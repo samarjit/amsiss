@@ -3899,7 +3899,6 @@ VALIDATION, STRQUERY, NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, PRKEY, AUTOGEN,
 ELEM_ATTRIB ) VALUES ( 
 'frmRequest', 'buttonPanel', '6', 'Close', 'btnclose', 'btnclose', NULL, NULL, 'onclick=''closeReq();'''
 , NULL, '5', '0', NULL, 'BUTTON', NULL, NULL, NULL, 'disabled="disabled"'); 
-COMMIT;
 
 Insert into PANEL_FIELDS
    (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
