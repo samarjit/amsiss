@@ -13,15 +13,11 @@ import javax.naming.*;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-
 /**
- * To send Email the following fields are mandatory
- * sendto, from, subject, msgtext
- * @return JSON object containing {'ERROR':errm or 'SUCCESS':''} 
- * if 'ERROR' is returned ignore 'SUCCESS' 
- * @author Add
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to perform the send mail operation. 
  *
  */
+
 public class SendMailAC extends ActionSupport{
 private String sendto;
 private String from;
@@ -82,7 +78,14 @@ public String getMsgbody() {
 public void setMsgbody(String msgbody) {
 	this.msgbody = msgbody;
 }
-
+/**
+ * This function is executed by default
+ * 
+ * @return JSON object containing {'ERROR':errm or 'SUCCESS':''} 
+ * if 'ERROR' is returned ignore 'SUCCESS' 
+ * 
+ *
+ */
 public String execute(){
 	 String resultHtml = "{\"SUCCESS\":\"Email Sent\"}";
 	 String errorm = "";
@@ -109,6 +112,11 @@ public String execute(){
 	return SUCCESS;
 }
 
+/**
+ * This function is used to send mail.
+ * @return boolean
+ * @param sendto, from, subject, msgtext
+ */
 public boolean sendJavaMail(){
 	boolean res = true;
 	InitialContext ic;
@@ -147,9 +155,7 @@ public boolean sendJavaMail(){
 	}
 	return res;
 }
-	/**
-	 * @param args
-	 */
+	/*
 	public static void main(String[] args) {
 		InitialContext ic;
 		String snName = "java:comp/env/mail/MyMailSession";
@@ -184,6 +190,6 @@ public boolean sendJavaMail(){
 		} catch (Exception e) {
 			System.out.println("Exception in sending mail!");
 		}
-	}
+	} */
 
 }

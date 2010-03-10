@@ -28,6 +28,10 @@ import crud.RetreiveData;
 import dao.CrudDAO;
 import dto.UserDTO;
 
+/**
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to retrieve details. 
+ *
+ */
 public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAware{
 	private void debug( int priority,String s){
 		if(priority > 0)
@@ -57,7 +61,13 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
  
 	
 	 
-	
+
+    /**
+     * execute() method is executed by default. 
+     * @param whereclause, screeName
+     * @returns String 
+     *
+     */
 	public String execute()   {
     	HashMap metadata = new HashMap();
     	RetreiveData retrive = new RetreiveData();
@@ -131,6 +141,13 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
         return SUCCESS;
     }
 	
+	/**
+	 * This functions instantiates the appropriate business logic class defined in Database and calls the 
+	 * preRetreiveProcessBL function of the class.
+	 * @param screenName
+	 * @return HashMap
+	 */
+	
     public HashMap preRetreiveProcessBL(String screenName) {
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
@@ -179,7 +196,12 @@ public class RetreiveDetailsAC extends ActionSupport implements ServletRequestAw
 	}
 
 
-
+	/**
+	 * This functions instantiates the appropriate business logic class defined in Database and calls the 
+	 * postRetreiveProcessBL function of the class.
+	 * @param screenName
+	 * @return HashMap
+	 */
 	public HashMap postRetreiveProcessBL(String screenName) {
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();

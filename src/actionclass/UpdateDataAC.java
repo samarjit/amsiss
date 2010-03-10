@@ -26,6 +26,11 @@ import crud.InsertData;
 import crud.UpdateData;
 import dao.CrudDAO;
 
+
+/**
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to perform the update operation. 
+ *
+ */
 public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 
 	private InputStream inputStream;
@@ -62,7 +67,12 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 	public void setRetBLhm(HashMap retBLhm) {
 		this.retBLhm = retBLhm;
 	}
-	
+	/**
+	 * This function is executed by default
+	 * @return String
+	 * @param insertKeyValue, screenName, whereclause
+	 *
+	 */
 	public String execute()  {
 		HashMap metadata = new HashMap();
     	UpdateData update = new UpdateData();
@@ -136,9 +146,12 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
         return SUCCESS;
 	}
 	
-	private void preUpdateProcessBL(String screenName) {
-	
-	}
+	/**
+	 * This functions instantiates the appropriate business logic class defined in Database and calls the 
+	 * postUpdateProcessBL function of the class.
+	 * @param screenName
+	 * @return HashMap
+	 */
 	private HashMap postUpdateProcessBL(String screenName) throws Exception {
 		
 		Class aclass = null;

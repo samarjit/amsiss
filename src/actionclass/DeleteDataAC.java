@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import businesslogic.BaseBL;
@@ -23,6 +24,10 @@ import crud.DeleteData;
 import dao.CrudDAO;
 
 
+/**
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to perform the delete operation. 
+ *
+ */
 public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 	private void debug(int priority, String s){
 		if(priority > 1){
@@ -60,6 +65,13 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 	}
 	
 	
+	
+	/**
+	 * execute() method is executed by default. 
+	 * @param whereclause, screeName
+	 * @returns String 
+	 *
+	 */
 	public String execute() throws Exception {
 		HashMap metadata = new HashMap();
     	DeleteData delete = new DeleteData();
@@ -126,6 +138,12 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
         return SUCCESS;
 	}
 
+	/**
+	 * This functions instantiates the appropriate business logic class defined in Database and calls the 
+	 * postDeleteProcessBL function of the class.
+	 * @param screenName2
+	 * @return HashMap
+	 */
 	private HashMap postDeleteProcessBL(String screenName2) {
 		
 		Class aclass = null;

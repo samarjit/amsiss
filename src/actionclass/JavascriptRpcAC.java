@@ -19,10 +19,7 @@ import dao.CrudDAO;
 import dto.UserDTO;
 
 /**
- * Mandatory Fields: rpcid and screenName - for getting BLs, 
- * Rest of the required request parameters 
- * @author Samarjit
- *
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to for invoking Business Logic classes directly from Javascript. 
  */
 public class JavascriptRpcAC extends ActionSupport implements  ParameterAware,SessionAware{
 	private void debug( int priority,String s){
@@ -55,6 +52,12 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware,Se
         return inputStream;
     }
 	
+	/**
+	 * This functions instantiates the appropriate business logic class defined in Database and calls the 
+	 * jsrpcProcessBL function of the class.
+	 * @param screenName
+	 * @return HashMap
+	 */
 	public HashMap jsrpcProcessBL(String screenName) {
 		Class aclass = null;
 		HashMap retBLhm = new HashMap();
@@ -94,15 +97,20 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware,Se
 		return retBLhm;
 	}
 	
+	/**
+	 * execute() method is executed by default. 
+	 * @param  rpcid, screenName 
+	 * @returns String 
+	 */
 	public String execute(){
 		
 		String resultHtml = null;
 		debug(1,"jsrpc start..."+screenName+" "+rpcid); 
-		HashMap hm =  jsrpcProcessBL(  screenName);
+		HashMap hm =  jsrpcProcessBL(screenName);
 		JSONObject jobj = new JSONObject(hm);
 		resultHtml = jobj.toString();
 		debug(1,"json result:"+resultHtml);
-		inputStream = new StringBufferInputStream(resultHtml );
+		inputStream = new StringBufferInputStream(resultHtml);
 		return SUCCESS;
 	}
 
