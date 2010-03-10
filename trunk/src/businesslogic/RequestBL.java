@@ -171,6 +171,58 @@ public class RequestBL implements BaseBL{
 
 
 			}
+			if(rpcid.equals("cancel")){
+				String[] tmp = (String[]) buslogHm.get("reqid");
+				String reqid = (String)(tmp[0]);
+				String SQL = "update ams_request set status='CANCELLED' where reqid=? ";
+
+				CachedRowSet crs = null;
+				try {
+					DBConnector db = new DBConnector();
+					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+					arPrepstmt.add(DataType.INT, reqid);			
+					debug(1,arPrepstmt.toString(SQL));
+
+					crs = db.executePreparedQuery(SQL, arPrepstmt );
+				}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+					}
+				}
+				
+			}
+			
+			if(rpcid.equals("close")){
+				String[] tmp = (String[]) buslogHm.get("reqid");
+				String reqid = (String)(tmp[0]);
+				String SQL = "update ams_request set status='CLOSED' where reqid=? ";
+
+				CachedRowSet crs = null;
+				try {
+					DBConnector db = new DBConnector();
+					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+					arPrepstmt.add(DataType.INT, reqid);			
+					debug(1,arPrepstmt.toString(SQL));
+
+					crs = db.executePreparedQuery(SQL, arPrepstmt );
+				}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+					}
+				}
+				
+			}
+			
 			if(rpcid.equals("getManager")){
 				String[] tmp = (String[]) buslogHm.get("empid");
 				String empid1 = (String)(tmp[0]);
