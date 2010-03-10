@@ -89,6 +89,9 @@ public InputStream getInputStream() {
 
 
 
+/* (non-Javadoc)
+ * @see com.opensymphony.xwork2.ActionSupport#execute()
+ */
 public String execute(){
 	
 	String resultHtml = null;
@@ -119,6 +122,11 @@ public String execute(){
 	return SUCCESS;
 }
 
+/**
+ * updates type of notification and finally calls selectAll(){@link VendorMapAC.selectAll} to select the latest status
+ * @return json containing ERROR if any or RFQSTATUSUPDATE if all the vendors have been mapped and RFQ status needs to change
+ * 
+ */
 private String updateTypeNotify() {
 	VendorMap vendor = new VendorMap();
 	
@@ -132,6 +140,12 @@ private String updateTypeNotify() {
 		return "{\"ERROR\":\"Record Insert failed\"}";
 	}
 }
+
+
+/**
+ * Inserts a record for mapping and later selects the latest mapping status to be displayed
+ * @return json ERROR if any otherwise selectALL results
+ */
 private String insert(){
 	VendorMap vendor = new VendorMap();
 	debug(1,"type notify:"+typenotify+"suggestdelvtime:"+suggestdelvtime);
@@ -143,6 +157,10 @@ private String insert(){
 	}
 }
 
+/**
+ * Deletes a mapping and calls selectAll()
+ * @return json ERROR if any otherwise selectALL results
+ */
 private String delete(){
 	VendorMap vendor = new VendorMap();
 	debug(1,"delete: rfqid"+rfqid+"vendorid:"+vendorid);
@@ -154,6 +172,11 @@ private String delete(){
 	}
 }
 
+/**
+ * Maps all the vendors initially to RFQ of a particular department so valid department must be in object scope
+ * while calling this method
+ * @return json ERROR if any otherwise selectALL results
+ */
 private String initialMap(){
 	VendorMap vendor = new VendorMap();
 	debug(1,"initialMap: rfqid"+rfqid+"department:"+department+"type notify:"+typenotify+"suggestdelvtime:"+suggestdelvtime);
@@ -164,6 +187,9 @@ private String initialMap(){
 		return "{\"ERROR\":\"Initial Mapping failed\"}";
 	}
 }
+/**
+ * @return json with all the status of selected vendors 
+ */
 private String selectAll(){
 	VendorMap vendor = new VendorMap();
 	ArrayList<HashMap<String,String>>  ar = vendor.setlectAll(rfqid);
@@ -184,7 +210,7 @@ private String selectAll(){
 
 /**
  * Used to fill in dependent dropdown based on department selected 
- * @return
+ * @return XML with vendor list based on a particular department
  */
 private String getVendorList(){
 	VendorMap vendor = new VendorMap();

@@ -6,6 +6,12 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
 
+/**
+ * This class is for future use in case some initialization of resources is to be done or some resource disallocation or some housekeeping
+ * activity should be done here.
+ * @author SAMARJIT
+ *
+ */
 public class InitAMS implements ServletContextListener {
 	 
 	@Override

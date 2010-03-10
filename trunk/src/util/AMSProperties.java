@@ -7,6 +7,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
+/**
+ * AMSProperties class will be used to keep in cache all the property related details that are set up in ams.properties file essential 
+ * while running of AMS application. Info like email of administrator database URL etc. will be cached  
+ * @author SAMARJIT
+ *
+ */
 public class AMSProperties {
 public static  Properties prop;
 private static   AMSProperties isntance;
