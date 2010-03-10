@@ -22,8 +22,7 @@ import dao.CrudDAO;
 import dbconn.DBConnector;
 
 /**
- * RELATEDPANEL may be put in screen_panel
- * @author Add
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to perform the search operation. 
  *
  */
 public class SearchListAC extends ActionSupport {
@@ -64,10 +63,9 @@ public class SearchListAC extends ActionSupport {
 
 
 	/**
-     * Related Panel concept is used because some fields in main details table say reqdate can be actually 
-     * two dates from and todate in search panel. 
-     * @param metadata
-     * @return
+     * This function creates a searchquery based on the screenName, panelName
+     * @param metadata 
+     * @return String
      */
     public String createSearchQuery(HashMap metadata){
     	String searchQueryWhere = "";
@@ -248,6 +246,11 @@ public class SearchListAC extends ActionSupport {
     }
     
     
+    /**
+     * This functions generates the HTML.
+     * @param query, metadata
+     * @return String
+     */
     private String getResultXML(String query, HashMap metadata){
     	  String html = "";
     	  String tableHeader = "";
@@ -313,6 +316,11 @@ public class SearchListAC extends ActionSupport {
     	
     	return html;
     }
+    /**
+     * This method is executed by default. 
+     * @returns String 
+     *
+     */
     public String execute() throws Exception {
     	HashMap metadata = new LinkedHashMap();
     	//inputStream = new StringBufferInputStream("Hello World! This is a text string response from a Struts 2 Action.");

@@ -11,6 +11,9 @@ import pojo.Createhtml;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to generate HTML required to be shown on screen. 
+ */
 public class GenerateHtmlAC extends ActionSupport{
 public String user;
 public String password;
@@ -183,7 +186,7 @@ public String getPassword() {
 public void setPassword(String password) {
 	this.password = password;
 }
-
+/*
 	public static void main(String[] args) {
 		 Createhtml htmlc = new Createhtml();
 		 List<String> lstPanels =  htmlc.getPanels("frmRequest");
@@ -193,8 +196,13 @@ public void setPassword(String password) {
 		 }
 		System.out.println("Extrs fields:"+arPanelData);
 
-	}
+	} */
 
+/**
+ * execute() method is executed by default. 
+ * @param screeName
+ * @returns String
+ */
 	public String execute() {
 		  
 		 String templateName;

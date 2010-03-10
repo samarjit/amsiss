@@ -24,6 +24,10 @@ import dao.CrudDAO;
 
 
 
+/**
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used to perform the insert operation. 
+ *
+ */
 public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 
 	private InputStream inputStream;
@@ -114,6 +118,13 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 		System.out.println("InsertDataAC:"+s);
 	}
 	
+
+	/**
+	 * execute() method is executed by default. 
+	 * @param insertKeyValue, screeName, invokewfl
+	 * @returns String 
+	 *
+	 */
 	public String execute()  {
 		HashMap metadata = new HashMap();
     	InsertData insert = new InsertData();
@@ -141,7 +152,7 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 		    	ArrayList errorList = new ArrayList();
 		    	JSONObject jobj = new JSONObject();
 		    	
-		    	 try {
+		    	  try {
 					autogenId =insert.getNewAppId();
 					if(insertKeyValue != null || (!"".equals(insertKeyValue)))
 						 insertresult    = insert.doInsert(screenName, insertKeyValue, autogenId);
@@ -149,7 +160,6 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 					insertresult = "Insert failed";
 					e.printStackTrace();
 				}
-		    	
 		    	if(insertresult.length() >1){
 					errorList.add(insertresult);
 				}
@@ -210,8 +220,13 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 	}
 
 	
-	
-	private HashMap postInsertProcessBL(String screenName ) {
+	/**
+	 * This functions instantiates the appropriate business logic class defined in Database and calls the 
+	 * postInsertProcessBL function of the class.
+	 * @param screenName
+	 * @return HashMap
+	 */
+	private HashMap postInsertProcessBL(String screenName) {
 	
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();

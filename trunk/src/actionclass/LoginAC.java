@@ -23,6 +23,12 @@ import dao.LoginDAO;
 import dao.WorkflowDAO;
 import dto.UserDTO;
 
+/**
+ * This is a action class that inherits Strut's Framework's ActionSupport class and is used for login and logout. 
+ * execute() method is executed for login and logout() method is used for logout. 
+ * 
+ *
+ */
 public class LoginAC extends ActionSupport implements ServletRequestAware{
 	private void log(String s){
 		System.out.println(s);
@@ -59,6 +65,13 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 		this.htmlStr = htmlStr;
 	}
 
+	/**
+	 * 
+	 * execute() method is for login.
+	 * @param userid, password
+	 * @return String
+	 *
+	 */
 	public String execute(){
 		UserDTO usr = new UserDTO();
 		ArrayList<String> arwflId= null;
@@ -107,6 +120,10 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 		}
 		return SUCCESS;
 	}
+	/**
+	 * This function is used to logout from the system.
+	 * @return String
+	 */
 	public String logout(){
 		System.out.println("logged out");
 		HttpSession session = request.getSession(false);
