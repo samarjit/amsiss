@@ -7,14 +7,21 @@ import javax.sql.rowset.CachedRowSet;
 import dao.CrudDAO;
 import dbconn.DBConnector;
 
+/**
+ * This class generates a menu based on the role of the user.
+ *
+ */
 public class GenerateMenu {
 	private void debug(int priority,String s){
 		if(priority > 0)
 		System.out.println("GenerateMenu:"+s);
 	}
+	/**
+	 * This function generates code for menu
+	 * @param role
+	 * @return menu
+	 */
 	public StringBuffer retrieveMenu(String role){
-		
-		
 		
 		String menuName;
 		 String menuAction;
