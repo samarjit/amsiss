@@ -107,12 +107,11 @@ Insert into SCREEN
  Values
    ('frmApprovalRRFList', 'template2', 'jquery.js,json2.js,jquery-ui-1.7.2.custom.min.js,frmApprovalRRFList.js', 'frmApprovalRRFList.css', NULL, 
     NULL, NULL, 'Approve RRF List');
-Insert into SCREEN
-   (SCR_NAME, TEMPLATE_NAME, JSNAME, CSSNAME, SPLWHERECLAUSE, 
-    RELATEDPANEL, BUSINESSLOGIC, SCREEN_TITLE)
- Values
-   ('frmPO', 'template1', 'jquery.js,json2.js,jquery-ui-1.7.2.custom.min.js,frmPO.js', 'button.css,detailsScreen.css', NULL, 
-    NULL, NULL, 'Purchase Order Details');
+INSERT INTO SCREEN ( SCR_NAME, TEMPLATE_NAME, JSNAME, CSSNAME, SPLWHERECLAUSE, RELATEDPANEL,
+BUSINESSLOGIC, SCREEN_TITLE ) VALUES ( 
+'frmPO', 'template1', 'jquery.js,json2.js,jquery-ui-1.7.2.custom.min.js,frmPO.js'
+, 'button.css,detailsScreen.css,frmRequest.css', NULL, NULL, NULL, 'Purchase Order Details'); 
+
 Insert into SCREEN
    (SCR_NAME, TEMPLATE_NAME, JSNAME, CSSNAME, SPLWHERECLAUSE, 
     RELATEDPANEL, BUSINESSLOGIC, SCREEN_TITLE)
