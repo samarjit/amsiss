@@ -17,10 +17,11 @@ public class DeleteData {
 		System.out.println(s);
 	}
 	/**
-	 * main function is used only for testing doDelete() is the method that does 
-	 * really works
-	 * @param args
+	 * This function performs the delete operation 
+	 * @param screenName
+	 * @param whereClause
 	 * @throws JSONException 
+	 * @return result of the delete operation
 	 */
 	
 	public String doDelete(String screenName, String whereClause) throws JSONException{
@@ -62,6 +63,15 @@ public class DeleteData {
 			return html;
 	}
 
+	/**
+	 * This function creates a delete query that performs the delete operation 
+	 * @param metadata
+	 * @param scrname
+	 * @param panelName
+	 * @param hmWherePanel
+	 * @return delete query
+	 */
+	
 	public String createDeleteQuery(HashMap metadata,String scrname,String panelName, HashMap<String,String> hmWherePanel) {
 		String delQuery = "";
 		String joiner = " WHERE ";
@@ -94,6 +104,7 @@ public class DeleteData {
 		}
 		return delQuery;
 	}
+	/*
 	public static void main(String[] args) throws JSONException {
 		CrudDAO cd = new CrudDAO();
 		String whereClause="{\"json\":[{\"key\":\"username\",\"value\":\"samarjit3\"},{\"key\":\"assethost\",\"value\":\"234\"},{\"key\":\"assetid\",\"value\":\"1\"}]}";
@@ -102,5 +113,5 @@ public class DeleteData {
 		System.out.println("hmWhere:"+hmWhere);
 		String strWhereQuery  = cd.createWhereClause(" WHERE ","frmAllocation","panelFields",hmWhere,true);
 		System.out.println("strWhereQuery="+strWhereQuery+";table name:");
-	}
+	} */
 }

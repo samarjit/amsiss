@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
 
+import org.json.JSONException;
+
 import pojo.ListAttribute;
 
 import businesslogic.BaseBL;
@@ -33,7 +35,13 @@ public class RetreiveData  {
 	}
 	
 	
-	
+	/**
+	 * This function performs the retrieve details operation 
+	 * @param screenName
+	 * @param whereClause
+	 * @throws JSONException 
+	 * @return result of the retrieve operation
+	 */
 	public String doRetrieveData(String scrName, String whereClause) throws Exception{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
@@ -137,7 +145,12 @@ public class RetreiveData  {
 		
 		return html;
 	}
-	
+	/**
+	 * This function creates whereclause for the retrieve query 
+	 * @param sg
+	 * @param tempData
+	 * @return where clause
+	 */
 	private String replaceRefWhereClause(String sg,HashMap<String, HashMap<String, String>> tempData) {
 		debug(1,"in replace where parts tempData hashmap:"+tempData);
 		Pattern pattern = Pattern.compile("\\{(.*?)\\}");
@@ -166,11 +179,11 @@ public class RetreiveData  {
 	 * Expecting whereClause[PanelName]=field!value~#field1!value1
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception{
+/*	public static void main(String[] args) throws Exception{
 		
 		RetreiveData rd = new RetreiveData();
 		rd.doRetrieveData("frmRequest","empid!0~#empname!sam samanta");
-	} 
+	} */
 	
 	/**
 	 * predifined query should be upto table(+)
@@ -179,7 +192,7 @@ public class RetreiveData  {
 	 * @param scrname [input]
 	 * @param panelName [input]
 	 * @param hmWherePanel [passed to createWhereClause]
-	 * @return
+	 * @return retrieve query
 	 */
 	private String createRetrieveQuery(HashMap metadata,String scrname,String panelName, HashMap<String,String> hmWherePanel) {
 		String retrieveQuery ="";
@@ -219,6 +232,12 @@ public class RetreiveData  {
 		return retrieveQuery;
 	}
 	
+	/**
+	 * This function retrieves data in html based on the query
+	 * @param scrname
+	 * @param query
+	 * @return data
+	 */
 	public String doRetrieveDatabyQuery(String scrName, String query) throws Exception{
 		CrudDAO cd = new CrudDAO();
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
@@ -314,6 +333,11 @@ public class RetreiveData  {
 		return html;
 	}
 
+	/**
+	 * This function retrieves data based on the query
+	 * @param query
+	 * @return data
+	 */
 	public String doretrievedatabyname(String query){
 		CachedRowSet crs = null;
 		try {

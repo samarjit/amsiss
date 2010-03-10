@@ -19,10 +19,13 @@ public class UpdateData {
 		}
 	}
 	/**
-	 * main function is used only for testing doDelete() is the method that does 
-	 * really works
-	 * @param args
+	 * This function performs the retrieve details operation 
+	 * @param screenName
+	 * @param whereClause
+	 * @param insertClause
+	 * @throws JSONException 
 	 * @throws SQLException 
+	 * @return result of the update operation
 	 */
 	
 	public String doUpdate(String screenName, String insertClause, String whereclause) throws JSONException, SQLException{
@@ -81,8 +84,17 @@ public class UpdateData {
 		return html;
 	}
 	
+	/**
+	 * This function creates a update query that performs the update operation 
+	 * @param metadata
+	 * @param scrname
+	 * @param panelName
+	 * @param hmWherePanel
+	 * @return update query
+	 */
 	public String createUpdateQuery(HashMap metadata,String scrname,String panelName,String insertClause,HashMap<String,String> hmWherePanel) {
 		
+		 
 		String updateQuery = "";
 		String joiner = " WHERE ";
 		CrudDAO cd = new CrudDAO();

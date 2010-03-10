@@ -19,16 +19,19 @@ public class InsertData {
 		if(priority >0)
 		System.out.println("InsertData:"+s);
 	}
+	
 	/**
-	 * main function is used only for testing doDelete() is the method that does 
-	 * really works
-	 * @param args
-	 * @throws SQLException 
+	 * This function performs the delete operation 
+	 * @param screenName
+	 * @param insertClause
+	 * @param autogenId
+	 * @return result of Insert operation
 	 */
 	
-	public String doInsert(String screenName, String insertClause, String autogenId) throws SQLException{
+	public String doInsert(String screenName, String insertClause, String autogenId){
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
+		String storeflag = null;
 		String scrName=screenName;
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
 		//HashMap<String, String> hmWhere = Utility.extractWhereClause( insertClause/*String whereStringOfPanel, String panelName */);
@@ -38,11 +41,18 @@ public class InsertData {
 		int insertResult = 0;
 		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
+		
 		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
 			
-			String storeflag = cd.getStoreFlag(screenName, panelName);
+			
+			try {
+				storeflag = cd.getStoreFlag(screenName, panelName);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if( storeflag.indexOf('W') > -1){
 				debug(0, "******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
 			    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
@@ -66,14 +76,27 @@ public class InsertData {
 						html+= ","+panelName;
 					}
 				}
-			}//if( storeflag
-		} //while
+				debug(0, "Insert query:" + sg);
+				if(insertResult <0 ){
+					html+= ","+panelName;
+				}
+			}						
+		}
 		if(html.length() > 0){
 			html = html.substring(1); 
 			html = "Insert failed in "+html;
 		}
 		return html;
 	}
+	
+	/**
+	 * This function creates a insert query that performs the insert operation 
+	 * @param metadata
+	 * @param scrname
+	 * @param panelName
+	 * @param insertClause
+	 * @return Insert Query
+	 */
 	
 	public String createInsertQuery(HashMap metadata,String scrname,String panelName, String insertClause) {
 		
@@ -108,6 +131,11 @@ public class InsertData {
 		System.out.println("*****************insert query*************** "+insertQry);
 		return insertQry;
 	}
+	
+	/**
+	 * This function gets a new APPID from database
+	 * @return new ID
+	 */
 	
 	public String getNewAppId() {
 		CrudDAO cd = new CrudDAO();
