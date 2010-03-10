@@ -1,0 +1,11 @@
+@./AMS_ASSET_ALLOCATION.sql;
+@./AMS_ASSET_AVAILABILITY.sql;
+@./AMS_DN.sql;
+@./AMS_PO.sql;
+@./AMS_QUOTATION.sql;
+@./AMS_REQUEST.sql;
+@./AMS_REQUEST_SOFTWARE.sql;
+@./AMS_RFQ.sql;
+@./AMS_RFQ_VENDOR_MAP.sql;
+@./AMS_RRF.sql;
+@./AMS_ASSET.sql;
