@@ -27,12 +27,20 @@ import dto.PrepstmtDTOArray;
 import dto.PrepstmtDTO;
 
 
+/**
+ * This class is used to connect to the database and execute queries.
+ *
+ */
 public class DBConnector { 
 private void debug(int priority, String s){
 	if(priority>0){
 		System.out.println("DBConnecctor:"+s);
 	}
 }
+/**
+ * This function is used to return a connection with the database.
+ * 
+ */
 private Connection getConnection()
 {
 	 
@@ -92,6 +100,12 @@ private Connection getConnection()
     return conn;
 }
 
+/**
+ * This functions executes a query
+ * @param qry
+ * @return result
+ * @throws SQLException
+ */
 public CachedRowSet executeQuery(String qry) throws SQLException{
 	CachedRowSetImpl crs;
 	Connection conn =null;
@@ -133,6 +147,12 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
 	return crs;
 }
 
+/**
+ * This function is used to execute update query.
+ * @param qry
+ * @return
+ * @throws SQLException
+ */
 public int executeUpdate(String qry) throws SQLException{
 	Connection conn =null;
 	int retval =0;
@@ -161,6 +181,13 @@ public int executeUpdate(String qry) throws SQLException{
 	return retval;
 }
 
+/**
+ * Executes prepared statements
+ * @param qry
+ * @param arPrepstmt
+ * @return result
+ * @throws SQLException
+ */
 public CachedRowSet executePreparedQuery(String qry,PrepstmtDTOArray arPrepstmt) throws SQLException{
 	CachedRowSetImpl crs = null;
 	Connection conn =null;
@@ -229,6 +256,13 @@ public CachedRowSet executePreparedQuery(String qry,PrepstmtDTOArray arPrepstmt)
 	return crs;
 }
 
+/**
+ * Executes prepared update statements.
+ * @param qry
+ * @param arPrepstmt
+ * @return result
+ * @throws SQLException
+ */
 public int executePreparedUpdate(String qry,PrepstmtDTOArray arPrepstmt) throws SQLException{
 	Connection conn =null;
 	int retval =0;
@@ -288,6 +322,7 @@ public int executePreparedUpdate(String qry,PrepstmtDTOArray arPrepstmt) throws 
 	/*
 	 * testing 
 	 */
+/*
 	public static void main(String[] args) {
 		try{
 		CachedRowSet crs = new DBConnector().executeQuery("select empid,empname from ams_request");
@@ -299,6 +334,6 @@ public int executePreparedUpdate(String qry,PrepstmtDTOArray arPrepstmt) throws 
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-	}
+	} */
 
 }
