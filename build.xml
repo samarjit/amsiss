@@ -23,7 +23,7 @@
 	</target>
 	<target name="deploy1">  
 			  <mkdir dir="${deploy}"/>
-			  <copy file="${basedir}\sample.war" tofile="${deploy}\sample.war"/>
+			  <copy file="${basedir}\ams.war" tofile="${deploy}\ams.war"/>
 	</target>
 	<target name="deploy">  
 			  <mkdir dir="${deploy}"/>
@@ -35,7 +35,7 @@
 				 <fileset dir="${build}"  />
 			  </copy>
 			  <copy file="${strutsconf}" tofile="${destweb.classes}\struts.xml"/>
-			  <jar destfile="${deploy}/sample.war" basedir="${deploy}" />
+			  <jar destfile="${deploy}/ams.war" basedir="${deploy}" />
 	</target>
 	
 	<target name="clean">  

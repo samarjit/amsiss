@@ -10,6 +10,11 @@ import dbconn.DBConnector;
 import dto.PrepstmtDTOArray;
 import dto.PrepstmtDTO.DataType;
 
+/**
+ * VendorMapDAO does all the data access functionality for AMS_RFQ_VENDOR_MAP
+ * @author SAMARJIT
+ *
+ */
 public class VendorMapDAO {
 	public void debug(int priority, String s){
 		s="VendorMapDAO:"+s;
@@ -17,6 +22,14 @@ public class VendorMapDAO {
 		System.out.println(s);
 	}
 
+	/**
+	 * Inserts a new mapping entry in AMS_RFQ_VENDOR_MAP
+	 * @param rfqid
+	 * @param vendorid
+	 * @param typenotify
+	 * @param suggestdelvtime
+	 * @return
+	 */
 	public String insert(String rfqid, String vendorid, String typenotify, String suggestdelvtime) {
 		DBConnector db = new DBConnector();
 		String retStr = "SUCCESS";
@@ -52,6 +65,11 @@ public class VendorMapDAO {
 		return retStr;		
 	}
 
+	/**
+	 * Selects Vendors that can be mapped to RFQs related to a particular department
+	 * @param department
+	 * @return
+	 */
 	public Map getVendorList(String department) {
 		
 		CachedRowSet crs = null;
@@ -107,6 +125,12 @@ public class VendorMapDAO {
 		return vlist;
 	}
 
+	/**
+	 * Selects all the entries of a mapping between RFQ and vendors that are currently there. It also
+	 * gets type of notify information and email and print status
+	 * @param rfqid
+	 * @return
+	 */
 	public ArrayList<HashMap<String, String>> selectAll(String rfqid) {
 		CachedRowSet crs = null;
 		String SQL = "select vendor_id, vendor_name,b.TYPE_NOTIFY,b.INDV_STATUS,b.SUGGEST_DLV_TIME, vendor_rating,vendor_email, vendor_status from AMS_VENDOR a, AMS_RFQ_VENDOR_MAP b  where a.VENDOR_ID = b.VENDORID " +
@@ -144,6 +168,12 @@ public class VendorMapDAO {
 		return arvlist;
 	}
 
+	/**
+	 * deletes a vendor mapping
+	 * @param rfqid
+	 * @param vendorid
+	 * @return
+	 */
 	public String delete(String rfqid, String vendorid) {
 		DBConnector db = new DBConnector();
 		String retStr = "SUCCESS";
@@ -175,6 +205,15 @@ public class VendorMapDAO {
 		return retStr;
 	}
 
+	/**
+	 * Maps all the vendors that are possible to map to RFQ of a particular department. User can delete the unwanted 
+	 * mappings after this
+	 * @param rfqid
+	 * @param department
+	 * @param typenotify
+	 * @param suggestdelvtime
+	 * @return
+	 */
 	public String initialMap(String rfqid, String department, String typenotify, String suggestdelvtime) {
 		String retStr = "SUCCESS";
 		DBConnector db = new DBConnector();
@@ -232,6 +271,16 @@ public class VendorMapDAO {
 		return retStr;
 	}
 
+	/**
+	 * Type of Notification is updated like email or print and number of times the vendor has been notified.
+	 * The information is kept is a textual format so that later new modes of notification eg.SMS can be added 
+	 * without any change in java code
+	 * @param rfqid
+	 * @param vendorid
+	 * @param typenotify
+	 * @param indvstatus
+	 * @return
+	 */
 	public String updateTypeNotify(String rfqid, String vendorid,
 			String typenotify,String indvstatus) {
 		CachedRowSet crs = null;
