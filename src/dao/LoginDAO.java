@@ -6,12 +6,21 @@ import javax.sql.rowset.CachedRowSet;
 
 import dbconn.DBConnector;
 
+/**
+ * This class is used to connect to the DB for authenticating the user.
+ *
+ */
 public class LoginDAO {
 	private void debug(int priority,String s){
 		if(priority > 1)
 		System.out.println("LoginDAO:"+s);
 	}
 
+	/**
+	 * This function gets role for the userid
+	 * @param userid
+	 * @return role
+	 */
 	public String getUserRole(String userId) {
 		String SQL = "select ROLEID from AMS_EMPLOYEE where EMPID = '" + userId+"'";
 		CachedRowSet crs  = null;
@@ -36,7 +45,11 @@ public class LoginDAO {
 		}
 		return userRole;
 	}
-
+	/**
+	 * This function gets usernmae for the userid
+	 * @param userid
+	 * @return username
+	 */
 	public String getUserName(String userId) {
 		String SQL = "select EMPNAME from AMS_EMPLOYEE where EMPID = '" + userId+"'";
 		CachedRowSet crs  = null;
@@ -61,7 +74,11 @@ public class LoginDAO {
 		}
 		return userName;
 	}
-
+	/**
+	 * This function gets password for the userid
+	 * @param userid
+	 * @return password
+	 */
 	public String getPassword(String userId) {
 		String password = null;
 		String SQL = "select PASSWORD from AMS_EMPLOYEE where EMPID = '" + userId+"'";

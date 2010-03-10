@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
+import org.json.JSONException;
+
 import pojo.ListAttribute;
 
 
@@ -16,11 +18,23 @@ import dbconn.DBConnector;
 import dto.PrepstmtDTO;
 import dto.PrepstmtDTOArray;
 
+/**
+ * This class generates queries for CRUD operations.
+ *
+ */
 public class CrudDAO {
 	private void debug(int priority,String s){
 		if(priority > 1)
 		System.out.println("CrudDAO:"+s);
 	}
+	
+	/**
+	 * This function creates special whereclause for each panel
+	 * @param screenName
+	 * @param panelName
+	 * @return String of whereclause
+	 */
+	
 	
 	public String findSplWhereClsOfPanels(String screenName,String panelName){
  		String SQL = "SELECT splwhereclause   FROM  screen_panel where scr_name='"+screenName+"' and panel_name='"+panelName+"' ";
@@ -47,6 +61,13 @@ public class CrudDAO {
 		}
 		return 	tableNames;
 	}
+	
+	/**
+	 * This function retrieves panels by screen name
+	 * @param screenName
+	 * @return String array of panels
+	 */
+	
 	
 	public List<String> findPanelByScrname(String screenName){
 		String SQL = 
@@ -76,6 +97,12 @@ public class CrudDAO {
 	}
 	
 	
+	/**
+	 * This function retrieves table by panels
+	 * @param screenName
+	 * @param panelName
+	 * @return tables associated with the panel
+	 */
 	
 	public String findTableByPanels(String screenName,String panelName){
 		String tableNames = "";
@@ -110,7 +137,7 @@ public class CrudDAO {
 	 * @param metadata [output] gets filled with details of a column
 	 * @param scrname  [input]
 	 * @param panelName [input]
-	 * @return
+	 * @return a part of the retrieve query
 	 */
 	public String createRetrieveQueryPart1(HashMap metadata,String scrname,String panelName) {
 		DBConnector db = new DBConnector();
@@ -174,7 +201,7 @@ public class CrudDAO {
 	 * @param scrname [input]
 	 * @param panelName [input]
 	 * @param hmWherePanel [input] whereclause of a planel key/value pair
-	 * @return
+	 * @return whereclause
 	 */
 	public String createWhereClause(String joiner, String scrname,String panelName,HashMap<String, String> hmWherePanel,boolean exactMatch) {
 		String strWhereQuery = "";
@@ -241,6 +268,12 @@ public class CrudDAO {
 		
 	}
 
+	/**
+	 * This function executes retrieve query
+	 * @param query
+	 * @return CachedRowSet result
+	 */
+	
 	public CachedRowSet executeRetrieveQuery(String sg) throws Exception {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
@@ -254,7 +287,11 @@ public class CrudDAO {
 		return crs;
 	}
 	
-	
+	 /** 
+	 * This function executes insert query
+	 * @param query
+	 * @return CachedRowSet result
+	 */
 	public int  executeInsertQuery(String sg) throws Exception {
 		DBConnector db = new DBConnector();
 		int result = 0;
@@ -268,7 +305,12 @@ public class CrudDAO {
 		return result  ;
 	}
 	
-
+	 /** 
+	 * This function finds a pre defined query
+	 * @param screenName
+	 * @param panelName
+	 * @return query
+	 */
 	public String findPreDefQuery(String screenName, String panelName) {
 		String preDefQuery = "";
 		String SQL = "select SELQUERY from screen_panel  where scr_name='"+screenName+"' and panel_name='"+panelName+"' ";
@@ -285,6 +327,14 @@ public class CrudDAO {
 		return preDefQuery;
 	}
 
+	 /** 
+	 * This function creates update query
+	 * @param metadata
+	 * @param updateClause
+	 * @param screenName
+	 * @param panelName
+	 * @return query
+	 */
 	public String createUpdateQueryPart1(HashMap metadata, String scrname, String panelName,HashMap updateClause) {
 		DBConnector db = new DBConnector();
 		String strQuery="";
@@ -350,9 +400,17 @@ public class CrudDAO {
 			return updateQuery;
 		
 	}
+	
+	 /** 
+	 * This function creates insert query
+	 * @param metadata
+	 * @param updateClause
+	 * @param screenName
+	 * @param panelName
+	 * @return query
+	 */
 
-	public HashMap createInsertQueryPart1(HashMap metadata, String scrname,
-		String panelName,HashMap insertClause) {
+	public HashMap createInsertQueryPart1(HashMap metadata, String scrname, String panelName,HashMap insertClause) {
 			DBConnector db = new DBConnector();
 			String strQuery="";
 			HashMap inesrtqryPart = new HashMap();
@@ -417,7 +475,11 @@ public class CrudDAO {
 				
 				return inesrtqryPart;
 	}
-
+	 /** 
+	 * This function get business logic name based on screen name
+	 * @param screenName
+	 * @return businesslogic Name
+	 */
 	public String getBusinessLogicName(String screenName) {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
@@ -436,6 +498,10 @@ public class CrudDAO {
 		return businesslogicname;
 	}
 	
+	 /** 
+	 * This function returns new App ID
+	 * @return App ID
+	 */
 	public String getNewAppId() {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
@@ -458,6 +524,12 @@ public class CrudDAO {
 		return appid;
 	}
 
+	 /** 
+	 * This finds a storeFlag for a field
+     * @param screenName
+	 * @param panelName
+	 * @return storeflag status
+	 */
 	public String getStoreFlag(String screenName, String panelName) throws SQLException {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
