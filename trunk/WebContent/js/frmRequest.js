@@ -3,8 +3,6 @@ window.onload = refresh;
 function refresh() {
 }
 
-
-
 var New_Hardware = 1;
 var New_Software = 2;
 var Hardware_Upgrade = 3;
@@ -28,8 +26,6 @@ function populate()
 		// prompt("url",url);
 		sendAjaxGet(url, requestCallBackview);
 
-			
-		
 	}	
 	else {
 		// var url =
@@ -38,7 +34,7 @@ function populate()
 		sendAjaxGet(url, requestCallBack);
 		// alert("This alert box was called with the onload event");
 	}
-	
+
 
 }
 var screenMode = "insert";
@@ -86,7 +82,7 @@ function requestCallBackview(p){
 	else {
 		//alert(jason.message);
 		p = decodeURIComponent(json.message);
-		alert(p);
+		//alert(p);
 		document.getElementById("retreivedetailsdiv").innerHTML = p;	
 		panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 		// alert(panelsTable.length);
@@ -99,7 +95,7 @@ function requestCallBackview(p){
 			if (detailTable[i].id == 'buttonPanel' || detailTable[i].rows.length==0)
 				continue;
 			for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
-			// detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];
+				// detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];
 
 				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
 				// alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
@@ -143,9 +139,9 @@ function requestCallBackview(p){
 				document.getElementById("NewHardware").style.display = "block";
 			}
 			else
-				{
+			{
 				document.getElementById("GeneralHardware").style.display = "block"; 
-				}
+			}
 
 			document.getElementById("Software").style.display = "none";
 			document.getElementById("HardwareUpgrade").style.display = "none"; 
@@ -260,7 +256,7 @@ function requestCallBackview(p){
 	}
 
 
-fnAdjustTableWidth();
+	fnAdjustTableWidth();
 	disable_fields();
 
 }
@@ -562,32 +558,42 @@ function disable_fields(){
 	}
 	document.getElementById("reqid").style.visibility = 'visible'; 
 	document.getElementById("status").style.visibility = 'visible'; 
-	
-	
-	
+
+
+
 	if(document.getElementById("status").value=="NEW"){
-		
+
 		document.getElementById("btnmodify").disabled = false;
 		document.getElementById("btnSave").disabled = true;
 		document.getElementById("btnsubmit").disabled = false;
 		document.getElementById("btndelete").disabled = false;
+		document.getElementById("btnclose").disabled = true;
 
 
 	}
-	
-if(document.getElementById("status").value=="PENDAPPROVAL"){
-		
+
+	if(document.getElementById("status").value=="PENDAPPROVAL"){
+
 		document.getElementById("btnmodify").disabled = true;
 		document.getElementById("btnSave").disabled = true;
 		document.getElementById("btnsubmit").disabled = true;
 		document.getElementById("btndelete").disabled = true;
 		document.getElementById("btncancel").disabled = false;
+		document.getElementById("btnclose").disabled = true;
 
-		
+	}
+
+	if(document.getElementById("status").value=="END"){
+
+		document.getElementById("btnmodify").disabled = true;
+		document.getElementById("btnSave").disabled = true;
+		document.getElementById("btnsubmit").disabled = true;
+		document.getElementById("btndelete").disabled = true;
+		document.getElementById("btncancel").disabled = true;
+		document.getElementById("btnclose").disabled = false;
 
 
 	}
-	
 
 }
 
@@ -619,7 +625,7 @@ function reqSubmit() {
 }
 
 function reqSave() {
-	
+
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
@@ -634,30 +640,30 @@ function reqSave() {
 	} else {
 
 
-	// alert("in savesdkgf ");
-	// var
-	// url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;
+		// alert("in savesdkgf ");
+		// var
+		// url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;
 
-	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
-	prompt("url",url);	
-	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CR&create=";
-	alert(url);
-	// add key:vlaue to url
-	sendAjaxGet(url, saveCallBack);
+		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
+		prompt("url",url);	
+		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CR&create=";
+		//alert(url);
+		// add key:vlaue to url
+		sendAjaxGet(url, saveCallBack);
 
 	}
 
-	
+
 
 }
 
 function deleteData(){
 
 	whereclause  = makeWhereClause();
-	alert(decodeURIComponent(whereClause));
-	
+	//alert(decodeURIComponent(whereClause));
+
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
-	alert(decodeURIComponent(url));	
+	//alert(decodeURIComponent(url));	
 	// prompt("url",url);
 	// add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
@@ -677,7 +683,7 @@ function saveCallBack(val) {
 			populate();
 		}
 	}
-	
+
 }
 
 function KeyValue(a,b) {
@@ -764,7 +770,7 @@ function prepareInsertData() {
 
 
 		query = "#panelsdiv #" + panelDataTable[i] + " :input";
-		alert(query);
+		//alert(query);
 		var requestar = new Array();
 
 		var elem = 	jQuery(query); 
@@ -775,8 +781,8 @@ function prepareInsertData() {
 
 			if(screenMode != "modify"){
 
-			if(val=='reqid'){
-				item.value = "AUTOGEN_SEQUENCE_ID";}
+				if(val=='reqid'){
+					item.value = "AUTOGEN_SEQUENCE_ID";}
 			}
 			if(item.type=="hidden" && ((val=='hardwaretype') || (val=='hardwaretypegeneral') || (val=='newhardwaretype'))){
 				item.value = typee;}
@@ -798,14 +804,13 @@ function prepareInsertData() {
 	var k = new Object();
 	k.json = pclass;
 	var myJSONText = JSON.stringify(k, replacer,"");
-	alert("myjson "+myJSONText);
+	//alert("myjson "+myJSONText);
 	return myJSONText;			
 }
 
 
 function updateData(){
-	alert("aaa");
-	// obj.disabled = true;
+		// obj.disabled = true;
 	screenMode = "modify";
 	// There will be only one table in search screen 'search div'
 	// document.requestFrm.submit();
@@ -852,10 +857,10 @@ function updateData(){
 }
 
 function makeWhereClause(){
-	 
+
 	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
-	
+
 	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 	whereClause = "panelFields1WhereClause=";
@@ -882,18 +887,18 @@ function makeWhereClause(){
 		var myJSONText = JSON.stringify(k, replacer,"");
 		//alert(myJSONText);
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
-		 
-		 
-		
+
+
+
 	}
-	
+
 	return whereClause;	 
 
 }
 
 function submitactivity(){
-	alert("here in submit activity");
-	alert(wflcontrollerurl);
+	//alert("here in submit activity");
+	//alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
 	alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
@@ -909,16 +914,16 @@ function submitactivity(){
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
 	jQuery.each(jQuery("#panelsdiv  table"),function(idx,elem){	
-		 
+
 		var query = jQuery(elem).eq(0).find("tr").eq(0).find("td ");
 		jQuery.each(query, function(index, item) {
-		//	alert(elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width());
+			//	alert(elem.id+" tdwidthar["+index+"]"+tdwidthar[index] + " "+jQuery(item).width());
 			if(!tdwidthar[index])tdwidthar[index]  = jQuery(item).width();
 			else if(   tdwidthar[index] < jQuery(item).width())			{
 				tdwidthar[index]  = jQuery(item).width();
 			}
-			 
-				
+
+
 		});
 	});
 	var j = 0 ;
@@ -963,13 +968,33 @@ function submitScreenFlowactivity(){
 function submitScreenFlowactivity(){
 	//alert("here in submit activity")
 	//alert(wflcontrollerurl);
-	
-	
+
+
 	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=getEmail&mgrid="+document.getElementById("mgrid").options[document.getElementById("mgrid").selectedIndex].value;
 	sendAjaxGet(url, beforeMail);
 
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 
+}
+
+function cancelReq(){
+	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=cancel&reqid="+document.getElementById("reqid").value;
+	sendAjaxGet(url, afterCancel);
+
+}
+
+function afterCancel(){
+	window.location = "template1.action?screenName=frmRequestList";
+}
+
+function closeReq(){
+	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=close&reqid="+document.getElementById("reqid").value;
+	sendAjaxGet(url, afterClose);
+
+}
+
+function afterClose(){
+	window.location = "template1.action?screenName=frmRequestList";
 }
 
 function afterMail(){
@@ -978,16 +1003,20 @@ function afterMail(){
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName;
 	location.href = url;
-	
+
 }
 
 function beforeMail(p){
-	
+
 	var jobj = JSON.parse(p);
 	empemail = jobj.empemail;
 	mgremail = jobj.mgremail;
 
 	var url = mailurlpart+"?subject=Request from "+document.getElementById("empname").value+"&from="+empemail+"&sendto="+mgremail+"&msgbody=request type is "+document.getElementById("requesttype").options[document.getElementById("requesttype").selectedIndex].value;
 	sendAjaxGet(url, afterMail);
-	
+
 }
+
+
+
+

@@ -19,7 +19,7 @@ function search(){
 		url=url+'&pagesize='+pagesize;
 	if(pageno)
 		url=url+'&pageno='+pageno;
-	
+	alert(url);
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){

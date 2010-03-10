@@ -153,19 +153,46 @@ function fnAdjustTableWidth() {
 
 function disable_fields(){
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-
 	for(var i =0; i<panelsTable.length;i++){
-		
-	//	alert("panels "+ panelsTable[i].id);
-		if (panelsTable[i].id == 'panelFields' || panelsTable[i].id == 'quotationFields' ){
+
+		// alert("panels "+ panelsTable[i].id);
+		if (panelsTable[i].id != 'buttonPanel'){
+
+//			fields = panelsTable[i].getElementsByTagName("input");
+//			for(var k = 0; k<fields.length; k++){
+
+//			fields[k].disabled = true;
+
+//			}
 			var query = jQuery(panelsTable[i]).find(" :input");
 			var elem = 	jQuery(query);
-		
+
 			jQuery.each(elem, function(index, item) {
 				item.disabled = true;
-			});		
+			});
+
 		}
 	}
+}
+
+
+function enable_fields(){
+	screenMode = "modify";
+
+	var updateonar = "pocomments".split(",");
+	for ( var i = 0; i < updateonar.length; i++) {
+		var arelm = updateonar[i];
+		jQuery("#"+ arelm).attr('disabled','');
+	}
+	document.getElementById("delete").disabled = true;
+	document.getElementById("viewpo").disabled = true;
+	document.getElementById("cancelpo").disabled = true;
+	document.getElementById("modify").disabled = true;
+	document.getElementById("save").disabled = false;
+
+
+
+
 }
 
 function disable_quot_fields(){
@@ -214,17 +241,63 @@ function replacer(key, value) {
 }
 
 
+
+function posave(){
+	
+	document.getElementById("save").disabled=false;
+	document.getElementById("modify").disabled=true;
+	whereclause  = makeWhereClause();
+	var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmPO";
+	//prompt("url",url);	
+	url = url+ "&insertKeyValue="+ prepareInsertData();
+	sendAjaxGet(url, poCallBack);
+}
+
+function makeWhereClause(){
+	 
+	// alert("in make url,selectedIdx:"+selectedIdx);
+	//There will be only one table in search screen 'search div'
+	
+	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
+
+	whereClause = "panelFields1WhereClause=";
+	if(listTable != null){
+		//poplate wher clause url
+		var j=0;
+		requestar = new Array();
+		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
+		{  
+			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
+			if(jQuery("#retreivedetailsdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
+				name = jQuery("#retreivedetailsdiv").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
+				name = jQuery.trim(name);
+				value = jQuery("#retreivedetailsdiv").find(" table tbody tr").eq(1).find(" td").eq(i).text();
+				value = jQuery.trim(value);
+				whereClause = whereClause + name + "!" + value + "~#";
+				requestar[j] = new KeyValue(name, value);				
+				j++;		
+				//alert(jQuery("#retreivedetailsdiv table th:eq("+i+") div").text());
+			}
+		}
+		var k = new Object();
+		k.json = requestar;
+		var myJSONText = JSON.stringify(k, replacer,"");
+		//alert(myJSONText);
+		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
+		 
+		 
+		
+	}
+	
+	return whereClause;	 
+
+}
+
 function prepareInsertData() {
 
 	
-	if(document.getElementById("approvarid").value == 'select'){		
-		showerror("Please enter Approver ID");
-		exit();
-	}
 	
-	if(document.getElementById("requestid").value == 'select'){		
-		document.getElementById("requestid").value=" ";
-	}
+	
 	
 	//alert("in prepare");
 	//var array = {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
@@ -233,8 +306,7 @@ function prepareInsertData() {
 	//alert(document.getElementById("rrfquotationid").value);
 	//exit();
 	//get the quotation id from quotation fileds
-	document.getElementById("quotationid").value=document.getElementById("rrfquotationid").value;
-	document.getElementById("rrfrfqid").value=document.getElementById("rfqid").value;
+	
 	
 
 	
@@ -258,12 +330,11 @@ function prepareInsertData() {
 	var k = new Object();
 	k.json = pclass
 	var myJSONText = JSON.stringify(k, replacer,"");
-	alert(myJSONText );	
+	//alert(myJSONText );	
 	return myJSONText;			
 }
 
-
-function updateData(obj){
+function updateData(){
 	//obj.disabled = true;
 	screenAction = "modify";
 	//There will be only one table in search screen 'search div'
@@ -364,7 +435,7 @@ function makeWhereClause(){
 
 function submitactivity(){
 	//alert("here in submit activity")
-	alert(wflcontrollerurl);
+	//alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
 	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
