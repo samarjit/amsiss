@@ -9,19 +9,23 @@ import javax.sql.rowset.CachedRowSet;
 
 import dbconn.DBConnector;
 
+/**
+ * This class connects to the database and perform appropriate operations for workflow.
+ *
+ */
 public class WorkflowDAO {
 	private void debug(int priority, String s){
 		if(priority >0)
 		System.out.println("WorkflowDAO:"+s);
 	}
+	
+
 	/**
-	 * @param args
+	 * This function gets the next available action 
+	 * @param userid
+	 * @param applicationId
+	 * @return Hashhmap consisting of actions
 	 */
-	public static void main(String[] args) {
-		
-
-	}
-
 	public HashMap<String, ArrayList<String>> getAvailableAction(String userid,String applicationId) {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
@@ -81,6 +85,10 @@ public class WorkflowDAO {
 		}
 		return wflsesshm;
 	}
+	/**
+	 * This functions gets a new APP ID
+	 * @return APP ID
+	 */
 	public String getNewAppId() {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
@@ -102,6 +110,12 @@ public class WorkflowDAO {
 		}
 		return appid;
 	}
+	
+	/**
+	 * This function gets the workflow name based on the activity
+	 * @param activity
+	 * @return workflow name
+	 */
 	public String getSuitableWorkflowName(String activity) {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
@@ -130,7 +144,7 @@ public class WorkflowDAO {
 	 * @param appid
 	 * @param status
 	 * @param hmActions
-	 */
+		 */
 	public void createApplicationWfl(String userid, long id,String appid,String status, HashMap hmActions) {
 		DBConnector db = new DBConnector();
 		int i =0;
@@ -184,6 +198,12 @@ public class WorkflowDAO {
  
 		
 	}
+	
+	/**
+	 * Function gets the screen ID
+	 * @param activityname
+	 * @return screen ID
+	 */
 	public String getScreenId(String activityname) {
 		DBConnector db = new DBConnector();
 		CachedRowSet crs = null;
@@ -236,7 +256,7 @@ public class WorkflowDAO {
 					}
 	}
 	/**
-	 * This method marks beginnign of a new stage. If the stage is already in list it is updated to started once again(The stage got repeated due to workflow).
+	 * This method marks beginning of a new stage. If the stage is already in list it is updated to started once again(The stage got repeated due to workflow).
 	 * If the stage was not in list then a new insert will be done with status as started
 	 * @param userid
 	 * @param id
@@ -296,6 +316,14 @@ public class WorkflowDAO {
 		}
 		
 	}
+	/**
+	 * This function creates a new application screen flow
+	 * @param userid
+	 * @param wflName
+	 * @param appid
+	 * @param status
+	 * @param hmActions
+	 */
 	public void createApplicationScrWfl(String userid, String wflName,String appid, String status, ArrayList<String> hmActions) {
 		DBConnector db = new DBConnector();
 		int i =0;
@@ -348,6 +376,14 @@ public class WorkflowDAO {
 		}
 		
 	}
+	/**
+	 * This function changes the stage of the application screen flow
+	 * @param userid
+	 * @param wflid
+	 * @param appid
+	 * @param status
+	 * @param doString
+	 */
 	public void changeStageApplicationScrWfl(String userid, String wflid,String appid, String status, String doString) {
 		int i=0;
 		 try {
@@ -369,6 +405,14 @@ public class WorkflowDAO {
 					}
 		
 	}
+	/**
+	 * This function updates the status of the application workflow
+	 * @param userid
+	 * @param wflid
+	 * @param appid
+	 * @param status
+	 * @param hmActions
+	 */
 	public void updateApplicationScrWfl(String userid, String wflid,String appid, String status, ArrayList<String> hmActions) {
 		CachedRowSet crs = null;
 		DBConnector db = new DBConnector();
