@@ -1,3 +1,4 @@
+<%@ page import="util.AMSLogger" %>
 <hr>
 
 <a href="wflinitview.jsp">Initialize View</a> |
@@ -9,3 +10,9 @@ View Workflow #:
 <input type="submit" value="View">
 </form>
 
+<%
+AMSLogger log = AMSLogger.getInstance();
+log.debug("hello 123");
+
+%>
+<%="hello" %>

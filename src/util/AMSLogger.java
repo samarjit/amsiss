@@ -12,6 +12,8 @@
 
 package util;
 
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -24,7 +26,7 @@ public class AMSLogger  {
     
     static {
         try {
-            AMSLogger.initialize("resource\\log4j2.properties");
+            AMSLogger.initialize("log4j.properties");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,7 +48,8 @@ public class AMSLogger  {
     //0.0.0.0.0 
 	public static void initialize(String fileName) throws Exception {
         try {
-            PropertyConfigurator.configure(fileName);
+        	URL url = AMSLogger.class.getResource("/"+fileName);
+            PropertyConfigurator.configure(url.getFile());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,4 +85,9 @@ public class AMSLogger  {
     public boolean isDebugEnabled() {
         return logger.isDebugEnabled();
     }
+    public static void main(String[] args) {
+		AMSLogger logger = AMSLogger.getInstance();
+		logger.debug("hello");
+		System.out.println("logger");
+	}
 }

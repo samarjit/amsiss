@@ -80,6 +80,12 @@ id="WebApp_ID" version="2.5">
 		<servlet-name>FlowControllerServlet</servlet-name>
 		<url-pattern>/FlowControllerServlet</url-pattern>
 	</servlet-mapping>
+	<listener>
+	  	<listener-class>
+	  		util.InitAMS
+	  	</listener-class>
+    </listener>
+	
 	<welcome-file-list>
 		<welcome-file>/pages/login.jsp</welcome-file>
 	</welcome-file-list>
