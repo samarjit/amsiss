@@ -18,6 +18,9 @@ import javax.sql.rowset.CachedRowSet;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+import util.AMSProperties;
+
 import com.sun.rowset.CachedRowSetImpl;
 
 import dto.PrepstmtDTOArray;
@@ -37,12 +40,16 @@ private Connection getConnection()
 	Connection conn = null;
 	try
     {
-        String userName = "ams";
-        String password = "ams";
+        
       // String driverName ="com.mysql.jdbc.Driver";
         String driverName ="oracle.jdbc.OracleDriver";
       // String url = "jdbc:mysql://localhost:3306/ams";
-        String url = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
+       //"jdbc:oracle:thin:@127.0.0.1:1521:XE"; 
+        String userName = AMSProperties.get("databaseuser");
+        String password = AMSProperties.get("databasepassword");
+        String url = AMSProperties.get("databaseserverurl");
+         
+		
       /*  
         //Main xml config to get hibernate config file path
        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File("src/cbrca/databaseconfig.xml"));
