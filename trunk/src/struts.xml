@@ -71,13 +71,7 @@
 
 	<package name="actionTag" namespace="/" extends="struts-default">
 
-		<action name="actionTagAction1" class="actionclass.ActionTagAction">
-			<result name="done">tes.jsp</result>
-		</action>
-		<action name="actionTagAction2" class="actionclass.ActionTagAction"
-			method="default">
-			<result name="done">tes.jsp</result>
-		</action>
+		 
 
 		<action name="searchlist" class="actionclass.SearchListAC">
 			<result type="stream">
