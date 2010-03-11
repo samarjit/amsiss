@@ -74,7 +74,7 @@ public class InsertDataTest {
 			if (var.matches("") && var.length()==0) assertEquals(">>>successfully inserted", "", var);
 			else if (var.length()>0) assertNotNull(">>>failed inserting the new record or unique constraint", var);
 				
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			fail(e.toString());
 		}
 	}
