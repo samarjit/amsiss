@@ -68,7 +68,8 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 	
 	/**
 	 * execute() method is executed by default. 
-	 * @param whereclause, screeName
+	 * @param whereclause
+	 * @param screeName
 	 * @returns String 
 	 *
 	 */
