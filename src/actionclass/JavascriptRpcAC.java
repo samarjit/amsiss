@@ -99,7 +99,8 @@ public class JavascriptRpcAC extends ActionSupport implements  ParameterAware,Se
 	
 	/**
 	 * execute() method is executed by default. 
-	 * @param  rpcid, screenName 
+	 * @param  rpcid 
+	 * @param screenName 
 	 * @returns String 
 	 */
 	public String execute(){

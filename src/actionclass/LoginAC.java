@@ -68,7 +68,8 @@ public class LoginAC extends ActionSupport implements ServletRequestAware{
 	/**
 	 * 
 	 * execute() method is for login.
-	 * @param userid, password
+	 * @param userid 
+	 * @param password
 	 * @return String
 	 *
 	 */
