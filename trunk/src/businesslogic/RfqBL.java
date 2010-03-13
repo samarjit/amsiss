@@ -11,7 +11,7 @@ import dto.PrepstmtDTO.DataType;
 
 public class RfqBL implements BaseBL {
 	private void debug(int priority, String s) {
-		if(priority > -1){
+		if(priority > 0){
 			System.out.println("RfqBL:"+s);
 		}
 	}

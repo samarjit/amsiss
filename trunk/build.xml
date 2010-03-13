@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <project basedir="." default="compile">
 <property name="serverdeploydir" value="E:\samarjit\tomcat6\webapps" />
 <property name="serverclientjars" value="E:\samarjit\tomcat6\lib" />
@@ -36,13 +35,15 @@
 	<target name="createwar">  
 			  <mkdir dir="${deploy}"/>
 			  <copy todir="${deploy}">
-					<fileset dir="${web.dir}"  />
-					
+					<fileset dir="${web.dir}"  />		
 			  </copy>
 			  <copy  todir="${destweb.classes}">
-				 <fileset dir="${build}"  />
+				 <fileset dir="${src}"  excludes="**/*.java" />
 			  </copy>
-			  <copy file="${strutsconf}" tofile="${destweb.classes}\struts.xml"/>
+		      <copy  todir="${destweb.classes}">
+						 <fileset dir="${build}"  />
+			  </copy>
+			  <!--copy file="${strutsconf}" tofile="${destweb.classes}\struts.xml"/-->
 			  <jar destfile="${deploy}/ams.war" basedir="${deploy}" />
 	</target>
 	
