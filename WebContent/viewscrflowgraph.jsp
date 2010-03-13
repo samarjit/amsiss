@@ -10,16 +10,45 @@
 
  
 <html>
+<script language="javascript" src="<%=request.getContextPath() %>/js/jquery.js"></script>
+<script language="javascript" src="<%=request.getContextPath() %>/js/json2.js"></script>
+<script type="text/javascript">
+function rpccallback(param){
+	alert(param);	
+	var json = JSON.parse( param);
+		if(json.WFLACTIONDESC != null){
+		      jQuery('#actiondesc').val(json.WFLACTIONDESC);
+		      jQuery('#wflid').val(json.WFLID);
+		  	document.getElementById("formscrwfl").submit();
+		}
+	}
+
+function fnRpc(){
+	alert("hi"+jQuery('#appid').val());
+jQuery.ajax({
+	   type: "GET",
+	   url: "jsrpc.action?screenName=frmRFQ&appid="+jQuery('#appid').val()+"&rpcid=scrflowgraph",
+	   success:  rpccallback
+
+	 });
+}
+
+var workflowxml="";
+</script>
+
 <body>
-<form action="#" method="GET">
-ActionDesc:<input name="actiondesc" value="<%= request.getParameter("actiondesc") %>"/>
+<form action="#" method="GET" id='formscrwfl'>
+Application ID:<input type="text" name="appid" id="appid" value="" size=20 />
+<input type="button" value="Show" onclick="fnRpc();" />
+Workflow ID:<input type="text" name="wflid" id="wflid" value="" size=20 />
+ActionDesc:<input name="actiondesc" id="actiondesc" value="<%= request.getParameter("actiondesc") %>"/>
 xAdjust:<input name="xadjust" value="-3"/>
 yAdjust:<input name="yadjust" value="-2"/>
 <input type="submit" />
 </form>
 
 <div id="workflowCanvas" style="position:relative;height:566px;width:508px;">
-<img src="processimage.jpg" border=0/>
+<img src="processimage.jpg" border=0 id="processimage"/>
 </div>
 <script type="text/javascript" src="js/wz_jsgraphics.js"></script>
 <script type="text/javascript" src="js/xmlextras.js"></script>
@@ -28,7 +57,7 @@ var actiondesc = "<%=request.getParameter("actiondesc") %>";
 
 var xmlHttp = XmlHttp.create();
 var async = true;
-xmlHttp.open("GET", ".gpd.newworkflow.xml", async);
+xmlHttp.open("GET", workflowxml, async);
 xmlHttp.onreadystatechange = function () {
     if (xmlHttp.readyState == 4){
         //set up graphics

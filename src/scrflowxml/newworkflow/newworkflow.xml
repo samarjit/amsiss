@@ -10,12 +10,39 @@
 			<action name="sam" class="businesslogic.LoginBL"></action>
 		</event>
    </start-state>
-   <decision name="Approve">
-		<transition to="End" name="rejected"></transition>
+   <decision name="Approve" >
+		<transition to="end" name="rejected"></transition>
 		<transition to="Allocate" name="approved"></transition>
 	</decision>
 
-	<task-node name="Allocate"></task-node>
+	<task-node name="Allocate">
+		<event type="before-signal">
+			<mail></mail>
+			<script></script>
+		</event>
+		<transition to="mail-node1"></transition>
+	</task-node>
+
+	<mail-node name="mail-node1" template="template1" async="true" to="s@omeone.com">
+		<subject>
+			sa
+		</subject>
+		<text>
+			sdf
+		</text>
+		<event type="task-start">
+			<mail></mail>
+			<create-timer duedate="fg" name="df" transition="sd" repeat="fg">
+				<action name="dfg" expression="dfgg"></action>
+			</create-timer>
+			<script name="myscript">
+				mysc
+			</script>
+			<action name="asd" class=""></action>
+			<mail></mail>
+		</event>
+		
+	</mail-node>
 
 
 	<end-state name="end"></end-state>

@@ -35,7 +35,7 @@ import businesslogic.BaseBL;
  *
  */
 public class ScreenFlow {
-	boolean initialized = false;
+	private static boolean initialized = false;
 	HashMap propertyset ;
 	
 	public ScreenFlow() {
@@ -396,6 +396,14 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 		System.out.println();
 	}
 	
+	
+	/**
+	 * The xml format which is supported by ScreenFlow can be populated into this object
+	 * 
+	 * @param flowName
+	 * @param currentAction
+	 * @return
+	 */
 	public ScrFlowNode populateScrFlowNode(String flowName, String currentAction) {
 		String workflowFile = 	ScreenFlow.workflowlocationcache.get(flowName);
 		String transitTo ="";

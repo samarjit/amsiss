@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.struts2.ServletActionContext;
+
 import pojo.Createhtml;
 
 
@@ -15,6 +17,12 @@ import com.opensymphony.xwork2.ActionSupport;
  * This is a action class that inherits Strut's Framework's ActionSupport class and is used to generate HTML required to be shown on screen. 
  */
 public class GenerateHtmlAC extends ActionSupport{
+	private void debug( int priority,String s){
+		if(priority > 0)
+		System.out.println("GenerateHtml:"+s);
+	}
+
+	
 public String user;
 public String password;
 public String dataPanel;
@@ -35,12 +43,10 @@ private String screenMode;
 private String ajaxPopulate = "";
 private InputStream inputStream;
 private String passedonvalues;
+private String redirectjspname;
 
 
-private void debug( int priority,String s){
-	if(priority > 0)
-	System.out.println("GenerateHtml:"+s);
-}
+
 
 
 public String getPassedonvalues() {
@@ -72,10 +78,7 @@ public void setInputStream(InputStream inputStream) {
 	this.inputStream = inputStream;
 }
 
-private void debug(String s){
-//	System.out.println("GenerateHtml:"+s);
-}
-
+ 
 public String getPanelFieldsWhereClause() {
 	return panelFieldsWhereClause;
 }
@@ -186,6 +189,15 @@ public String getPassword() {
 public void setPassword(String password) {
 	this.password = password;
 }
+
+public String getRedirectjspname() {
+	return redirectjspname;
+}
+
+
+public void setRedirectjspname(String redirectjsp) {
+	this.redirectjspname = redirectjsp;
+}
 /*
 	public static void main(String[] args) {
 		 Createhtml htmlc = new Createhtml();
@@ -197,6 +209,9 @@ public void setPassword(String password) {
 		System.out.println("Extrs fields:"+arPanelData);
 
 	} */
+
+
+
 
 /**
  * execute() method is executed by default. 
@@ -212,6 +227,7 @@ public void setPassword(String password) {
 		 //setDataPanel(htmlc.makehtml("panelFields"));
 		 //setButtonPanel(htmlc.makehtml("buttonPanel"));
 		 List<String> lstPanels =  htmlc.getPanels(screenName);
+		 
 		 if(ajaxPopulate.equalsIgnoreCase("true")){
 			 String result =  htmlc.makehtml(screenName, lstPanels.get(0));
 		        inputStream = new StringBufferInputStream(result);
@@ -237,7 +253,11 @@ public void setPassword(String password) {
 			addActionError("The template was not found for this page!");
 			templateName = "failure"; //redirects to pages/unknownerror.jsp
 		}
-		
+		if(templateName.matches(".*(?ims:\\.jsp)")  || templateName.matches(".*(?ims:\\.html)") || templateName.matches(".*(?ims:\\.htm)") ){
+			debug(1,"redirecting to jsp:"+ServletActionContext.getServletContext().getContextPath()+"/"+templateName);
+			redirectjspname = "/"+templateName;
+			return "redirecttojsp";
+		}
 //		try {
 //		 	workflow.main(null);
 //		} catch (InvalidInputException e) {

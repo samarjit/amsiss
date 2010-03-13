@@ -33,14 +33,18 @@ location.href=url;
 
 </script>
 <% UserDTO userDTO = (UserDTO) session.getAttribute("userSessionData"); 
+String userId = "";
  if(userDTO==null || userDTO.getUserid() == null){
 	 String url = request.getContextPath()+"/pages/login.jsp?errormsg=Session Expired";
 	 System.out.println("url="+url);
 	 response.sendRedirect(url);
+	 
+ }else{
+	 userId = userDTO.getUserid(); 
  }
 %>
 <script>
-var userId =  '<%= userDTO.getUserid() %>' 
+var userId =  '<%= userId %>';
 </script>
 
 Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
