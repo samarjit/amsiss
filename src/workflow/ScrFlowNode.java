@@ -3,6 +3,7 @@ package workflow;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -30,6 +31,30 @@ private String description;
 private ArrayList transitionto;
 private String decisionHandler;
 private String decisionExpression;
+private String NodeType;
+private String eventscript;
+private HashMap email;
+
+
+
+public HashMap getEmail() {
+	return email;
+}
+public void setEmail(HashMap email) {
+	this.email = email;
+}
+public String getEventscript() {
+	return eventscript;
+}
+public void setEventscript(String eventscript) {
+	this.eventscript = eventscript;
+}
+public String getNodeType() {
+	return NodeType;
+}
+public void setNodeType(String nodeType) {
+	NodeType = nodeType;
+}
 public Node getNode() {
 	return node;
 }
@@ -69,9 +94,9 @@ public void setDecisionExpression(String decisionExpression) {
 
 public String toString(){
 	return "Node:"+node+ ", "+"eventactions:"+eventactions
-	+",eventexpression:"+eventexpression+", description:"+description+
+	+",eventexpression:"+eventexpression+", eventscript:"+eventscript+", description:"+description+
 	", transitionto:"+transitionto+", decisionHandler:"+decisionHandler+
-	", decisionExpression:"+decisionExpression;
+	", decisionExpression:"+decisionExpression+" ,email:"+email;
 	
 }
  

@@ -18,6 +18,9 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pojo.CreateMailFromTemplate;
+
+import actionclass.SendMailAC;
 import businesslogic.BaseBL;
 
 import com.opensymphony.workflow.InvalidInputException;
@@ -151,137 +154,104 @@ public String executeScrflow(){
 	ArrayList<String> errorList = new ArrayList<String>();
 	String url=""; 
 	String decision=null;
+	boolean emailsent = false;
+	ArrayList<String>hmActions = new ArrayList<String>();
 	try {
-		if (create != null) {
-			if (activityname != null && !"".equals(activityname)) {
-				ApplicationDTO appdto = new ApplicationDTO();
-				debug(0, "activityname:" + activityname);
-				//String appid = wflBean.getNewApplicationId();
-				String WflName = wflBean.getSuitableWorkflowName(activityname);
-				//wflid = wflBean.workflowInit(appid, WflName, null);
-				ArrayList<String> hmActions = wflBean.getNextScrFlowActions(WflName, "",decision); //rest of the places wflid = WflName
-				if ("".equals(url) && hmActions.size() > 0) {
-					String actionname = (String) hmActions.get(0);
-					url = wflBean.getScreenId(actionname);
-//					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
-//					appdto.setCurrentAction(actionname);
+		do{		emailsent = false;
+				if (create != null) {
+					if (activityname != null && !"".equals(activityname)) {
+						ApplicationDTO appdto = new ApplicationDTO();
+						debug(0, "activityname:" + activityname);
+						String WflName = wflBean.getSuitableWorkflowName(activityname);
+						hmActions = wflBean.getNextScrFlowActions(WflName, "",decision); //rest of the places wflid = WflName
+						if ("".equals(url) && hmActions.size() > 0) {
+							String actionname = (String) hmActions.get(0);
+							url = wflBean.getScreenId(actionname);
+						}
+						wflBean.createApplicationScrWfl(usrDTO.getUserid(),WflName, appid, "S", hmActions);//'S' for started
+					}
+				} else if (action != null) {
+					if (doString != null && !doString.equals("")) {
+						preSubmitProcessBL(screenName);
+						wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
+						 postSubmitProcessBL(screenName);
+					} else {
+						debug(5, "WorkflowAC:doString is null");
+					}
+					
+					debug(1, "AppId:" + appid+ "  screenflowid:" + wflid+ " doString:(expecting CreateRequest, RFQ etc..)" + doString + "  ");
+		
+					hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
+					if ("".equals(url) && hmActions.size() > 0) {
+						String actionname = (String) hmActions.get(0);
+						url = wflBean.getScreenId(actionname);
+					}
+					wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
+		
+				} else if (navigateto != null) {
+					String pageName = navigateto;
+					url = wflBean.getScreenId(pageName);
+				} else if(cancel != null){
+					
+					wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
+					preSubmitProcessBL(screenName); 
+					hmActions = new ArrayList<String>();
+					if(retBLhm.get("nextAction") != null){
+						doString = (String) retBLhm.get("nextAction");
+						System.out.println("doString ##" + doString);
+						hmActions.add(doString);
+						url = wflBean.getScreenId(doString);
+					}
+					else{
+						hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
+						if ("".equals(url) && hmActions.size() > 0) {
+							String actionname = (String) hmActions.get(0);
+							url = wflBean.getScreenId(actionname);
+						}
+					}
+					if( hmActions.size() > 0)
+					wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
+					
 				}
-				wflBean.createApplicationScrWfl(usrDTO.getUserid(),WflName, appid, "S", hmActions);//'S' for started
-//				appdto.setWflactions(hmActions);
-//				appdto.setWflid(wflid);
-//				session.put("applicationDTO", appdto);
-			}
-		} else if (action != null) {
-			//uses appid, wflid, doString
-//			ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
-//			if (appdto == null)
-//				appdto = new ApplicationDTO();
-//			if (appid != null && appid.length() > 0) {
-//				appdto.setAppid(appid);
-//			}
-//			if (wflid != -1 && wflid > 0) {
-//				appdto.setWflid(wflid);
-//			}
-//
-//			String wflSession = appdto.getAppid();
-
-			if (doString != null && !doString.equals("")) {
-//				int actionid = Integer.parseInt(doString);
-//				try {
-//					wflBean.doAction(wflSession/*appid*/, wflid, actionid);
-//
-//				} catch (InvalidInputException e) {
-//					e.printStackTrace();
-//				} catch (WorkflowException e) {
-//					e.printStackTrace();
-//				}
+				else if(approve != null){
+					
+					wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
+					preSubmitProcessBL(screenName); 
+					hmActions = new ArrayList<String>();
+					if(approve.equals("true")){
+						decision="approved";
+					}else{
+						decision="rejected";
+					}
+					hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
+					String actionname = null;
+					if ("".equals(url) && hmActions.size() > 0) {	
+						actionname = (String) hmActions.get(0);
+						url = wflBean.getScreenId(actionname);
+					}
+					wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
+					if(actionname.equals("End"))
+					{				
+						wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", "End");//'C' & End for close
+					}			
+				}
 				
-				preSubmitProcessBL(screenName);
-				wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
-				//postSubmitProcessBL(screenName);
-			} else {
-				debug(5, "WorkflowAC:doString is null");
-			}
-			
-			debug(1, "AppId:" + appid+ "  screenflowid:" + wflid+ " doString:(expecting CreateRequest, RFQ etc..)" + doString + "  ");
-
-			ArrayList<String> hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
-			if ("".equals(url) && hmActions.size() > 0) {
-				String actionname = (String) hmActions.get(0);
-				url = wflBean.getScreenId(actionname);
-//				appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
-//				appdto.setCurrentAction(actionname);
-			}
-			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
-//			appdto.setWflid(wflid);
-//			appdto.setWflactions(hmActions);
-//			session.put("applicationDTO", appdto);
-		} else if (navigateto != null) {
-//			ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
-//			HashMap<String, Integer> hmactions = appdto.getWflactions();
-			//wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
-			String pageName = navigateto;
-			url = wflBean.getScreenId(pageName);
-//			appdto.setCurrentAction(pageName);
-//			appdto.setCurrentActionId(hmactions.get(pageName));
-//			appdto.setWflid(wflid);
-			
-		} else if(cancel != null){
-			
-			wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
-			preSubmitProcessBL(screenName); 
-			ArrayList<String> hmActions = new ArrayList<String>();
-			if(retBLhm.get("nextAction") != null){
-				doString = (String) retBLhm.get("nextAction");
-				System.out.println("doString ##" + doString);
-				hmActions.add(doString);
-				url = wflBean.getScreenId(doString);
-			}
-			else{
-				hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
-				if ("".equals(url) && hmActions.size() > 0) {
-					String actionname = (String) hmActions.get(0);
-					url = wflBean.getScreenId(actionname);
-//					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
-//					appdto.setCurrentAction(actionname);
+				
+				if(hmActions != null && hmActions.size()>0){
+					ScrFlowNode sfn = wflBean.populateScreenflowNode(wflid,hmActions.get(0));
+					HashMap<String,String> emailProp = sfn.getEmail();
+					if(emailProp !=null && emailProp.size()>0){
+						sendEmail(emailProp);
+						emailsent = true;
+					}
+					doString = hmActions.get(0);
 				}
-			}
-			if( hmActions.size() > 0)
-			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
+				
+				//Doing another activity right away here of Sending mails.
+				
+				debug(5,"emailsent="+emailsent);
+		}while(emailsent == true);
 			
-		}
-		else if(approve != null){
-			
-			wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'C' for close
-			preSubmitProcessBL(screenName); 
-			ArrayList<String> hmActions = new ArrayList<String>();
-			/*if(retBLhm.get("nextAction") != null){
-				doString = (String) retBLhm.get("nextAction");
-				System.out.println("doString ##" + doString);
-				hmActions.add(doString);
-				url = wflBean.getScreenId(doString);
-			}*/
-			//else{
-			if(approve.equals("true")){
-				decision="approved";
-			}else{
-				decision="rejected";
-			}
-			hmActions = wflBean.getNextScrFlowActions(wflid, doString, decision);
-			String actionname = null;
-			if ("".equals(url) && hmActions.size() > 0) {	
-				actionname = (String) hmActions.get(0);
-				url = wflBean.getScreenId(actionname);
-//					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
-//					appdto.setCurrentAction(actionname);
-			}
-			//}
-			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
-			if(actionname.equals("End"))
-			{				
-				wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", "End");//'C' for close
-			}			
-		}
 		
 	} catch (Exception e) {
 	debug(5,"Some Error has occured:"+e.getMessage());
@@ -330,6 +300,52 @@ public String executeScrflow(){
 }
 
 
+
+/**
+ * 
+ * @param emailProp is populated from screen flow xml emailProp {template:"",sendto:"",msgbody:""}
+ * Requires more parameters like where clause and other replacer text for template operation
+ * 
+ * basically all subsequent writes will overwrite previous property thus screen properties is given more importance.
+ */
+private void sendEmail(HashMap<String,String> emailProp) {
+
+	CreateMailFromTemplate  cm = new CreateMailFromTemplate();
+	try {
+		
+		Map map = parameter;
+ 		Iterator iter = map.keySet().iterator();
+		HashMap<String,String> buslogHm = new HashMap<String, String>();
+		buslogHm.putAll(emailProp); 
+		
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			String values[] =  (String[]) map.get(key);
+			if(values.length >0) 
+			buslogHm .put(key, values[0]);
+		}
+		
+		UserDTO usr = (UserDTO) (session.get("userSessionData"));
+		String id = usr.getUserid();
+		buslogHm.put("roleid", usr.getRoleid());
+		buslogHm.put("username", usr.getUsername());
+		buslogHm.put("userid", id);	
+		cm.createEmail(emailProp.get("template"), buslogHm	);
+		SendMailAC smAC = new SendMailAC();
+		smAC.setSendto(cm.getSendto());
+		smAC.setFrom(cm.getFrom());
+		smAC.setSubject(cm.getSubject());
+		smAC.setMsgbody(cm.getMsgbody());
+		smAC.sendJavaMail();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
+
+private void postSubmitProcessBL(String screenName2) {
+	// TODO Auto-generated method stub
+	
+}
 
 public String getCancel() {
 	return cancel;

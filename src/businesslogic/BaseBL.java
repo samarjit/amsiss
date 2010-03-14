@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This Interface comprises of functions that are to be called at various CRUD operations stages.  
+ * This Interface comprises of functions that are to be called at various CRUD operations stages. 
+ * All the methods take an HashMap by convention request parameter Map and UserDTO is passed
+ * to each method 
  * 
  */
 public interface BaseBL extends Serializable {

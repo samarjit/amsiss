@@ -8,6 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import pojo.CreateMailFromTemplate;
+
+import bsh.EvalError;
+import bsh.Interpreter;
+
 import com.opensymphony.workflow.InvalidActionException;
 import com.opensymphony.workflow.InvalidEntryStateException;
 import com.opensymphony.workflow.InvalidInputException;
@@ -26,8 +31,10 @@ import dao.WorkflowDAO;
 
 public class  WorkflowBean
 {
-	private void log(String s){
-		System.out.println(s);
+	private void debug(int priority, String s){
+		if(priority>-1){
+			System.out.println("WorkflowAC:"+s);
+		}
 	}
 	  Workflow workflow =  null;
 	long workflowId = 0;
@@ -196,10 +203,35 @@ wf.doAction(id, 1, inputs);*/
 	public void changeStageApplicationScrWfl(String userid, String wflid,String appid, String status, String doString) {
 		WorkflowDAO wflDAO = new WorkflowDAO();
 		wflDAO.changeStageApplicationScrWfl(  userid,   wflid,  appid,   status,   doString);
+		ScreenFlow scrfl = new ScreenFlow();
+		ScrFlowNode sfn = scrfl.populateScrFlowNode(wflid,doString);
+		 String script = sfn.getEventscript();
+		 Interpreter i = new Interpreter(); 
+			try {
+				if(script!=null) {
+					System.out.println("=========Executing BSH script============:\n"+script+" :::");
+					i.eval(script);
+				}
+				if(i.get("propertySet")!=null){
+					scrfl.setPropertyset((HashMap)i.get("propertySet"));
+				}
+				debug(0,"Eval="+ i.get("propertySet") );
+			} catch (EvalError e) {
+				System.out.print("Exception in Script evaluation:"+e.getMessage()+" "+e.getErrorLineNumber());
+				 e.printStackTrace();
+			}
+		 
+		
 	}
-
+	
 	public void updateApplicationScrWfl(String userid, String wflid,String appid, String status, ArrayList<String> hmActions) {
 		WorkflowDAO wflDAO = new WorkflowDAO();
 		wflDAO.updateApplicationScrWfl(  userid,   wflid,  appid,   status,   hmActions);
+	}
+
+	public ScrFlowNode populateScreenflowNode(String wflid, String doString) {
+		ScreenFlow scrfl = new ScreenFlow();
+		ScrFlowNode sfn = scrfl.populateScrFlowNode(wflid,doString);
+		return sfn;
 	}
 }

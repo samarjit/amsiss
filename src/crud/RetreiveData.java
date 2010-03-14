@@ -298,7 +298,7 @@ public class RetreiveData  {
 										+ " style='display:none'>" + ls
 										+ "</div>" + ls.getLblname() + "</th>";
 							}
-							htmlTemp += "<td id=" + fname + "> " + data + "</td>";
+							htmlTemp += "<td id=" + fname + ">      " + data + "</td>";
 							tempPanelData.put(fname, data);
 						}
 						if (firstItr) {
