@@ -3173,56 +3173,68 @@ Insert into PANEL_FIELDS
     'btnAllocsearch', 'VARCHAR', NULL, 'onclick=''search3()''', NULL, 
     '0', '0', NULL, 'BUTTON', NULL, 
     NULL, NULL, NULL);
+
 Insert into PANEL_FIELDS
    (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
     IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
     NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
     PRKEY, AUTOGEN, ELEM_ATTRIB)
  Values
-   ('frmAllocationList', 'panelFieldsAlloc', '1', 'Asset ID', 'assetid', 
+   ('frmAllocationList', 'panelFieldsAlloc', '2', 'Asset ID', 'assetid', 
     'assetid', 'VARCHAR', 'ASSET_ID', NULL, NULL, 
+    '0', '1', NULL, 'TEXTBOX', 'Y', 
+    'Y', NULL, NULL);
+Insert into PANEL_FIELDS
+   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
+    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
+    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
+    PRKEY, AUTOGEN, ELEM_ATTRIB)
+ Values
+   ('frmAllocationList', 'panelFieldsAlloc', '3', 'Asset Serial No.', 'assetno', 
+    'assetno', 'VARCHAR', 'ASSET_SNO', NULL, NULL, 
+    '1', '0', NULL, 'TEXTBOX', 'Y', 
+    NULL, NULL, NULL);
+Insert into PANEL_FIELDS
+   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
+    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
+    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
+    PRKEY, AUTOGEN, ELEM_ATTRIB)
+ Values
+   ('frmAllocationList', 'panelFieldsAlloc', '4', 'Host Name', 'assethost', 
+    'assethost', 'VARCHAR', 'ASSET_HOSTNAME', NULL, NULL, 
+    '1', '1', NULL, 'TEXTBOX', 'Y', 
+    NULL, NULL, NULL);
+Insert into PANEL_FIELDS
+   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
+    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
+    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
+    PRKEY, AUTOGEN, ELEM_ATTRIB)
+ Values
+   ('frmAllocationList', 'panelFieldsAlloc', '5', 'User Name', 'assetusername', 
+    'assetusername', 'VARCHAR', 'ASSET_USERNAME', NULL, NULL, 
+    '2', '0', NULL, 'TEXTBOX', 'Y', 
+    'Y', NULL, NULL);
+Insert into PANEL_FIELDS
+   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
+    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
+    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
+    PRKEY, AUTOGEN, ELEM_ATTRIB)
+ Values
+   ('frmAllocationList', 'panelFieldsAlloc', '6', 'Allocated to IP', 'assetip', 
+    'assetip', 'VARCHAR', 'ASSET_IP_ADDRESS', NULL, NULL, 
+    '2', '1', NULL, 'TEXTBOX', 'Y', 
+    NULL, NULL, NULL);
+Insert into PANEL_FIELDS
+   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
+    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
+    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
+    PRKEY, AUTOGEN, ELEM_ATTRIB)
+ Values
+   ('frmAllocationList', 'panelFieldsAlloc', '1', 'Allocation ID', 'allocid', 
+    'allocid', 'VARCHAR', 'ALLOC_ID', NULL, NULL, 
     '0', '0', NULL, 'TEXTBOX', 'Y', 
     'Y', NULL, NULL);
-Insert into PANEL_FIELDS
-   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
-    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
-    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
-    PRKEY, AUTOGEN, ELEM_ATTRIB)
- Values
-   ('frmAllocationList', 'panelFieldsAlloc', '2', 'Asset Serial No.', 'assetno', 
-    'assetno', 'VARCHAR', 'ASSET_SNO', NULL, NULL, 
-    '0', '1', NULL, 'TEXTBOX', 'Y', 
-    NULL, NULL, NULL);
-Insert into PANEL_FIELDS
-   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
-    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
-    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
-    PRKEY, AUTOGEN, ELEM_ATTRIB)
- Values
-   ('frmAllocationList', 'panelFieldsAlloc', '3', 'Host Name', 'assethost', 
-    'assethost', 'VARCHAR', 'ASSET_HOSTNAME', NULL, NULL, 
-    '0', '1', NULL, 'TEXTBOX', 'Y', 
-    NULL, NULL, NULL);
-Insert into PANEL_FIELDS
-   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
-    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
-    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
-    PRKEY, AUTOGEN, ELEM_ATTRIB)
- Values
-   ('frmAllocationList', 'panelFieldsAlloc', '4', 'User Name', 'assetusername', 
-    'assetusername', 'VARCHAR', 'ASSET_USERNAME', NULL, NULL, 
-    '1', '1', NULL, 'TEXTBOX', 'Y', 
-    'Y', NULL, NULL);
-Insert into PANEL_FIELDS
-   (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
-    IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
-    NROW, NCOL, CLASSNAME, HTMLELM, STORE_FLG, 
-    PRKEY, AUTOGEN, ELEM_ATTRIB)
- Values
-   ('frmAllocationList', 'panelFieldsAlloc', '5', 'Allocated to IP', 'assetip', 
-    'assetip', 'VARCHAR', 'ASSET_IP_ADDRESS', NULL, NULL, 
-    '0', '1', NULL, 'TEXTBOX', 'Y', 
-    NULL, NULL, NULL);
+
 Insert into PANEL_FIELDS
    (SCR_NAME, PANEL_NAME, ORDERNO, LBLNAME, FNAME, 
     IDNAME, DATATYPE, DBCOL, VALIDATION, STRQUERY, 
