@@ -28,6 +28,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import bsh.EvalError;
+import bsh.Interpreter;
 import businesslogic.BaseBL;
 
 /**
@@ -36,7 +38,7 @@ import businesslogic.BaseBL;
  */
 public class ScreenFlow {
 	private static boolean initialized = false;
-	HashMap propertyset ;
+	private HashMap propertyset ;
 	
 	public ScreenFlow() {
 		super();
@@ -50,6 +52,16 @@ public class ScreenFlow {
 	}
  
 	
+	public HashMap getPropertyset() {
+		return propertyset;
+	}
+
+
+	public void setPropertyset(HashMap propertyset) {
+		this.propertyset = propertyset;
+	}
+
+
 /**This function parses the given file.
  * 
  */
@@ -215,7 +227,19 @@ public ArrayList<String> getNextActions(String scrFlowName, String currentAction
 							}
 						}
 					}
-				 
+				 if( !found ){ 
+						NodeList nlstate = (NodeList) xpath.evaluate("process-definition/mail-node", doc, XPathConstants.NODESET);
+						for(int i =0 ;i<nlstate.getLength();i++){
+							Node node =  nlstate.item(i);
+							if(node.getNodeType() == Document.ELEMENT_NODE){
+								Element elm = (Element) node;
+								if(currentAction.equals(elm.getAttribute("name"))){
+									currentElement = elm;
+									 found=true; break;
+								}
+							}
+						}
+					}
 				 if( !found ){
 					 retar.add("Element Not Found");
 					 throw new Exception("element not found");
@@ -266,7 +290,7 @@ public ArrayList<String> getNextActions(String scrFlowName, String currentAction
 
 
 /**
- * gets the screen Name
+ * gets the screen Name, consider using database table before using screen name from screenflow xml 
  * @param scrFlowName
  * @param currentAction
  * @return screen name
@@ -382,17 +406,37 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 	 * @throws IllegalAccessException  while class loading
 	 * @throws InstantiationException while class was instanciation
 	 */
+	/**
+	 * @param args
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ScreenFlow scf = new ScreenFlow();
 		scf.init();
-		System.out.println("NextAction:"+scf.getNextActions("scrrfqwfl", "", null));
-		System.out.println("Current Screen Name:"+scf.getActionScreenName("newwfl", "start-state1"));
-		System.out.println("BusinessLogic:"+scf.getBusinessLogic("loginflow", ""));
-		String className = scf.getBusinessLogic("loginflow", "start");
-		Class aclass = Class.forName(className);
-		BaseBL basebl = (BaseBL) aclass.newInstance();
+		System.out.println("NextAction:"+scf.getNextActions("newwfl", "mail-node1", null));
+		//System.out.println("Current Screen Name:"+scf.getActionScreenName("newwfl", "start-state1"));
+		//System.out.println("BusinessLogic:"+scf.getBusinessLogic("loginflow", ""));
+		//String className = scf.getBusinessLogic("loginflow", "start");
+		//Class aclass = Class.forName(className);
+		//BaseBL basebl = (BaseBL) aclass.newInstance();
 		System.out.println("findScrFlowNode:");
-		scf.populateScrFlowNode ("loginflow", "start");
+		ScrFlowNode sfn = scf.populateScrFlowNode ("newwfl", "mail-node1");
+		String script = sfn.getEventscript();
+		Interpreter i = new Interpreter(); 
+		try {
+			if(script!=null) {
+				System.out.println("=========Executing BSH script============:\n"+script+" :::");
+				i.eval(script);
+			}
+			 
+			System.out.println("Eval="+ i.get("propertySet") );
+		} catch (EvalError e) {
+			System.out.print("Exception in Script evaluation:"+e.getMessage()+" "+e.getErrorLineNumber());
+			 e.printStackTrace();
+		}
+		
 		System.out.println();
 	}
 	
@@ -417,22 +461,48 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 			Document doc = parserXML(url.getFile());
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			NodeList nodelist = (NodeList) xpath.evaluate("/process-definition/start-state[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+			if(nodelist != null && nodelist.getLength()>0){
+				scrflownode.setNodeType("start-state");
+			}
 			if(nodelist == null || nodelist.getLength() <1){
 				nodelist = (NodeList) xpath.evaluate("/process-definition/state[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+				scrflownode.setNodeType("state");
 			}
 			if(nodelist == null || nodelist.getLength() <1){
 				nodelist = (NodeList) xpath.evaluate("/process-definition/task-node[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+				scrflownode.setNodeType("task-node");
 			}
 			if(nodelist == null || nodelist.getLength() <1){
 				nodelist = (NodeList) xpath.evaluate("/process-definition/fork[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+				scrflownode.setNodeType("fork");
 			}
 			if(nodelist == null || nodelist.getLength() <1){
 				nodelist = (NodeList) xpath.evaluate("/process-definition/decision[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+				scrflownode.setNodeType("decision");
 			}
 			if(nodelist == null || nodelist.getLength() <1){
 				nodelist = (NodeList) xpath.evaluate("/process-definition/join[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+				scrflownode.setNodeType("join");
 			}
-
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/mail-node[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+				scrflownode.setNodeType("mail-node");
+				HashMap<String,String> emailPropSet = new HashMap<String, String>();
+				node = nodelist.item(0); 
+				emailPropSet.put("template", (String)((Element)node).getAttribute("template"));
+				emailPropSet.put("sendto", (String)((Element)node).getAttribute("to"));
+				Element elm = (Element)node;
+			 
+					NodeList subject = elm.getElementsByTagName("subject");
+					String subjectstr = trim(subject.item(0).getTextContent());      
+					NodeList text = elm.getElementsByTagName("text");
+					String textstr = trim(text.item(0).getTextContent());      
+				 
+				emailPropSet.put("subject", subjectstr);
+				emailPropSet.put("msgbody", textstr);
+				System.out.println(emailPropSet);
+				scrflownode.setEmail(emailPropSet);
+			}
 			if(nodelist != null && nodelist.getLength()>0){
 				found = true;
 				Element descnode = (Element) nodelist.item(0);
@@ -461,6 +531,11 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 						businessLogic =  ((Element)innerNodeList.item(0)).getAttribute("expression");
 						scrflownode.setEventexpression(businessLogic);
 						}
+					innerNodeList = (NodeList) xpath.evaluate("event/script", node, XPathConstants.NODESET);
+					if(innerNodeList !=null && innerNodeList.getLength() >0){
+						businessLogic =  trim(((Element)innerNodeList.item(0)).getTextContent());
+						scrflownode.setEventscript(businessLogic);
+						}
 					innerNodeList = (NodeList) xpath.evaluate("transition", node, XPathConstants.NODESET);
 					if(innerNodeList !=null && innerNodeList.getLength() >0){
 						ArrayList<String> transitionto = new ArrayList<String>();
@@ -478,8 +553,7 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 					
 				} 
 			}
-				
-			System.out.println(scrflownode);
+			System.out.println("ScrFlowNode:"+scrflownode);	
 		}catch(Exception e){
 			e.printStackTrace();
 		}

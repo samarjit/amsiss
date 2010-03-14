@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container name="" width="1074" height="417">
-  <node name="CaptureRequest" x="97" y="44" width="132" height="36">
+<root-container name="" width="886" height="346">
+  <node name="CaptureRequest" x="95" y="24" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
@@ -14,11 +14,11 @@
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="Allocate" x="180" y="280" width="132" height="36">
+  <node name="Allocate" x="266" y="244" width="132" height="36"/>
+  <node name="end" x="36" y="284" width="132" height="36"/>
+  <node name="mail-node1" x="213" y="93" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="end" x="36" y="284" width="132" height="36"/>
-  <node name="mail-node1" x="260" y="347" width="132" height="36"/>
 </root-container>

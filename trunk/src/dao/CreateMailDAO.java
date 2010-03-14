@@ -8,7 +8,7 @@ import dbconn.DBConnector;
 
 public class CreateMailDAO {
 
-	public HashMap<String,String> findByTemplate(String template) {
+	public HashMap<String,String> findMailDetailsByTemplate(String template) {
 		String SQL = " SELECT  SENDTOQRY,     SENDTOQWHERE, SUBJECT,FROMTEXT, BODYTEXT FROM EMAIL_TEMPLATE  where TEMPLATENAME ='"+template+"'";
 		HashMap<String,String> hmret = new HashMap<String,String>();
 		CachedRowSet crs = null;
