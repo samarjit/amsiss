@@ -47,4 +47,11 @@ Insert into AMS_MENU
    (MENU_ID, MENU_NAME, MENU_ROLE_ID, MENU_ACTION)
  Values
    (7, 'Inventory', 'ADMIN', 'template1.action?screenName=frmAssetList');
+
+Insert into AMS_MENU
+   (MENU_ID, MENU_NAME, MENU_ROLE_ID, MENU_ACTION)
+ Values
+   (13, 'View Workflow', 'ADMIN', 'viewworkflow.jsp');
 COMMIT;
+   
+
