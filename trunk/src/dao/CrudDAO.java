@@ -248,10 +248,15 @@ public class CrudDAO {
 			}} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			 catch (NullPointerException n) {
+				 continue;
+			}
 			 catch (Exception e) {
 				 debug(5,SQL);
 					e.printStackTrace();
-			}finally{
+			}
+			 
+			 finally{
 					if(crs != null){
 						try {
 							crs.close();
