@@ -18,6 +18,7 @@ function populate()
 
 function prepopulate(param)
 {
+	
 	var json = JSON.parse(param);
 	var poid= json.poid;
 	var postatus= json.postatus;
@@ -193,17 +194,21 @@ jQuery(function(){
 
 function dnSave() 
 {
+	alert("Calling dnsave method>>"+screenMode);
 	if(screenMode == "create")
 	{
-		if(document.getElementById("itemid").selectedIndex == 0){		
+		if(document.getElementById("itemname").selectedIndex == 0){		
 			showerror("Please choose an item name.");
 		}
 		else
 		{
 		document.getElementById("deliverynoteid").value = "AUTOGEN_SEQUENCE_ID";
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmDeliveryNote";
-		url = url + "&itemid=" + document.getElementById("itemid").value;
+		url = url + "&itemname=" + document.getElementById("itemname").value;
 		url = url + "&itemquantity=" + document.getElementById("itemquantity").value;
+		
+		url = url + "&dnpoid=" + document.getElementById("poid").value;
+		alert(url);
 		//url = url + "&dnpurchaseorderid=" + document.getElementById("dnpurchaseorderid").value;
 		//alert(document.getElementById("deliverynoteid").value);
 		//action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
@@ -248,8 +253,18 @@ function saveCallBack(val)
 			k.json1 = valuesar;
 			var myJSONText = JSON.stringify(k, replacer,"");
 			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
-			alert(whereClause);
+			//alert(whereClause);
 			populate();
+			
+		/*	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
+			prompt("url",url);	
+			url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=";
+			//alert(url);
+			// add key:vlaue to url
+			sendAjaxGet(url, saveCallBack);*/
+			
+			
+			
 		}
 	}
 }
@@ -318,6 +333,9 @@ function replacer(key, value) {
 
 function prepareInsertData() 
 {
+	
+	document.getElementById("dnpoid").value=document.getElementById("poid").value;
+	
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	var pclass = new Array();
 	for (var i=0; i<dataTable.length; i++) 
@@ -328,7 +346,7 @@ function prepareInsertData()
 		var j = 0;
 		jQuery.each(elem,function(index,item)
 		{
-			requestar[j] = new KeyValue(item.id, item.value);	
+			requestar[j] = new KeyValue(item.id, item.value);
 			j++;						
 		});
 		pclass[i] = new panelClass(dataTable[i].id,requestar);					
@@ -336,6 +354,7 @@ function prepareInsertData()
 	var k = new Object();
 	k.json = pclass;
 	var myJSONText = JSON.stringify(k,replacer,"");
+	alert("myJSONText>>"+myJSONText);
 	return myJSONText;			
 }
 
@@ -385,7 +404,7 @@ function makeWhereClause()
 		var myJSONText = JSON.stringify(k, replacer,"");
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 	}
-	alert(">>Where clause>>"+whereClause);
+	//alert(">>Where clause>>"+whereClause);
 	return whereClause;	 
 }
 
@@ -399,8 +418,7 @@ function insertData()
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 }	
 
-/*
-function submitactivity(){
+/*function submitactivity(){
 	alert("here in submit activity");
 	alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
@@ -411,7 +429,6 @@ function submitactivity(){
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 		
-	}
 
 function submitScreenFlowactivity()
 {
