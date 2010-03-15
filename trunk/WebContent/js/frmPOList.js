@@ -1,7 +1,6 @@
 
 function search(){
 		 
-	
 		var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
 		if(document.getElementById("spoid"))
 			url=url+'&spoid='+document.getElementById("spoid").value;
@@ -197,28 +196,36 @@ function viewdetails(btnname){
 	return true;	 
 
 }
-
+var poid="";
+var postatus="";
 function createAllocfromSel()
 {
-	document.getElementById("formwhere").screenName.value = "frmDeliveryNote";
-	document.getElementById("screenMode").value= "create";
-	
-	if(typeof selectedIdx == 'undefined')
+	if(selectedIdx<=0)
 	{
-		alert("please select a purchase order");
+		showalert("please select a purchase order");
 		return;
 	}
-	var poid = getSelectedRowData("searchdiv","poid");
-	var postatus = getSelectedRowData("searchdiv","postatus");
+	poid = getSelectedRowData("searchdiv","poid");
+	postatus = getSelectedRowData("searchdiv","postatus");
+		
+	if(postatus == " NEW" || postatus != " SEND")
+	{
+		showerror("Can't create the delivery note for this purchase order id.");
+		return;
+	}
+	else if(postatus==" SEND")
+	{
+		var k = new Object();
+		k.poid = poid;
+		k.postatus = postatus;
 	
-	var k = new Object();
-	k.poid = poid;
-	k.postatus = postatus;
+		var myJSONText = JSON.stringify(k, replacer,"");
+		jQuery('#passedonvalues').val(myJSONText);
 	
-	var myJSONText = JSON.stringify(k, replacer,"");
-	jQuery('#passedonvalues').val(myJSONText);
-	
-	document.getElementById("formwhere").submit();
+		document.getElementById("formwhere").screenName.value = "frmDeliveryNote";
+		document.getElementById("screenMode").value= "create";
+		document.getElementById("formwhere").submit();
+	}
 }
 
 function getSelectedRowData(searchdivId,colname){
