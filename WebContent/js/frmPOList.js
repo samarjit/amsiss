@@ -1,6 +1,7 @@
 
 function search(){
 		 
+	
 		var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
 		if(document.getElementById("spoid"))
 			url=url+'&spoid='+document.getElementById("spoid").value;
@@ -10,7 +11,10 @@ function search(){
 			url=url+'&spostatus='+document.getElementById("spostatus").value;
 		if(document.getElementById("spodate"))
 			url=url+'&spodate='+document.getElementById("spodate").value;
-	
+		
+		var time = new Date();
+		url=url+'&curTime='+time.getTime();
+		
 		var pagesize = jQuery('.searchdiv .pagesize').val();
 		var pageno = jQuery('.searchdiv .pageno').val();
 		
@@ -175,7 +179,7 @@ function viewdetails(btnname){
 		var k = new Object();
 		k.json = requestar;
 		var myJSONText = JSON.stringify(k, replacer,"");
-		alert("JSON Text>>"+myJSONText);
+		//alert("JSON Text>>"+myJSONText);
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 		
 		//document.getElementById("dnpurchaseorderid").value=poid;
@@ -196,6 +200,7 @@ function viewdetails(btnname){
 	return true;	 
 
 }
+
 var poid="";
 var postatus="";
 function createAllocfromSel()
@@ -227,6 +232,7 @@ function createAllocfromSel()
 		document.getElementById("formwhere").submit();
 	}
 }
+
 
 function getSelectedRowData(searchdivId,colname){
 	var celldata="";
