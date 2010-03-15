@@ -3,22 +3,34 @@ function populate()
 	alert("Screen Mode>>"+screenMode);
 	fnAdjustTableWidth();
 	
-	if(vpassedonvalues != null && vpassedonvalues.trim() != ""){
-		prepopulate(vpassedonvalues);
-		disable_fields();
-	}
-	
-	if(!(whereClause == ""))
+	if(screenMode=="create")
 	{
-		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
-		url=url+"&whereClause="+ whereClause;		
-		sendAjaxGet(url, dnCallBack); //call this method in commonjs.js.
-	}	
+		if(vpassedonvalues != null && vpassedonvalues.trim() != ""){
+			prepopulate(vpassedonvalues);
+			disable_fields();
+		}
+		
+		if(!(whereClause == ""))
+		{
+			var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
+			url=url+"&whereClause="+ whereClause;		
+			sendAjaxGet(url, dnCallBack); //call this method in commonjs.js.
+		}
+	}
+	else if(screenMode=="viewdetails")
+	{
+		if(!(whereClause == ""))
+		{
+			var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
+			url=url+"&whereClause="+ whereClause;		
+			sendAjaxGet(url, dnCallBack); //call this method in commonjs.js.
+		}
+		
+	}
 }
 
 function prepopulate(param)
 {
-	
 	var json = JSON.parse(param);
 	var poid= json.poid;
 	var postatus= json.postatus;
@@ -213,7 +225,9 @@ function dnSave()
 		//alert(document.getElementById("deliverynoteid").value);
 		//action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 		//url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=true";
-		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=true";
+		//url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=true";
+		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&action=true";
+		
 		sendAjaxGet(url, saveCallBack);
 		}
 	}
@@ -228,8 +242,10 @@ function dnSave()
 	}
 }
 //***for successful and error message ***
+//Error/Successful Message for deleting
 function saveCallBack(val) 
 {
+	//show success message 
 	var json = JSON.parse(val);
 	if(json.error !=null )
 	{
@@ -238,34 +254,16 @@ function saveCallBack(val)
 	else 
 	{
 		showalert(json.message);
-		if(json.workflowurl != null)
-		{
-			alert("workflow:"+json.workflowurl);
-			location.href = json.workflowurl ;
-		}
-		else
-		{//extracting all fields whereclause form insert key value pair of each panel
-			alert("json.workflowurl==null");
-			var allfields = prepareInsertData();
-			var json1 = JSON.parse(allfields);
-			var valuesar = json1.json1[0].valuesar;
-			var k = new Object();
-			k.json1 = valuesar;
-			var myJSONText = JSON.stringify(k, replacer,"");
-			whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
-			//alert(whereClause);
-			populate();
-			
-		/*	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
-			prompt("url",url);	
-			url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=";
-			//alert(url);
-			// add key:vlaue to url
-			sendAjaxGet(url, saveCallBack);*/
-			
-			
-			
-		}
+		var allfields = prepareInsertData();
+		var json1 = JSON.parse(allfields);
+		var valuesar = json1.json1[0].valuesar;
+		var k = new Object();
+		k.json1 = valuesar;
+		var myJSONText = JSON.stringify(k, replacer,"");
+		whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
+		//alert(whereClause);
+		//populate();
+		location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
 	}
 }
 /*
@@ -283,9 +281,6 @@ function deleteData()
 {
 	whereclause  = makeWhereClause();
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmDeliveryNote";
-	prompt("url",url);	
-	//prompt("url",url);
-	//add key:value to url
 	sendAjaxGet(url, cancelCallBack);//call this method in commonjs.js.
 	
 }
@@ -295,7 +290,7 @@ function cancelCallBack(val) {
 	//show success message 
 	if(val < 0)
 	{
-		showerror("Could not cancel : Error Occured! ");
+		showerror("Could not delete : Error Occured! ");
 	}
 	else
 	{
@@ -335,7 +330,6 @@ function prepareInsertData()
 {
 	
 	document.getElementById("dnpoid").value=document.getElementById("poid").value;
-	
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	var pclass = new Array();
 	for (var i=0; i<dataTable.length; i++) 
@@ -354,7 +348,6 @@ function prepareInsertData()
 	var k = new Object();
 	k.json = pclass;
 	var myJSONText = JSON.stringify(k,replacer,"");
-	alert("myJSONText>>"+myJSONText);
 	return myJSONText;			
 }
 
@@ -363,10 +356,8 @@ function updateData(obj)
 	screenMode = "modify";
 	document.getElementById("btnSave").disabled=false;
 	document.getElementById("btnModify").disabled=true;
-	//document.getElementById("btnDelete").disabled=true;
-	document.getElementById("btnCancel").disabled=true;
-	
-	var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,invoiceno,chqno,orderno,itemid,Status,wflactionid,wflactiondesc,wflid".split(",");
+	document.getElementById("btnDelete").disabled=true;
+	var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,itemid".split(",");
 	for ( var i = 0; i < updateonar.length; i++) 
 	{
 		var arelm = updateonar[i];
@@ -404,7 +395,6 @@ function makeWhereClause()
 		var myJSONText = JSON.stringify(k, replacer,"");
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 	}
-	//alert(">>Where clause>>"+whereClause);
 	return whereClause;	 
 }
 
@@ -428,7 +418,8 @@ function insertData()
 	
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
-		
+}
+
 
 function submitScreenFlowactivity()
 {
