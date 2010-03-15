@@ -2,6 +2,7 @@
 function search()
 {
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
+	
 	if(document.getElementById("sdeliverynoteid"))
 		url=url+'&sdeliverynoteid='+document.getElementById("sdeliverynoteid").value;
 	if(document.getElementById("spurchaseorderid"))
@@ -27,16 +28,16 @@ function search()
 		url=url+'&pagesize='+pagesize;
 	if(pageno)
 		url=url+'&pageno='+pageno;
+	
 	sendAjaxGet(url,mycall); //call this method in commonjs.js.
 }
-
+var selectedIdx =-1;
 //***retrieve the data for the search criteria***
 function mycall(p)
 {
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
 }
-var selectedIdx =0;
 
 //***get the index of selected record***
 function addSelectEvents()
@@ -84,8 +85,7 @@ function replacer(key, value)
 //***get the details of selected record from the list table.***
 function viewdetails()
 {
- 
-	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
+ 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
 	whereClause = "panelFields1WhereClause=";
 	
 	if(selectedIdx<=0)//there is no record selected
@@ -93,7 +93,7 @@ function viewdetails()
 		showerror("Please select a record.");
 		return false;
 	}		
-	else if(listTable != null && selectedIdx != 0)
+	else if(listTable != null && selectedIdx != -1)
 	{
 		var j=0;
 		requestar = new Array();
@@ -107,8 +107,6 @@ function viewdetails()
 				value = jQuery.trim(value);
 				whereClause = whereClause + name + "!" + value + "~#";
 				requestar[j] = new KeyValue(name, value);	
-				alert("name"+name);
-				alert("value"+value);
 				j++;		
 			}
 		}
