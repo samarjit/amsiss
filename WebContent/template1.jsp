@@ -33,11 +33,14 @@
 <s:url var="deleteurl" value="/deletedata.action" />
 <s:url var="generateurl" value="/template1.action" />
 <s:url var="rpcurl" value="/jsrpc.action" />
+<s:url var="sendmail" value="/sendmail.action" />
+<s:url var="poForm" value="/POForm.jsp" />
 
 
 
 <%String ctxpath=request.getContextPath(); %>
 <script language="javascript">
+var mailurlpart='<s:property value="%{#sendmail}"/>';
 var retriveurlpart='<s:property value="%{#retriveurl}"/>';
 var jsrpcurlpart='<s:property value="%{#rpcurl}"/>';
 var generateurlpart='<s:property value="%{#generateurl}"/>';
@@ -49,6 +52,7 @@ var deleteurlpart='<s:property value="%{#deleteurl}"/>';
 var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
 var screenMode= '<s:property value="%{#parameters.screenMode}"/>';
 var vpassedonvalues= '<s:property value="%{#parameters.passedonvalues}" escape="false" />';
+var poFormpart = '<s:property value="%{#poForm}"/>';
 var ctxpath = "<%= ctxpath %>";
 </script>
 
