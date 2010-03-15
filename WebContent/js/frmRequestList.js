@@ -13,7 +13,8 @@ function search(){
 		url=url+'&srequesttype='+document.getElementById("srequesttype").value;
 	var pagesize = jQuery('.searchdiv .pagesize').val();
 	var pageno = jQuery('.searchdiv .pageno').val();
-	url=url+'&sempid='+userId;
+	var time = new Date();
+	url=url+'&sempid='+userId+'&curTime='+time.getTime();
 
 	if(pagesize)
 		url=url+'&pagesize='+pagesize;
@@ -131,6 +132,12 @@ function replacer(key, value) {
 
 
 function viewdetails(){
+	
+	if(selectedIdx == -1)
+	{
+		showerror("Please select a record");
+	}
+	
  
 	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'

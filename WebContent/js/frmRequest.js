@@ -11,6 +11,8 @@ var AMC_Renewal = 5;
 var Pc_Transfer = 6;
 var Release_Resource = 7;
 var Software_Transfer = 8;
+var Miscellaneous = 9;
+
 
 
 function populate()
@@ -151,6 +153,8 @@ function requestCallBackview(p){
 			document.getElementById("PcSwapTransfer").style.display = "none";
 			document.getElementById("ReleaseResource").style.display = "none";
 			document.getElementById("SoftwareTransfer").style.display = "none";
+			document.getElementById("Misc").style.display = "none";
+
 
 
 		} 
@@ -168,6 +172,8 @@ function requestCallBackview(p){
 			document.getElementById("PcOneTransfer").style.display = "none";
 			document.getElementById("ReleaseResource").style.display = "none";
 			document.getElementById("SoftwareTransfer").style.display = "none";
+			document.getElementById("Misc").style.display = "none";
+
 
 		}
 
@@ -184,6 +190,8 @@ function requestCallBackview(p){
 			document.getElementById("PcOneTransfer").style.display = "none";
 			document.getElementById("ReleaseResource").style.display = "none";
 			document.getElementById("SoftwareTransfer").style.display = "none";
+			document.getElementById("Misc").style.display = "none";
+
 
 		}
 
@@ -200,6 +208,8 @@ function requestCallBackview(p){
 			document.getElementById("PcOneTransfer").style.display = "none";
 			document.getElementById("ReleaseResource").style.display = "none";
 			document.getElementById("SoftwareTransfer").style.display = "none";
+			document.getElementById("Misc").style.display = "none";
+
 		}
 
 		if(selType==Pc_Transfer){
@@ -220,6 +230,8 @@ function requestCallBackview(p){
 			document.getElementById("AmcRenewal").style.display = "none"; 
 			document.getElementById("ReleaseResource").style.display = "none";
 			document.getElementById("SoftwareTransfer").style.display = "none";
+			document.getElementById("Misc").style.display = "none";
+
 		}
 
 		if(selType==Release_Resource){
@@ -235,11 +247,32 @@ function requestCallBackview(p){
 			document.getElementById("PcSwapTransfer").style.display = "none";
 			document.getElementById("PcOneTransfer").style.display = "none";
 			document.getElementById("SoftwareTransfer").style.display = "none";
+			document.getElementById("Misc").style.display = "none";
+
 
 		}
 
 		if(selType==Software_Transfer){
 			document.getElementById("SoftwareTransfer").style.display = "block";
+			document.getElementById("NewHardware").style.display = "none";
+			document.getElementById("Software").style.display = "none";
+			document.getElementById("HardwareUpgrade").style.display = "none";
+			document.getElementById("HardwareTypes").style.display = "none";
+			document.getElementById("GeneralHardware").style.display = "none"; 
+			document.getElementById("AmcRenewal").style.display = "none"; 
+			document.getElementById("PcTransferType").style.display = "none";
+			document.getElementById("PcSwapTransfer").style.display = "none";
+			document.getElementById("PcOneTransfer").style.display = "none";
+			document.getElementById("ReleaseResource").style.display = "none";
+			document.getElementById("Misc").style.display = "none";
+
+
+
+		}
+		
+		if(selType==Miscellaneous){
+			document.getElementById("Misc").style.display = "block";
+			document.getElementById("SoftwareTransfer").style.display = "none";
 			document.getElementById("NewHardware").style.display = "none";
 			document.getElementById("Software").style.display = "none";
 			document.getElementById("HardwareUpgrade").style.display = "none";
@@ -261,6 +294,11 @@ function requestCallBackview(p){
 
 }
 
+function sameScreen(){
+	fnAdjustTableWidth();
+	disable_fields();
+}
+
 function generatename(obj){
 	var selIndex = obj.selectedIndex;
 	var empid = obj.options[selIndex].value;
@@ -273,6 +311,13 @@ function generatename(obj){
 function generaterequestname(p){
 	var jobj = JSON.parse(p);
 	document.getElementById("mgrname").value = jobj.mgrname;	
+
+}
+
+function generatedepartmentname(p){
+	var jobj = JSON.parse(p);
+	document.getElementById("departmentname").value = jobj.deptname;	
+
 }
 /*
  * function generatecall(obj){ var selIndex = obj.selectedIndex;
@@ -364,6 +409,8 @@ function generatecall(obj){
 		document.getElementById("PcSwapTransfer").style.display = "none";
 		document.getElementById("ReleaseResource").style.display = "none";
 		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
 	}
 
 
@@ -381,6 +428,8 @@ function generatecall(obj){
 		document.getElementById("PcSwapTransfer").style.display = "none";
 		document.getElementById("ReleaseResource").style.display = "none";
 		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
 
 
 	} 
@@ -398,6 +447,8 @@ function generatecall(obj){
 		document.getElementById("PcOneTransfer").style.display = "none";
 		document.getElementById("ReleaseResource").style.display = "none";
 		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
 
 	}
 
@@ -414,6 +465,8 @@ function generatecall(obj){
 		document.getElementById("PcOneTransfer").style.display = "none";
 		document.getElementById("ReleaseResource").style.display = "none";
 		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
 
 	}
 
@@ -430,6 +483,8 @@ function generatecall(obj){
 		document.getElementById("PcOneTransfer").style.display = "none";
 		document.getElementById("ReleaseResource").style.display = "none";
 		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
 	}
 
 	if(selIndex==Pc_Transfer){
@@ -443,6 +498,8 @@ function generatecall(obj){
 		document.getElementById("AmcRenewal").style.display = "none"; 
 		document.getElementById("ReleaseResource").style.display = "none";
 		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
 	}
 
 	if(selIndex==Release_Resource){
@@ -458,6 +515,8 @@ function generatecall(obj){
 		document.getElementById("PcSwapTransfer").style.display = "none";
 		document.getElementById("PcOneTransfer").style.display = "none";
 		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
 
 	}
 
@@ -473,9 +532,33 @@ function generatecall(obj){
 		document.getElementById("PcSwapTransfer").style.display = "none";
 		document.getElementById("PcOneTransfer").style.display = "none";
 		document.getElementById("ReleaseResource").style.display = "none";
+		document.getElementById("Misc").style.display = "none";
+
+	}
+	
+	
+	if(selIndex==Miscellaneous){
+		document.getElementById("Misc").style.display = "block";
+		document.getElementById("SoftwareTransfer").style.display = "none";
+		document.getElementById("NewHardware").style.display = "none";
+		document.getElementById("Software").style.display = "none";
+		document.getElementById("HardwareUpgrade").style.display = "none";
+		document.getElementById("HardwareTypes").style.display = "none";
+		document.getElementById("GeneralHardware").style.display = "none"; 
+		document.getElementById("AmcRenewal").style.display = "none"; 
+		document.getElementById("PcTransferType").style.display = "none";
+		document.getElementById("PcSwapTransfer").style.display = "none";
+		document.getElementById("PcOneTransfer").style.display = "none";
+		document.getElementById("ReleaseResource").style.display = "none";
 
 
 	}
+	
+	if(selIndex!=0){
+		var url = jsrpcurlpart+"?screenName="+screenName+"&requestType="+selIndex+"&rpcid=getDepartment";
+		sendAjaxGet(url, generatedepartmentname);
+	}
+	
 }
 
 
@@ -600,7 +683,7 @@ function disable_fields(){
 function enable_fields(){
 	screenMode = "modify";
 
-	var updateonar = "mgrid,mgrname,departmentname,remarks,user1,assetidhu,transfertypeone,userid1,assetid1,userid2,assetid2,transfertypeswap,assetidsw,description,assetname,userid,assetidamc,hardwaretype,assetidpco,assettype,ramnh,harddisk,descriptionnh,processor,refreqid,assetidrr,software,descriptionhu,processorhu,ramhu,hdd,make,quantity,descriptiongh,hardwaretype,quantity,hardwaretype,descriptionsw,assetidst,deliverynote,descriptionamc,transfertypesel,assetid,descriptionrr,ram,processornh".split(",");
+	var updateonar = "mgrid,remarks,itemname,user1,assetidhu,transfertypeone,userid1,assetid1,userid2,assetid2,transfertypeswap,assetidsw,description,assetname,userid,assetidamc,hardwaretype,assetidpco,assettype,ramnh,harddisk,descriptionnh,processor,refreqid,assetidrr,software,descriptionhu,descriptionmisc,processorhu,ramhu,hdd,make,quantitynh,descriptiongh,hardwaretype,quantitygh,quantitymi,hardwaretype,descriptionsw,assetidst,deliverynote,descriptionamc,transfertypesel,assetid,descriptionrr,ram,processornh".split(",");
 	for ( var i = 0; i < updateonar.length; i++) {
 		var arelm = updateonar[i];
 		jQuery("#"+ arelm).attr('disabled','');
@@ -679,6 +762,7 @@ function saveCallBack(val) {
 		showalert(json.message);
 		if(json.workflowurl != null){
 			location.href = json.workflowurl ;
+			
 		}else{
 			populate();
 		}
@@ -761,6 +845,12 @@ function prepareInsertData() {
 		panelDataTable[0] = 'panelFields';
 		panelDataTable[1] = 'SoftwareTransfer';
 	}
+	
+	if(selIndex == Miscellaneous){
+		panelDataTable[0] = 'panelFields';
+		panelDataTable[1] = 'Misc';
+	}
+
 
 	panelDataTable[panelDataTable.length] = 'statusFields';
 
