@@ -19,16 +19,6 @@ function clearWhereClause(){
 }
 
 
-
-jQuery(function() {
-	jQuery('#rrfdate').datepicker({
-		changeMonth: true,
-		changeYear: true
-	});
-	
-});
-
-
 function poCallBack(p){
 	//alert("Got from ajax:");	
 	
@@ -457,4 +447,51 @@ function submitScreenFlowactivity(){
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
 	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;		
 	}
+
+function viewPO(){
+	var POurl = poFormpart + "?poid="+document.getElementById("poid").value+"&qid="+document.getElementById("qid").value;
+	poptastic(POurl);
+	return false;
+	
+}
+
+var newwindow;
+
+function poptastic(url)
+{  
+	newwindow = window.open(url,'name','height=700,width=1000,resizable=yes,scrollbars=yes');
+	if (window.focus) {newwindow.focus();}
+}
+
+
+function loadPO(){
+	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=viewPO"+"&poid="+poid+"&qid="+qid;
+	sendAjaxGet(url, requestCallBackPO);
+	
+}
+
+function requestCallBackPO(p){
+	var jobj = JSON.parse(p);
+	
+	document.getElementById("vendorname").innerHTML = jobj.vendorName;
+	document.getElementById("totalamt").innerHTML = jobj.totalprice;
+	document.getElementById("quotationref").innerHTML = jobj.qref;
+	document.getElementById("quotationid").innerHTML = jobj.qid;
+	document.getElementById("itemid").innerHTML = jobj.itemid;
+	document.getElementById("curtype").innerHTML = jobj.currency;
+	document.getElementById("discount").innerHTML = jobj.discount;
+	document.getElementById("curdate").innerHTML = jobj.podate;
+	document.getElementById("linetotal").innerHTML = jobj.uprice * jobj.qty;
+	document.getElementById("vendoraddr").innerHTML = jobj.vendorAddr;
+	document.getElementById("poid").innerHTML = jobj.poid;
+	document.getElementById("comments").innerHTML = jobj.comments;
+	document.getElementById("misc").innerHTML = jobj.misc;
+	document.getElementById("qty").innerHTML = jobj.qty;
+	document.getElementById("unitprice").innerHTML = jobj.uprice;
+
+
+
+
+	
+}
 
