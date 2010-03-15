@@ -200,7 +200,6 @@ function viewdetails(btnname){
 
 function createAllocfromSel()
 {
-	alert("calling createAllocfromSel method>>>>");
 	document.getElementById("formwhere").screenName.value = "frmDeliveryNote";
 	document.getElementById("screenMode").value= "create";
 	
