@@ -21,6 +21,7 @@
 
 <s:property value="jsname" escape="false"/>
 <script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
+
 <link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
 <s:url var="url" value="/searchlist.action" />
 <script language="javascript" >
