@@ -31,6 +31,7 @@ function search()
 	
 	sendAjaxGet(url,mycall); //call this method in commonjs.js.
 }
+
 var selectedIdx =-1;
 //***retrieve the data for the search criteria***
 function mycall(p)
@@ -79,6 +80,7 @@ function replacer(key, value)
 	{
 		return String(value);
 	}
+	
 	return value;
 }
 
