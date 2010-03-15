@@ -20,13 +20,13 @@ function search()
 		url=url+'&sorderno='+document.getElementById("sorderno").value;
 	if(document.getElementById("sstatus"))
 		url=url+'&sstatus='+document.getElementById("sstatus").value;
+	
 	var pagesize = jQuery('.searchdiv .pagesize').val();
 	var pageno = jQuery('.searchdiv .pageno').val();
 	if(pagesize)
 		url=url+'&pagesize='+pagesize;
 	if(pageno)
 		url=url+'&pageno='+pageno;
-	
 	sendAjaxGet(url,mycall); //call this method in commonjs.js.
 }
 
@@ -93,7 +93,7 @@ function viewdetails()
 		showerror("Please select a record.");
 		return false;
 	}		
-	else if(listTable != null && selectedIdx != -1)
+	else if(listTable != null && selectedIdx != 0)
 	{
 		var j=0;
 		requestar = new Array();
@@ -116,7 +116,6 @@ function viewdetails()
 		k.json = requestar;
 		var myJSONText = JSON.stringify(k, replacer,"");//in json2.js
 		
-		
 		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
 		
 		//***call the frmDeliveryNote for the details of selected record***
@@ -124,10 +123,10 @@ function viewdetails()
 		document.getElementById("formwhere").screenName.value = "frmDeliveryNote";
 		document.getElementById("screenMode").value="viewdetails";
 		document.getElementById("formwhere").submit();
-		return true;
 	}
-	
 	else {	return false; }
+	
+	return true;
 
 }//view details
 
