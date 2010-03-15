@@ -254,6 +254,37 @@ public class RequestBL implements BaseBL{
 
 			}
 			
+			if(rpcid.equals("getDepartment")){
+				String[] tmp = (String[]) buslogHm.get("requestType");
+				String requestType = (String)(tmp[0]);
+				String queryy = "SELECT DEPT_ID FROM ams_request_type where REQUESTTYPEID=?";
+				CachedRowSet crs = null;
+				DBConnector db = new DBConnector();
+				PrepstmtDTOArray arPrepstmt4 = new PrepstmtDTOArray();
+				arPrepstmt4.add(DataType.STRING, requestType);
+				try {
+					crs = db.executePreparedQuery(queryy, arPrepstmt4);
+					while(crs.next()){
+						result.put("deptname", (String)crs.getString("DEPT_ID"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				finally {
+					if (crs != null) {
+						try {
+							crs.close();
+						} catch (Exception e) {
+						}
+
+					}
+				}
+
+
+			}
+			
 			if(rpcid.equals("getEmail")){
 				
 				String[] tmp = (String[]) buslogHm.get("mgrid");
