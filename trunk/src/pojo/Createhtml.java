@@ -206,6 +206,7 @@ public class Createhtml {
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
 					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+" class="+classname+"><option value=\"\">Select</option>";
 					CachedRowSet crs1 = null;
+					if(strquery!=null){
 					try {
 						 
 						crs1 = db.executeQuery(strquery);
@@ -221,7 +222,7 @@ public class Createhtml {
 							} catch (Exception e) {
 							}
 						}
-					} 
+					} }
 					elmStr+= "</select>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType+1, elmStr);
 				}
