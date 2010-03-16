@@ -213,7 +213,7 @@ function createAllocfromSel()
 	poid = getSelectedRowData("searchdiv","poid");
 	postatus = getSelectedRowData("searchdiv","postatus");
 		
-	if(postatus == " NEW" || postatus != " SEND")
+	if(postatus == " NEW" || postatus == " CREATE DN")
 	{
 		showerror("Can't create the delivery note for this purchase order id.");
 		return;
@@ -232,7 +232,6 @@ function createAllocfromSel()
 		document.getElementById("formwhere").submit();
 	}
 }
-
 
 function getSelectedRowData(searchdivId,colname){
 	var celldata="";
