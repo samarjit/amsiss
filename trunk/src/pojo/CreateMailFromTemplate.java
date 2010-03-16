@@ -61,7 +61,12 @@ private String createSendto(HashMap maildetails){
 		SQL+=" WHERE "+where;
 	}
 	//first parameter will be returned assuming that it has sendto value
-	String sendtotmp = cmDAO.getSendto(SQL);
+	String sendtotmp="";
+	// System.out.println(SQL+ "  "+SQL.matches(".*(?ims:SELECT).*(?ims:FROM).+"));
+	if(SQL != null && !"".equals(SQL) && SQL.matches(".*(?ims:SELECT).*(?ims:FROM).+")){
+		System.out.println("calling with SQL:"+SQL);
+		sendtotmp = cmDAO.getSendto(SQL);
+	}
 
 	return sendtotmp;
 }
@@ -141,11 +146,14 @@ public String toString(){
 	public static void main(String[] args) {
 		CreateMailFromTemplate cm = new CreateMailFromTemplate();
 		HashMap hm = new HashMap();
-		hm.put("empid", "ht082267b");
-		hm.put("empname", "value2");
-		hm.put("sendto", "sam@mydomain.com");
+		hm.put("mgrname", "john");
+		hm.put("mgrid", "jh123");
+		hm.put("empname", "karthick");
+		hm.put("subject", "asd");
+		hm.put("sendto", "asd");
+		hm.put("msgbody", "sdf");
 		try {
-			 cm.createEmail("template1",hm);
+			 cm.createEmail("requestNotification",hm);
 			 System.out.println(cm);
 		} catch (Exception e) {
 			e.printStackTrace();
