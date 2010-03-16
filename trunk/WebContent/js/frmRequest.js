@@ -1006,20 +1006,7 @@ function makeWhereClause(){
 
 }
 
-function submitactivity(){
-	//alert("here in submit activity");
-	//alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	alert(applicationid);
-	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
-	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 
-	// document.getElementById("submitanchor").href //stealing from
-	// actionbutton.jsp its not the right way, if its coming from viewDetails
-	// this will be wrong anyway!
-	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
-
-}
 
 function fnAdjustTableWidth() {
 	var tdwidthar = new Array();
@@ -1058,22 +1045,7 @@ function fnAdjustTableWidth() {
 
 }
 
-/*
-function submitScreenFlowactivity(){
-	alert("here in submit activity");
-	location.href ="workflow.action?activityname=CR&create=true";
-	alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	alert(applicationid);
-	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
-	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 
-	// document.getElementById("submitanchor").href //stealing from
-	// actionbutton.jsp its not the right way, if its coming from viewDetails
-	// this will be wrong anyway!
-	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
-
-} */
 
 function submitScreenFlowactivity(){
 	//alert("here in submit activity")
@@ -1084,13 +1056,13 @@ function submitScreenFlowactivity(){
 	sendAjaxGet(url, beforeMail); */
 
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	
+	if(validation()){
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&mgrid="+document.getElementById("mgrid").value+"&mgrname="+document.getElementById("mgrname").value+"&empname="+document.getElementById("empname").value;
 	location.href = url;
-	
+	}
 }
 
 function cancelReq(){
@@ -1110,4 +1082,128 @@ function closeReq(){
 }
 
 
+function validation(){
 
+	if(document.getElementById("mgrid").selectedIndex==0)
+	{
+		showerror("Select A Manager ID");
+		return false;
+	}
+
+	var requestType = document.getElementById("requesttype").selectedIndex;
+	if(requestType==0)
+	{
+		showerror("Select A Request Type");
+		return false;
+	}
+
+	var requestType = document.getElementById("requesttype").selectedIndex;
+	if(requestType==New_Hardware)
+	{
+		if(document.getElementById("hardwaretype").selectedIndex==0){
+			showerror("Select A Hardware Type");
+			return false;
+		}
+
+		if(document.getElementById("hardwaretype").selectedIndex==1 || document.getElementById("hardwaretype").selectedIndex==2){
+			if(document.getElementById("processornh").length == 0 && document.getElementById("hdd").length == 0 && document.getElementById("quantitynh").length == 0 && document.getElementById("descriptionnh").length == 0 && document.getElementById("ramnh").length == 0 && document.getElementById("make").length == 0){
+
+				showerror("Enter Hardware Details");
+				return false;
+
+			}
+			
+			if(document.getElementById("hardwaretype").selectedIndex!=1 && document.getElementById("hardwaretype").selectedIndex!=2){
+				
+				if(document.getElementById("quantitygh").length == 0){
+					showerror("Enter Hardware Quantity");
+					return false;
+				}
+				
+				if(document.getElementById("quantitygh").length == 0 && document.getElementById("quantitygh").length == 0 ){
+					showerror("Enter Hardware Details");
+					return false;
+				}
+
+		}
+
+		if(document.getElementById("quantitynh").length == 0){
+			showerror("Enter Quantity");
+			return false;
+		}
+	}
+
+	if(requestType==New_Software || requestType==Software_Upgrade)
+	{
+		if(document.getElementById("assetidamc").length==0){
+			showerror("Select A Software");
+			return false;
+		}
+	}
+
+	if(requestType==AMC_Renewal)
+	{
+
+		if(document.getElementById("assetidamc").length==0 && document.getElementById("descriptionamc").length==0 && document.getElementById("deliverynote").length==0 ){
+			showerror("Enter AMC Renewal Details");
+			return false;
+		}
+
+	}
+
+	if(requestType==Pc_Transfer)
+	{
+		if(document.getElementById("transfertypesel").selectedIndex==0){
+			showerror("Select A Transfer Type");
+			return false;
+		}
+
+		if(document.getElementById("transfertypesel").selectedIndex==1){
+
+			if(document.getElementById("userid1").length==0 || document.getElementById("assetidpco").length==0){
+				showerror("Enter One Way Transfer Details");
+				return false;
+			}
+		}
+
+		if(document.getElementById("transfertypesel").selectedIndex==2){
+
+			if(document.getElementById("userid1").length==0 || document.getElementById("assetidpco").length==0 || document.getElementById("userid2").length==0 || document.getElementById("assetid2").length==0){
+				showerror("Enter Two Way Transfer Details");
+				return false;
+			}
+		}
+	}
+
+	if(requestType==Release_Resource)
+	{
+		if(document.getElementById("assetidrr").length==0 && document.getElementById("descriptionrr").length==0){
+			showerror("Enter Release Resource Details");
+			return false;
+		}
+	}
+
+	if(requestType==Software_Transfer)
+	{
+
+		if(document.getElementById("assetname").length==0 && document.getElementById("userid").length==0 && document.getElementById("assetidst").length==0){
+			showerror("Enter Software Transfer Details");
+			return false;
+		}
+	}
+
+	if(requestType==Miscellaneous)
+	{
+
+		if(document.getElementById(("itemname").length==0 || document.getElementById("userid").length==0) && document.getElementById("descriptionmisc").length==0){
+			showerror("Enter Software Transfer Details");
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
+
+}
