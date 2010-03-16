@@ -176,23 +176,17 @@ public class RequestBL implements BaseBL{
 				String reqid = (String)(tmp[0]);
 				String SQL = "update ams_request set status='CANCELLED' where reqid=? ";
 
-				CachedRowSet crs = null;
 				try {
 					DBConnector db = new DBConnector();
 					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
-					arPrepstmt.add(DataType.INT, reqid);			
+					arPrepstmt.add(DataType.STRING, reqid);			
 					debug(1,arPrepstmt.toString(SQL));
 
-					crs = db.executePreparedQuery(SQL, arPrepstmt );
+					 db.executePreparedUpdate(SQL, arPrepstmt );
 				}catch (Exception e) {
 					e.printStackTrace();
 				}finally {
-					if (crs != null) {
-						try {
-							crs.close();
-						} catch (Exception e) {
-						}
-					}
+					
 				}
 				
 			}
@@ -202,23 +196,18 @@ public class RequestBL implements BaseBL{
 				String reqid = (String)(tmp[0]);
 				String SQL = "update ams_request set status='CLOSED' where reqid=? ";
 
-				CachedRowSet crs = null;
+				
 				try {
 					DBConnector db = new DBConnector();
 					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
-					arPrepstmt.add(DataType.INT, reqid);			
+					arPrepstmt.add(DataType.STRING, reqid);			
 					debug(1,arPrepstmt.toString(SQL));
 
-					crs = db.executePreparedQuery(SQL, arPrepstmt );
+					db.executePreparedUpdate(SQL, arPrepstmt);
 				}catch (Exception e) {
 					e.printStackTrace();
 				}finally {
-					if (crs != null) {
-						try {
-							crs.close();
-						} catch (Exception e) {
-						}
-					}
+				
 				}
 				
 			}
@@ -400,23 +389,17 @@ public class RequestBL implements BaseBL{
 		debug(1, appid);
 		String SQL = "update ams_request set status='PENDAPPROVAL' where reqid=? ";
 
-		CachedRowSet crs = null;
 		try {
 			DBConnector db = new DBConnector();
 			PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
-			arPrepstmt.add(DataType.INT, appid);			
+			arPrepstmt.add(DataType.STRING, appid);			
 			debug(1,arPrepstmt.toString(SQL));
 
-			crs = db.executePreparedQuery(SQL, arPrepstmt );
+			db.executePreparedUpdate(SQL, arPrepstmt);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			if (crs != null) {
-				try {
-					crs.close();
-				} catch (Exception e) {
-				}
-			}
+			
 		}
 		return (HashMap)buslogHm;
 	}
