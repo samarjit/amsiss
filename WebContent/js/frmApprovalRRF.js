@@ -215,7 +215,7 @@ function approvalRrf()
 	//alert("In approval");
 	
 	var applicationid = document.getElementById("rrfrfq").value;
-	alert(applicationid);
+	//alert(applicationid);
 	
 	var actionid =  document.getElementById("wflactiondesc").value;
 	var wflid= document.getElementById("wflid").value;
@@ -238,7 +238,7 @@ function approvalCallBack(val)
 	//alert("RRF approved");
 	//alert(val);
 	var json = JSON.parse(val);
-	alert(json.workflowurl);
+	//alert(json.workflowurl);
 	if(json.error !=null ){
 		showerror(json.error);
 	}else {
@@ -279,7 +279,7 @@ function approvalCallBack(val)
 			//prompt("url",url);	
 			//url = url + "&poid=AUTOGEN_SEQUENCE_ID&porrfid="+document.getElementById("rrfid").value;
 			url = url+ "&insertKeyValue="+ myJSONText;
-			alert(url);
+			//alert(url);
 			//exit();
 			sendAjaxGet(url, savePOCallBack);
 			
