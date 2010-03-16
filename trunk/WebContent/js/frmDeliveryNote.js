@@ -62,7 +62,15 @@ function dnCallBack(p)
 				comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
 				// alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
 				comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-
+				
+				if(comStr == "dnstatus" && comVal == "SUBMITTED" ){
+					jQuery('#btnModify').attr('disabled','disabled');
+					jQuery('#btnDelete').attr('disabled','disabled');
+					jQuery('#btnSave').attr('disabled','disabled');
+					jQuery('#btnSubmit').attr('disabled','disabled');
+				}
+				
+								
 				// comVal = detailTable[i].rows[1].cells[k].innerText;
 				for(var l = 0; l<panelsTable.length; l++)
 				{ 
@@ -119,7 +127,8 @@ for(var i =0; i<panelsTable.length;i++){
 if(screenMode == "create")
 {
 		jQuery('#btnModify').attr('disabled','disabled');
-		jQuery('#btnCancel').attr('disabled','disabled');
+		jQuery('#btnDelete').attr('disabled','disabled');
+		jQuery('#btnSubmit').attr('disabled','disabled');
 		document.getElementById("dnstatus").value = "CREATE";
 		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,invoiceno,chqno,orderno,itemid,Status,applicationid,wflactionid,wflactiondesc,wflid".split(",");
 		for ( var i = 0; i < updateonar.length; i++) 
@@ -136,9 +145,13 @@ if(screenMode == "create")
 }
 if (screenMode=="viewdetails")
 {
+		
+
 		jQuery('#btnSave').attr('disabled','disabled');	
 		jQuery('#btnModify').removeAttr('disabled');
 		jQuery('#btnCancel').removeAttr('disabled');
+	
+		
 		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,chqno,invoiceno,dnstatus,orderno,itemid,poid,postatus,Status,applicationid,wflactionid,wflactiondesc,wflid".split(",");
 		for ( var i = 0; i < updateonar.length; i++) 
 		{
@@ -146,7 +159,10 @@ if (screenMode=="viewdetails")
 			jQuery("#"+ arelm).attr('disabled','disabled');
 			
 		}
+		
 }
+
+
 }
 
 function fnAdjustTableWidth() {
@@ -203,7 +219,7 @@ jQuery(function(){
 
 function dnSave() 
 {
-	alert("Calling dnsave method>>"+screenMode);
+	//alert("Calling dnsave method>>"+screenMode);
 	if(screenMode == "create")
 	{
 		if(document.getElementById("itemname").selectedIndex == 0){		
@@ -410,13 +426,12 @@ function dnSubmit()
 {
 	
 	var applicationid = document.getElementById("applicationid").value;
-	//alert("applicationid"+applicationid);
+	alert("applicationid"+applicationid);
 	var actionid =  document.getElementById("wflactiondesc").value;
 	var wflid= document.getElementById("wflid").value;
 	var dnid= document.getElementById("deliverynoteid").value;
-	alert(dnid);
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&applicationid="+applicationid+"&screenName=frmDeliveryNote"+"&deliverynoteid="+ dnid + "&action=submit"  ;
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName=frmDeliveryNote"+"&deliverynoteid="+ dnid + "&action=submit"  ;
 	//alert(url);
 	location.href = url;
 	//prepareInsertData();
