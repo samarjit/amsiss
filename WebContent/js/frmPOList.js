@@ -213,20 +213,20 @@ function createAllocfromSel()
 	poid = getSelectedRowData("searchdiv","poid");
 	postatus = getSelectedRowData("searchdiv","postatus");
 		
-	if(postatus == " NEW" || postatus == " CREATE DN")
+	if(postatus == " NEW" || postatus == " DNCREATED")
 	{
 		showerror("Can't create the delivery note for this purchase order id.");
 		return;
 	}
 	else if(postatus==" SEND")
 	{
+		
 		var k = new Object();
 		k.poid = poid;
 		k.postatus = postatus;
 	
 		var myJSONText = JSON.stringify(k, replacer,"");
-		jQuery('#passedonvalues').val(myJSONText);
-	
+		jQuery('#passedonvalues').val(myJSONText);		
 		document.getElementById("formwhere").screenName.value = "frmDeliveryNote";
 		document.getElementById("screenMode").value= "create";
 		document.getElementById("formwhere").submit();
