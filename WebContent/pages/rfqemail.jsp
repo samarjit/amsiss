@@ -135,7 +135,7 @@ function fncopy() {
 	   var content = "<html>"+document.getElementById('myIframe').contentWindow.document.documentElement.innerHTML+"</html>";
 	var url = "<%=request.getContextPath() %>/sendmail.action?sendto="+jQuery("#vendoremailidtxt").val()+
 	'&from='+jQuery("#fromtxt").val()+'&msgbody='+escape(content)+'&subject='+jQuery('#subjecttxt').val();
-alert(content);
+//alert(content);
 	 jQuery.ajax({
 		  type: "GET",
 		  url: url,
