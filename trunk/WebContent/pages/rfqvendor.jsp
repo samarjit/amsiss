@@ -15,7 +15,7 @@ Type of Notification
 
 Suggested Delivery Time
 <input type="text" name="suggestdelvtime" id="suggestdelvtime" /> 
-<button onclick="insertVendor();">Add</button>
+<button onclick="insertVendor();" id="btnAdd">Add</button>
 <br /> 
 <s:property value="vendorList" />
 <br />
