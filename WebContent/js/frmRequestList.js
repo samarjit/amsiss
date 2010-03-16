@@ -11,6 +11,7 @@ function search(){
 		url=url+'&srequestid='+document.getElementById("srequestid").value;
 	if(document.getElementById("srequesttype"))
 		url=url+'&srequesttype='+document.getElementById("srequesttype").value;
+	
 	var pagesize = jQuery('.searchdiv .pagesize').val();
 	var pageno = jQuery('.searchdiv .pageno').val();
 	var time = new Date();
