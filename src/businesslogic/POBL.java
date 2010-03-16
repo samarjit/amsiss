@@ -178,9 +178,28 @@ public class POBL implements BaseBL {
 	}
 
 	@Override
-	public HashMap preSubmitProcessBL(Map hm) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap preSubmitProcessBL(Map buslogHm) {
+		
+		String[] delquotarr = (String[]) buslogHm.get("poid");
+		
+		if(delquotarr == null)
+			return (HashMap) buslogHm;
+		String poid = (String)(delquotarr[0]);
+		String SQL = "update ams_po set po_status='SEND' where po_id=? ";
+
+		try {
+			DBConnector db = new DBConnector();
+			PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+			arPrepstmt.add(DataType.STRING, poid);			
+			
+
+			db.executePreparedUpdate(SQL, arPrepstmt);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			
+		}
+		return (HashMap)buslogHm;
 	}
 
 	@Override
