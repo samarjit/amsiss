@@ -202,23 +202,18 @@ public class RrfBL implements BaseBL{
 		debug(1, quotationid);
 		String SQL = "update ams_quotation set qt_status='NEW' where qt_id= ? ";
 
-		CachedRowSet crs = null;
+		
 		try {
 			DBConnector db = new DBConnector();
 			PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 			arPrepstmt.add(DataType.STRING, quotationid);			
 			debug(1,arPrepstmt.toString(SQL));
 
-			crs = db.executePreparedQuery(SQL, arPrepstmt );
+			db.executePreparedUpdate(SQL, arPrepstmt );
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			if (crs != null) {
-				try {
-					crs.close();
-				} catch (Exception e) {
-				}
-			}
+			
 		}
 		return (HashMap)buslogHm;
 	}
@@ -238,23 +233,18 @@ public class RrfBL implements BaseBL{
 		debug(1, quotationid);
 		String SQL = "update ams_quotation set qt_status='RRFCREATED' where qt_id= ? ";
 
-		CachedRowSet crs = null;
+		
 		try {
 			DBConnector db = new DBConnector();
 			PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
 			arPrepstmt.add(DataType.STRING, quotationid);			
 			debug(1,arPrepstmt.toString(SQL));
 
-			crs = db.executePreparedQuery(SQL, arPrepstmt );
+			db.executePreparedUpdate(SQL, arPrepstmt );
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			if (crs != null) {
-				try {
-					crs.close();
-				} catch (Exception e) {
-				}
-			}
+			
 		}		
 		return (HashMap) buslogHm;
 	}
