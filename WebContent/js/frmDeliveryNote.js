@@ -274,15 +274,6 @@ function saveCallBack(val)
 		//location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
 	}
 }
-/*
-//*** cancel the existing delivery note***
-function dnCancel() 
-{
-	dnid=document.getElementById("deliverynoteid").value;
-	document.getElementById("dnstatus").value = "CANCELLED";
-	var url = jsrpcurlpart+"?screenName=frmDeliveryNote&dnid="+dnid+"&rpcid=cancel";
-	sendAjaxGet(url, cancelCallBack);
-}*/
 
 //***delete the existing delivery note***
 function deleteData()
