@@ -190,6 +190,8 @@ text-transform:lowercase;
 #logo h1 {
 font-size:48px;
 padding-top:10px;
+text-transform:capitalize;
+
 }
 #logo a {
 color:#A8A8A8;
