@@ -40,7 +40,7 @@ public class ApprovalReqBL implements BaseBL{
 				
 				String RRFSQL = "update ams_request set status='APPROVED', REMARKS=? where reqid=? ";
 
-				CachedRowSet reqcrs = null;
+				
 				try {
 					DBConnector db = new DBConnector();
 					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
@@ -48,16 +48,11 @@ public class ApprovalReqBL implements BaseBL{
 					arPrepstmt.add(DataType.STRING, reqid);			
 					debug(1,arPrepstmt.toString(RRFSQL));
 
-					reqcrs = db.executePreparedQuery(RRFSQL, arPrepstmt );
+					db.executePreparedUpdate(RRFSQL, arPrepstmt );
 				}catch (Exception e) {
 					e.printStackTrace();
 				}finally {
-					if (reqcrs != null) {
-						try {
-							reqcrs.close();
-						} catch (Exception e) {
-						}
-					}
+					
 				}
 			}//buslogHm.put("nextAction", "CreateRRF");
 													
@@ -75,7 +70,7 @@ public class ApprovalReqBL implements BaseBL{
 				
 				String REQSQL = "update ams_request set status='REJECTED', REMARKS=? where reqid=? ";
 
-				CachedRowSet reqcrs = null;
+				
 				try {
 					DBConnector db = new DBConnector();
 					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
@@ -83,86 +78,17 @@ public class ApprovalReqBL implements BaseBL{
 					arPrepstmt.add(DataType.STRING, reqid);			
 					debug(1,arPrepstmt.toString(REQSQL));
 
-					reqcrs = db.executePreparedQuery(REQSQL, arPrepstmt );
+					db.executePreparedUpdate(REQSQL, arPrepstmt );
 				}catch (Exception e) {
 					e.printStackTrace();
 				}finally {
-					if (reqcrs != null) {
-						try {
-							reqcrs.close();
-						} catch (Exception e) {
-						}
-					}
+					
 				}
 				//buslogHm.put("nextAction", "CreateRRF");
 			}
 		}
 		
 			
-			
-			//update the status of rrf.
-			/*String[] rrfidarr = (String[]) buslogHm.get("rrfid");
-			if(rrfidarr == null)
-				return (HashMap) buslogHm;
-			String rrfid = (String)(rrfidarr[0]);
-			debug(1, rrfid);
-			String SQL = "update ams_rrf set rrf_status='PENDAPPROVAL' where rrf_id=? ";
-
-			CachedRowSet crs = null;
-			try {
-				DBConnector db = new DBConnector();
-				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
-				arPrepstmt.add(DataType.STRING, rrfid);			
-				debug(1,arPrepstmt.toString(SQL));
-
-				crs = db.executePreparedQuery(SQL, arPrepstmt );
-			}catch (Exception e) {
-				e.printStackTrace();
-			}finally {
-				if (crs != null) {
-					try {
-						crs.close();
-					} catch (Exception e) {
-					}
-				}
-			}
-		}*/
-		//send mail to approver - Not Working--
-		//boolean res = true;
-		/*InitialContext ic;
-		String snName = "java:comp/env/mail/MyMailSession";
-		Session session = null;		
-		try {
-			ic = new InitialContext();
-			session = (Session) ic.lookup(snName);
-		} catch (Exception e) {
-			debug(5, "Exception: JNDI failed!");
-		}
-		if (session == null) {
-			debug(0, "Using non JNDI way");
-			Properties props = System.getProperties();
-			props.put("mail.from", "admin@hp.com");
-			session = Session.getInstance(props, null);
-		}
-		Message msg = new MimeMessage(session);
-		try {
-			msg.setSubject("RRF For approval");
-			msg.setSentDate(new Date());
-			msg.setFrom();
-			 
-			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(
-					"mgr@mydomain.com", false));
-			msg.setContent("RRF for approval","text/html");
-			Transport.send(msg);
-
-			debug(1, "Email send to:" + "mgr@mydomain.com" + msg.getSubject() + " from:"
-					+ "admin@mydomain.com" + " sub:" + msg.getSubject());
-		} catch (Exception e) {
-			debug(5, "Exception in sending mail!");
-			e.printStackTrace();
-			//res = false;
-		}		*/
-		
 		return (HashMap)buslogHm;	
 	}
 	
