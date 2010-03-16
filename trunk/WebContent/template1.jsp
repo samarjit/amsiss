@@ -20,7 +20,8 @@
 <script language="javascript" src="<%=request.getContextPath() %>/js/jquery.js"></script>
 <script language="javascript" src="<%=request.getContextPath() %>/js/json2.js"></script>
 <script language="javascript" src="<%=request.getContextPath() %>/js/encoder.js"></script>
-<script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script> 
+<script language="JavaScript" type="text/javascript" src="js/jquery.form.js"></script> 
 <s:property value="jsname" escape="false"/>
 <link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
 
@@ -57,6 +58,8 @@ var ctxpath = "<%= ctxpath %>";
 </script>
 
 </head>
+<script language="JavaScript" src="<%=ctxstr%>/js/commonjs.js"></script>
+
 <body onload="populate()">
 <s:actionerror/>
 <s:actionmessage/>
