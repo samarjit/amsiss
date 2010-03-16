@@ -14,7 +14,8 @@ function populate()
 		jQuery('#btnVendorMap').attr('disabled','disabled');
 		jQuery('#btnSubmit').attr('disabled','disabled');
 	}
-	//alert("In populate");
+	createVendorDropdownAjax();
+	disable_fields();
 }
 var screenMode = "insert";
 
@@ -130,18 +131,12 @@ function fnAdjustTableWidth() {
 
 function disable_fields(){
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-
+	
+	if(screenMode!= "create" ) 
 	for(var i =0; i<panelsTable.length;i++){
 		
 	//	alert("panels "+ panelsTable[i].id);
 		if (panelsTable[i].id == 'panelFields' ||panelsTable[i].id == 'statusFields'){
-//			
-//		fields = panelsTable[i].getElementsByTagName("input");
-//			for(var k = 0; k<fields.length; k++){
-//			
-//				fields[k].disabled = true;
-//			
-//			}
 			var query = jQuery(panelsTable[i]).find(" :input");
 			var elem = 	jQuery(query);
 		
@@ -151,7 +146,9 @@ function disable_fields(){
 		
 		}
 	}
-	var updateonar = "Status,wflactionid,wflactiondesc,wflid,btnSave".split(",");
+	
+	jQuery('#rfqstatus').attr('disabled','disabled');
+	var updateonar = "rfqid,Status,wflactionid,wflactiondesc,wflid,btnSave,btnSubmit".split(",");
 	for ( var i = 0; i < updateonar.length; i++) {
 		var arelm = updateonar[i];
 		jQuery("#"+ arelm).attr('disabled','disabled');
@@ -160,7 +157,45 @@ function disable_fields(){
 		jQuery('#btnVendorMap').attr('disabled','disabled');
 		jQuery('#btnSubmit').attr('disabled','disabled');
 	}
+	if(jQuery('#rfqstatus').val() =="CANCELLED" || screenMode == "cancel" ){
+		screenMode = "cancel";
+		var updateonar ="btnSave,btnModify,btnDelete,btnCancel,btnVendorMap,btnSubmit,btnSubmitselAll".split(",");
+			for ( var i = 0; i < updateonar.length; i++) {
+				var arelm = updateonar[i];
+				jQuery("#"+ arelm).attr('disabled','disabled');
+			}
+		jQuery("#btnAdd").attr('disabled','disabled');
+	}
+	if(jQuery('#Status').val()!= "" && jQuery('#Status').val() !="S" ){
 		
+		var updateonar ="btnSave,btnModify,btnDelete,btnCancel,btnVendorMap,btnSubmit,btnSubmitselAll".split(",");
+			for ( var i = 0; i < updateonar.length; i++) {
+				var arelm = updateonar[i];
+				jQuery("#"+ arelm).attr('disabled','disabled');
+			}
+	}
+	if(screenMode== "create" ){
+		var updateonar ="btnAdd,btnModify,btnDelete,btnCancel,btnVendorMap,btnSubmit,btnSubmitselAll".split(",");
+		for ( var i = 0; i < updateonar.length; i++) {
+			var arelm = updateonar[i];
+			jQuery("#"+ arelm).attr('disabled','disabled');
+		}
+		//jQuery("#btnAdd").attr('disabled','disabled');
+		jQuery('#btnSave').removeAttr('disabled');
+	}
+	if(screenMode== "modify" ){
+		jQuery('#btnSave').removeAttr('disabled');
+	}
+	if(screenMode == "view" && jQuery('#Status').val() =="S"){
+		updateonar = "btnModify,btnDelete".split(",");
+		for ( var i = 0; i < updateonar.length; i++) {
+			var arelm = updateonar[i];
+			jQuery("#"+ arelm).removeAttr('disabled');
+		}
+		if(jQuery('#rfqstatus').val() == "SEND"){
+			jQuery('#btnSubmit').removeAttr('disabled');
+		}
+	}
 }
 
 function insertData() {
@@ -313,6 +348,7 @@ function rfqCancel(){
 function updateData(obj){
 	//obj.disabled = true;
 	screenMode = "modify";
+	
 	//There will be only one table in search screen 'search div'
 	//document.requestFrm.submit();
 	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
@@ -360,7 +396,7 @@ function updateData(obj){
 		}
 	}
 
-
+	disable_fields();
 
 }
 
@@ -466,7 +502,10 @@ function popvendorcallback(parm){
 	var error  = jsonob.ERROR;
 	var rfqStatus = jsonob.RFQSTATUSUPDATE;
 	if(rfqStatus != "" && typeof( rfqStatus) != 'undefined')
+		{
 		jQuery("#rfqstatus").val(rfqStatus);
+		
+		}
 		
 	if(error != "" && typeof(error )!= 'undefined')	{
 		showerror(error);
@@ -516,7 +555,7 @@ function popvendorcallback(parm){
 	} catch (e) {
 		alert(e);
 	}
-	
+	disable_fields();
 }
 
 function calculateIndvStatus(url, type){ 
@@ -649,6 +688,8 @@ function rfqPrinted(vendorid){
 }
 
 function insertVendor(parm){
+	if(screenMode == "cancel")return;
+	if(jQuery('#Status').val() != "" && jQuery('#Status').val() != 'C' && screenMode == "create")
 	var url = ctxpath+"/vendormap.action?command=insert"+"&rfqid="+document.getElementById("rfqid").value
 	+"&vendorid="+document.getElementById("rfqvendorlist").value+"&typenotify="+
 	escape($F("typenotify"))+"&suggestdelvtime="+$F("suggestdelvtime");
@@ -657,10 +698,14 @@ function insertVendor(parm){
 	sendAjaxGet(url, popvendorcallback);
 }
 function fnMapVendors(){
+	if(jQuery('#Status').val() !="S"){
+		showalert("Save the record before mapping any vendors");
+		return;
+	}
 	var url = ctxpath+"/vendormap.action?command=initialmap"+"&rfqid="+$F("rfqid")+
 	"&typenotify="+escape("E~0~x~0")+"&suggestdelvtime=10&department="+$F("department");
 	 
-	alert(url);
+	 
 	sendAjaxGet(url, popvendorcallback);
 }
 
