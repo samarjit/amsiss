@@ -64,7 +64,7 @@ private String createSendto(HashMap maildetails){
 	String sendtotmp="";
 	// System.out.println(SQL+ "  "+SQL.matches(".*(?ims:SELECT).*(?ims:FROM).+"));
 	if(SQL != null && !"".equals(SQL) && SQL.matches(".*(?ims:SELECT).*(?ims:FROM).+")){
-		System.out.println("calling with SQL:"+SQL);
+		//System.out.println("calling with SQL:"+SQL);
 		sendtotmp = cmDAO.getSendto(SQL);
 	}
 
