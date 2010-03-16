@@ -504,6 +504,9 @@ function popvendorcallback(parm){
 	if(rfqStatus != "" && typeof( rfqStatus) != 'undefined')
 		{
 		jQuery("#rfqstatus").val(rfqStatus);
+		 if(rfqStatus == "SEND"){
+			jQuery('#btnSubmit').removeAttr("disabled");			 
+		 }
 		
 		}
 		
