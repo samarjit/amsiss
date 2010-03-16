@@ -246,7 +246,7 @@ function deleteData(){
 	whereclause  = makeWhereClause();
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
 	prompt("url",url);	
-	alert("in update!!!!!!! url" +url);
+	//alert("in update!!!!!!! url" +url);
 	//prompt("url",url);
 	//add key:vlaue to url
 	
@@ -328,7 +328,7 @@ function prepareInsertData() {
 		var k = new Object();
 		k.json = pclass
 		var myJSONText = JSON.stringify(k, replacer,"");
-		alert(myJSONText );	
+		//alert(myJSONText );	
 		return myJSONText;			
 }
 
@@ -446,10 +446,10 @@ function makeWhereClause(){
 
 
 function submitactivity(){
-	alert("here in submit activity")
+	//alert("here in submit activity")
 	alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
-	alert(applicationid);
+	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
@@ -459,10 +459,10 @@ function submitactivity(){
 	}
 
 function submitScreenFlowactivity(){
-	alert("here in submit activity")
-	alert(wflcontrollerurl);
+	//alert("here in submit activity")
+	//alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
-	alert(applicationid);
+	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	
