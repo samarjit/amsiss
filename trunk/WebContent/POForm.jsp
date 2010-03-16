@@ -32,7 +32,11 @@ var screenName='frmPO';
 var jsrpcurlpart= "<%=request.getContextPath()%>/jsrpc.action";
 var poid= '<%=request.getParameter("poid")%>';
 var qid= '<%=request.getParameter("qid")%>';
-
+var actionid = '<%=request.getParameter("doString")%>';
+var wflid = '<%=request.getParameter("wflid")%>';
+var applicationid = '<%=request.getParameter("appid")%>';
+var vendorid = '<%=request.getParameter("vendorid")%>';
+var url = '<%=request.getContextPath()%>';
 </script>
 </head>
 
@@ -45,6 +49,9 @@ var qid= '<%=request.getParameter("qid")%>';
 <tr>
   <th scope="col"><label>
     <input type="button" value="Print" onClick="window.print()">
+  </label></th>
+   <th scope="col"><label>
+    <input type="button" value="Send PO" onClick="sendPO()">
   </label></th>
 </tr>
 </table>
@@ -72,15 +79,16 @@ var qid= '<%=request.getParameter("qid")%>';
     <em>Singapore</em> - 529653</p></td>
   </tr>
 </table>
+<br>
 &nbsp;
 &nbsp;
 <table width="500" >
   <tr>
-    <td width="87" scope="col"><strong>Vendor</strong></td>
+    <td width="87" scope="col"><strong>Vendor &nbsp;</strong></td>
     <td width="397" scope="col"><div id="vendorname"><strong></strong></div></td>
   </tr>
   <tr>
-    <td>&nbsp;</td>
+    
     <td><div id="vendoraddr"></div></td>
   </tr>
 </table>
@@ -88,11 +96,12 @@ var qid= '<%=request.getParameter("qid")%>';
 &nbsp;
 <table width="500">
   <tr>
-    <td width="146" scope="col"><strong>Purchase Order ID</strong></td>
+    <td width="146" scope="col"><strong>Purchase Order ID &nbsp;
+    </strong></td>
     <td width="338" scope="col"><div id="poid"></div></td>
   </tr>
   <tr>
-    <td><strong>Date</strong></td>
+    <td><strong>Date &nbsp;</strong></td>
     <td><div id="curdate"></div></td>
   </tr>
 </table>
@@ -100,28 +109,28 @@ var qid= '<%=request.getParameter("qid")%>';
 &nbsp;
 <table width="500" border="0">
   <tr>
-    <td width="146" scope="col"><strong>Quotation ID</strong></td>
+    <td width="146" scope="col"><strong>Quotation ID &nbsp;</strong></td>
     <td width="344" scope="col"><div id="quotationid"></div></td>
   </tr>
   <tr>
-    <td><strong>Quotation Reference</strong></td>
+    <td><strong>Quotation Reference &nbsp;</strong></td>
     <td><div id="quotationref"></div></td>
   </tr>
 </table>
 <p>&nbsp;</p>
 <table width="539" border="0">
   <tr>
-    <th width="92" scope="col">Item ID</th>
-    <th width="133" scope="col">Description</th>
-    <th width="62" scope="col">Quantity</th>
-    <th width="119" scope="col">Unit Price</th>
-    <th width="111" scope="col">Line Total Price</th>
+    <th width="92" scope="col">Item ID &nbsp;</th>
+    <th width="133" scope="col">Description &nbsp;</th>
+    <th width="62" scope="col">Quantity &nbsp;</th>
+    <th width="119" scope="col">Unit Price &nbsp;</th>
+    <th width="111" scope="col">Line Total Price &nbsp;</th>
   </tr>
   <tr>
-    <td align="center"><div id="itemid"></div></td>
-    <td align="center"><div id="desc"></div></td>
-    <td align="center"><div id="qty"></div></td>
-    <td align="center"><div id="unitprice"></div></td>
+    <td align="center"><div id="itemid"></div></td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <td align="center"><div id="desc"></div></td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <td align="center"><div id="qty"></div></td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <td align="center"><div id="unitprice"></div></td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <td align="center"><div id="linetotal"></div></td>
   </tr>
   <tr>
@@ -149,42 +158,42 @@ var qid= '<%=request.getParameter("qid")%>';
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td><strong>Currency type</strong></td>
+    <td><strong>Currency type &nbsp;</strong></td>
     <td><div id="curtype"></div></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td><strong>Discount</strong></td>
+    <td><strong>Discount &nbsp;</strong></td>
     <td><div id="discount"></div></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td><strong>MISC</strong></td>
+    <td><strong>MISC &nbsp;</strong></td>
     <td><div id="misc"></div></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td><strong>Total Amount</strong></td>
+    <td><strong>Total Amount &nbsp;</strong></td>
     <td><div id="totalamt"></div></td>
   </tr>
 </table>
 <p>&nbsp;</p>
 <table width="500" border="0">
   <tr>
-    <th width="80" scope="col">Comments</th>
+    <th width="80" scope="col">Comments &nbsp;</th>
     <td width="410" scope="col"><div id="comments"></div></td>
   </tr>
 </table>
 <p>&nbsp;</p>
 <table width="500" border="0">
   <tr>
-    <td width="110" scope="col"><strong>Authorized By</strong></td>
+    <td width="110" scope="col"><strong>Authorized By &nbsp;</strong></td>
     <td width="380" scope="col">____________________________________</td>
   </tr>
   <tr>
@@ -192,7 +201,7 @@ var qid= '<%=request.getParameter("qid")%>';
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><strong>Date</strong></td>
+    <td><strong>Date &nbsp;</strong></td>
     <td>_________________</td>
   </tr>
 </table>
