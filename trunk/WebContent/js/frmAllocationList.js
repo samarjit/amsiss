@@ -213,12 +213,18 @@ function createAllocfromSel(){
 		return;
 	}
 	var reqid = getSelectedRowData("searchdiv","reqid");
+	var reqstatus = getSelectedRowData("searchdiv","status");
 	var empid = getSelectedRowData("searchdiv","empid");
 	var assetid = getSelectedRowData("searchdiv2","assetid");
 	var k = new Object();
 	k.reqid = reqid;
 	k.empid = empid;
 	k.assetid = assetid;
+ 
+	if(reqstatus != "APPROVED"){
+		showalert("Request Status must be APPROVED");
+		return;
+	}
 	var myJSONText = JSON.stringify(k, replacer,"");
 	jQuery('#passedonvalues').val(myJSONText);
 	document.getElementById("formwhere").submit();
@@ -241,6 +247,7 @@ function getSelectedRowData(searchdivId,colname){
 		if(colname == jQuery(item).find("div").attr("id"))
 			celldata  =  jQuery("#"+searchdivId+" table tr").eq(selectedIdx[searchdivId]).find("td").eq(index).text();
 	});
+	celldata = jQuery.trim(celldata);
 	return celldata;
 }
 //create url with where clause

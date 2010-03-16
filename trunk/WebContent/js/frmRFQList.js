@@ -169,7 +169,12 @@ function viewdetails(btnname){
 		document.getElementById("panelFieldsWhereClause").value=whereClause;
 		
 		if(btnname.id == 'capturequotation'){			
-			//alert("in Create rrf");
+			var rfqstatus = getSelectedRowData("searchdiv","rfqstatus");
+			if(rfqstatus!= "SEND"){
+				 
+				showalert("RFQ Status is SEND ie. Select RFQ which has been submitted");
+				return;
+			}
 			document.getElementById("formwhere").screenName.value = "frmQuotation";	
 			document.getElementById("screenMode").value= "capturequotation";
 			//document.getElementById("formwhere").submit();
@@ -189,6 +194,18 @@ function viewdetails(btnname){
 	}
 	return true;	 
 
+}
+
+function getSelectedRowData(searchdivId,colname){
+	var celldata="";
+	//jQuery("#searchdiv1 table th div").attr("id");
+	var query = jQuery("#"+searchdivId+" table th");
+	jQuery.each(query,function(index,item){
+		if(colname == jQuery(item).find("div").attr("id"))
+			celldata  =  jQuery("#"+searchdivId+" table tr").eq(selectedIdx).find("td").eq(index).text();
+	});
+	celldata = jQuery.trim(celldata);
+	return celldata;
 }
 
 //create url with where clause

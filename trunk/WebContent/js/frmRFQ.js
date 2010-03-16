@@ -689,13 +689,17 @@ function rfqPrinted(vendorid){
 
 function insertVendor(parm){
 	if(screenMode == "cancel")return;
-	if(jQuery('#Status').val() != "" && jQuery('#Status').val() != 'C' && screenMode == "create")
+	if(jQuery('#Status').val() != "" && jQuery('#Status').val() == 'S' && jQuery('#wflactiondesc').val()=="RFQCreate" && (screenMode == "create"
+		 || screenMode == 'modify')){
 	var url = ctxpath+"/vendormap.action?command=insert"+"&rfqid="+document.getElementById("rfqid").value
 	+"&vendorid="+document.getElementById("rfqvendorlist").value+"&typenotify="+
 	escape($F("typenotify"))+"&suggestdelvtime="+$F("suggestdelvtime");
 	
 	//alert(url);
 	sendAjaxGet(url, popvendorcallback);
+	}else{
+		showalert("Status should be 'S' Screen should be in modify mode");
+	}
 }
 function fnMapVendors(){
 	if(jQuery('#Status').val() !="S"){

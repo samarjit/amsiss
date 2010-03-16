@@ -28,7 +28,7 @@ public class SearchList {
 	}
 
 	private void debug(int priority, String s){
-		if(priority > -1){
+		if(priority > 1){
 			System.out.println("SearchList:"+s);
 		}
 	}
@@ -76,10 +76,12 @@ public class SearchList {
 	        		String datatype = crs.getString("datatype");
 	        		
 	        		if(null != datatype && !"".equalsIgnoreCase(datatype)){
-	        			if("DATE".equalsIgnoreCase(datatype)){
-	        				//MySQL????
-	        				//Oracle 
-	        				
+	        			if("DATE".equalsIgnoreCase(datatype) && !val.equalsIgnoreCase("")){
+	        				//MySQL????x
+	        				//Oracle ??y
+	        				val = val.toUpperCase();
+		        			searchQueryWhere +=joiner+" "+dbcol+" = TO_DATE('"+val+"','dd/mm/yyyy')";
+		        			joiner = " AND ";
 	        			}
 	        		}
 	        		if(!"".equals(searchQueryWhere)){

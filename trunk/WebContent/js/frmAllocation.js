@@ -16,11 +16,6 @@ function populate()
 	disable_fields();
 }
 //var screenMode = "insert";
-function $F(p){
-	if(document.getElementById(p))
-	return document.getElementById(p).value;
-	return "";
-}
 
 function prepopulate(param){
 	var json = JSON.parse(param);
@@ -228,7 +223,7 @@ function reqSave() {
 	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAllocation";
 	
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=allocid]").attr("value");
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
