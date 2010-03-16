@@ -64,6 +64,7 @@ function quotationCallBack(p){
 				document.getElementById("dateofdelivery").value=date;
 				document.getElementById("qtstatus").disabled=true;
 				document.getElementById("totalamount").disabled=true;
+				document.getElementById("quotationid").disabled=true;
 				document.getElementById("totalamount").value='0';
 				document.getElementById("unitprice").value='0';
 				document.getElementById("discount").value='0';
