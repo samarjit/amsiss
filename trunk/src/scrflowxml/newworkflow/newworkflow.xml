@@ -23,62 +23,22 @@
 			<mail></mail>
 			<script></script>
 		</event>
+		<transition to="end"></transition>
 	</task-node>
 
-	<mail-node name="mail-node1" template="template1" async="true" to="">
-		<description>
-			hello mail
-		</description>
+	<mail-node name="mail-node1" template="requestNotification" async="true" to="asd">
 		<subject>
-			sa
+			asd
 		</subject>
 		<text>
-			This is being sent from mail-node1 main activity...
-regards,
-Samarjit
+			sdf
 		</text>
 		<event type="task-start">
-			<script name="myscript">
-				pojo.CreateMailFromTemplate cm = new pojo.CreateMailFromTemplate();
-HashMap hm = new HashMap();
-		hm.put(&quot;empid&quot;, &quot;dav&quot;);
-		hm.put(&quot;empname&quot;, &quot;value2&quot;);
-		 
-		try {
-			 cm.createEmail(&quot;employeenotification&quot;,hm);
-			 System.out.println(cm);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-actionclass.SendMailAC smAC = new actionclass.SendMailAC();
-		smAC.setSendto(cm.getSendto());
-		smAC.setFrom(cm.getFrom());
-		smAC.setSubject(cm.getSubject());
-		smAC.setMsgbody(cm.getMsgbody()+&quot;This email is to tell you that the script of mail-node1 works&quot;);
-		smAC.sendJavaMail();
-System.out.println(&quot;This is executed from script&quot;);
-			</script>
+			
 			<action name="asdAction" expression="some expression"></action>
 		</event>
 		<transition to="Approve">
-	 
-		
-			<mail name="sam" to="sd" async="true">
-				<subject>
-					fg
-				</subject>
-				<text>
-					fg
-				</text>
-			</mail>
-			<mail name="smoe" to="te">
-				<subject>
-					te
-				</subject>
-				<text>
-					sgfgf
-				</text>
-			</mail>
+
 		</transition>
 		
 	</mail-node>
