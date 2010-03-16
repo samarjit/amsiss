@@ -163,6 +163,7 @@ public String executeScrflow(){
 						ApplicationDTO appdto = new ApplicationDTO();
 						debug(0, "activityname:" + activityname);
 						String WflName = wflBean.getSuitableWorkflowName(activityname);
+						wflid = WflName;
 						hmActions = wflBean.getNextScrFlowActions(WflName, "",decision); //rest of the places wflid = WflName
 						if ("".equals(url) && hmActions.size() > 0) {
 							String actionname = (String) hmActions.get(0);
@@ -317,12 +318,13 @@ private void sendEmail(HashMap<String,String> emailProp) {
  		Iterator iter = map.keySet().iterator();
 		HashMap<String,String> buslogHm = new HashMap<String, String>();
 		buslogHm.putAll(emailProp); 
-		
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
-			String values[] =  (String[]) map.get(key);
+			if(map.get(key) instanceof String[]){
+			 String values[] =  (String[]) map.get(key);
 			if(values.length >0) 
 			buslogHm .put(key, values[0]);
+			}
 		}
 		
 		UserDTO usr = (UserDTO) (session.get("userSessionData"));
