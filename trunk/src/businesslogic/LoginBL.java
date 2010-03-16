@@ -44,7 +44,7 @@ public class LoginBL implements BaseBL {
 						Login lin = new Login();
 						password = lin.getPassword(userid);						
 						if(password == null || (!password.equals(enterpassword))){
-							error="Invalid user name or passowrd";
+							error="Invalid user name or password";
 						}
 					}
 				}
