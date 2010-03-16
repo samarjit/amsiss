@@ -18,6 +18,15 @@ function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").Value = "";
 }
 
+function sendPO(){
+
+	url = url+"/scrworkflow.action?action=true&doString="+actionid+"&vendorid="+vendorid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&poid="+jQuery("#poid").text()+"&vendoraddr="+jQuery("#vendoraddr").text()+"&curdate="+jQuery("#curdate").text()+"&qid="+jQuery("#quotationid").text()+"&qref="+jQuery("#quotationref").text()+"&itemid="+jQuery("#itemid").text()+"&desc="+jQuery("#desc").text()+"&qty="+jQuery("#qty").text()+"&unitprice="+jQuery("#unitprice").text()+"&linetotal="+jQuery("#linetotal").text()+"&curtype="+jQuery("#curtype").text()+"&discount="+jQuery("#discount").text()+"&misc="+jQuery("#misc").text()+"&totalamt="+jQuery("#totalamt").text()+"&comments="+jQuery("#comments").text(); 
+	alert(url);
+	 window.close();
+	opener.location=(url);
+}
+
+
 
 function poCallBack(p){
 	//alert("Got from ajax:");	
@@ -38,7 +47,7 @@ function poCallBack(p){
 		for ( var i=0; i<detailTable.length ; i++)
 		{
 			//alert(detailTable[i].id);			
-			if (detailTable[i].id == 'buttonPanel')
+			if (detailTable[i].id == 'buttonPanel' || detailTable[i].rows.length==0)
 				continue;
 			/*if(detailTable[i].id == 'panelFields' && screenMode == "createrrf")
 			{
@@ -449,7 +458,11 @@ function submitScreenFlowactivity(){
 	}
 
 function viewPO(){
-	var POurl = poFormpart + "?poid="+document.getElementById("poid").value+"&qid="+document.getElementById("qid").value;
+	
+	var applicationid = jQuery("#panelsdiv #statusFields  input[id=wflappid]").attr("value");
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var POurl = poFormpart + "?poid="+document.getElementById("poid").value+"&qid="+document.getElementById("qid").value+"&vendorid="+document.getElementById("vendorid").value+"&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 	poptastic(POurl);
 	return false;
 	
@@ -465,7 +478,9 @@ function poptastic(url)
 
 
 function loadPO(){
+
 	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=viewPO"+"&poid="+poid+"&qid="+qid;
+	
 	sendAjaxGet(url, requestCallBackPO);
 	
 }
@@ -488,7 +503,6 @@ function requestCallBackPO(p){
 	document.getElementById("misc").innerHTML = jobj.misc;
 	document.getElementById("qty").innerHTML = jobj.qty;
 	document.getElementById("unitprice").innerHTML = jobj.uprice;
-
 
 
 
