@@ -1,3 +1,32 @@
+$(document).ready(function() { 
+	// Setup the ajax indicator
+	$("body").append('<div id="ajaxBusy"><p><img src="css/images/ajax-loader.gif"></p></div>');
+	$('#ajaxBusy').css({
+		display:"none",
+		margin:"0px",
+		paddingLeft:"20px",
+		paddingRight:"0px",
+		paddingTop:"0px",
+		paddingBottom:"20px",
+		position:"absolute",
+		right:"700px",
+		top:"350px",
+		width:"auto"
+	});
+ 
+	// Ajax activity indicator bound 
+	// to ajax start/stop document events
+	$(document).ajaxStart(function(){ 
+		$('#ajaxBusy').show(); 
+	}).ajaxStop(function(){ 
+		$('#ajaxBusy').hide();
+	});
+ 
+	///// Ignore this, just for demo purposes \\\\\\
+    // bind form using ajaxForm 
+    
+});
+
 var xmlHttpReq = false;
 function xmlhttpPost() 
 {
