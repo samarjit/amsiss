@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container width="643" height="399">
+<root-container width="677" height="364">
   <node name="RFQCreate" x="96" y="25" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
@@ -15,7 +15,7 @@
       <label x="-25" y="-25"/>
     </edge>
   </node>
-  <node name="CreatePO" x="179" y="253" width="123" height="36">
+  <node name="CreatePO" x="144" y="236" width="123" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
@@ -23,7 +23,7 @@
       <label x="-30" y="-20"/>
     </edge>
   </node>
-  <node name="CreateDN" x="456" y="236" width="132" height="36">
+  <node name="CreateDN" x="299" y="311" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
@@ -37,7 +37,6 @@
     </edge>
   </node>
   <node name="mail-node1" x="376" y="95" width="132" height="36"/>
-  <node name="mail-node2" x="177" y="362" width="132" height="36"/>
-  <node name="end-state1" x="427" y="356" width="132" height="36"/>
-  <node name="End" x="13" y="250" width="132" height="36"/>
+  <node name="mail-node2" x="53" y="303" width="132" height="36"/>
+  <node name="End" x="490" y="249" width="132" height="36"/>
 </root-container>
