@@ -1,6 +1,5 @@
 function populate()
 {
-	alert("Screen Mode>>"+screenMode);
 	fnAdjustTableWidth();
 	
 	if(screenMode=="create")
@@ -28,6 +27,7 @@ function populate()
 		
 	}
 }
+
 
 function prepopulate(param)
 {
@@ -121,7 +121,7 @@ if(screenMode == "create")
 		jQuery('#btnModify').attr('disabled','disabled');
 		jQuery('#btnCancel').attr('disabled','disabled');
 		document.getElementById("dnstatus").value = "CREATE";
-		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,invoiceno,chqno,orderno,itemid,Status,wflactionid,wflactiondesc,wflid".split(",");
+		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,invoiceno,chqno,orderno,itemid,Status,applicationid,wflactionid,wflactiondesc,wflid".split(",");
 		for ( var i = 0; i < updateonar.length; i++) 
 		{
 			var arelm = updateonar[i];
@@ -139,7 +139,7 @@ if (screenMode=="viewdetails")
 		jQuery('#btnSave').attr('disabled','disabled');	
 		jQuery('#btnModify').removeAttr('disabled');
 		jQuery('#btnCancel').removeAttr('disabled');
-		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,chqno,invoiceno,dnstatus,orderno,itemid,poid,postatus,Status,wflactionid,wflactiondesc,wflid".split(",");
+		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,chqno,invoiceno,dnstatus,orderno,itemid,poid,postatus,Status,applicationid,wflactionid,wflactiondesc,wflid".split(",");
 		for ( var i = 0; i < updateonar.length; i++) 
 		{
 			var arelm = updateonar[i];
@@ -178,9 +178,6 @@ function fnAdjustTableWidth() {
 		});
 
 	}
-
-
-
 }
 //*** date-time picker ***
 
@@ -216,18 +213,18 @@ function dnSave()
 		{
 		document.getElementById("deliverynoteid").value = "AUTOGEN_SEQUENCE_ID";
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmDeliveryNote";
-		url = url + "&itemname=" + document.getElementById("itemname").value;
-		url = url + "&itemquantity=" + document.getElementById("itemquantity").value;
+		//url = url + "&itemname=" + document.getElementById("itemname").value;
+		//url = url + "&itemquantity=" + document.getElementById("itemquantity").value;
 		
 		url = url + "&dnpoid=" + document.getElementById("poid").value;
-		alert(url);
+		//alert(url);
 		//url = url + "&dnpurchaseorderid=" + document.getElementById("dnpurchaseorderid").value;
 		//alert(document.getElementById("deliverynoteid").value);
 		//action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 		//url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=true";
 		//url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&create=true";
-		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CDN&action=true";
-		
+		url = url+ "&insertKeyValue="+ prepareInsertData();
+		//alert("URL>>>"+url);
 		sendAjaxGet(url, saveCallBack);
 		}
 	}
@@ -254,6 +251,17 @@ function saveCallBack(val)
 	else 
 	{
 		showalert(json.message);
+		
+		jQuery('#btnSave').attr('disabled','disabled');	
+		jQuery('#btnModify').removeAttr('disabled');
+		jQuery('#btnCancel').removeAttr('disabled');
+		var updateonar ="deliverydate,itemname,receiveddate,itemquantity,warrantydate,chqno,invoiceno,dnstatus,orderno,itemid,poid,postatus,Status,applicationid,wflactionid,wflactiondesc,wflid".split(",");
+		for ( var i = 0; i < updateonar.length; i++) 
+		{
+			var arelm = updateonar[i];
+			jQuery("#"+ arelm).attr('disabled','disabled');
+			
+		}		
 		var allfields = prepareInsertData();
 		var json1 = JSON.parse(allfields);
 		var valuesar = json1.json1[0].valuesar;
@@ -263,7 +271,7 @@ function saveCallBack(val)
 		whereClause = myJSONText.replace("AUTOGEN_SEQUENCE_ID","");
 		//alert(whereClause);
 		//populate();
-		location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
+		//location.href= ctxpath+"/template1.action?screenName=frmDeliveryNoteList";
 	}
 }
 /*
@@ -282,7 +290,6 @@ function deleteData()
 	whereclause  = makeWhereClause();
 	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmDeliveryNote";
 	sendAjaxGet(url, cancelCallBack);//call this method in commonjs.js.
-	
 }
 
 //Error/Successful Message for deleting
@@ -408,30 +415,19 @@ function insertData()
 	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 }	
 
-/*function submitactivity(){
-	alert("here in submit activity");
-	alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
-	alert(applicationid);
-	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
-	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+function dnSubmit() 
+{
 	
+	var applicationid = document.getElementById("applicationid").value;
+	//alert("applicationid"+applicationid);
+	var actionid =  document.getElementById("wflactiondesc").value;
+	var wflid= document.getElementById("wflid").value;
+	var dnid= document.getElementById("deliverynoteid").value;
+	alert(dnid);
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&applicationid="+applicationid+"&screenName=frmDeliveryNote"+"&deliverynoteid="+ dnid + "&action=submit"  ;
+	//alert(url);
+	location.href = url;
+	//prepareInsertData();
 }
 
-
-function submitScreenFlowactivity()
-{
-	alert("here in submit activity");
-	alert(wflcontrollerurl);
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
-	alert(applicationid);
-	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
-	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	
-	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
-	location.href = url;
-}*/
-	
