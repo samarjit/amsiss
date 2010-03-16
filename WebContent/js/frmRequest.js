@@ -666,7 +666,27 @@ function disable_fields(){
 
 	}
 
-	if(document.getElementById("status").value=="END"){
+	if(document.getElementById("status").value=="REJECTED" || document.getElementById("status").value=="CLOSED"){
+
+		document.getElementById("btnmodify").disabled = true;
+		document.getElementById("btnSave").disabled = true;
+		document.getElementById("btnsubmit").disabled = true;
+		document.getElementById("btndelete").disabled = true;
+		document.getElementById("btncancel").disabled = true;
+		document.getElementById("btnclose").disabled = true;
+	}
+	
+	if(document.getElementById("status").value=="APPROVED"){
+
+		document.getElementById("btnmodify").disabled = true;
+		document.getElementById("btnSave").disabled = true;
+		document.getElementById("btnsubmit").disabled = true;
+		document.getElementById("btndelete").disabled = true;
+		document.getElementById("btncancel").disabled = false;
+		document.getElementById("btnclose").disabled = true;
+	}
+	
+	if(document.getElementById("status").value=="RESOLVED"){
 
 		document.getElementById("btnmodify").disabled = true;
 		document.getElementById("btnSave").disabled = true;
@@ -674,9 +694,9 @@ function disable_fields(){
 		document.getElementById("btndelete").disabled = true;
 		document.getElementById("btncancel").disabled = true;
 		document.getElementById("btnclose").disabled = false;
-
-
 	}
+	
+	
 
 }
 
@@ -1059,54 +1079,35 @@ function submitScreenFlowactivity(){
 	//alert("here in submit activity")
 	//alert(wflcontrollerurl);
 
-
+	/*
 	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=getEmail&mgrid="+document.getElementById("mgrid").options[document.getElementById("mgrid").selectedIndex].value;
-	sendAjaxGet(url, beforeMail);
+	sendAjaxGet(url, beforeMail); */
 
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-
+	
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&mgrid="+document.getElementById("mgrid").value+"&mgrname="+document.getElementById("mgrname").value+"&empname="+document.getElementById("empname").value;
+	location.href = url;
+	
 }
 
 function cancelReq(){
 	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=cancel&reqid="+document.getElementById("reqid").value;
-	sendAjaxGet(url, afterCancel);
+	sendAjaxGet(url, afterCancelclose);
 
 }
 
-function afterCancel(){
+function afterCancelclose(){
 	window.location = "template1.action?screenName=frmRequestList";
 }
 
 function closeReq(){
 	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=close&reqid="+document.getElementById("reqid").value;
-	sendAjaxGet(url, afterClose);
+	sendAjaxGet(url, afterCancelclose);
 
 }
-
-function afterClose(){
-	window.location = "template1.action?screenName=frmRequestList";
-}
-
-function afterMail(){
-	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
-	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
-	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName;
-	location.href = url;
-
-}
-
-function beforeMail(p){
-
-	var jobj = JSON.parse(p);
-	empemail = jobj.empemail;
-	mgremail = jobj.mgremail;
-
-	var url = mailurlpart+"?subject=Request from "+document.getElementById("empname").value+"&from="+empemail+"&sendto="+mgremail+"&msgbody=request type is "+document.getElementById("requesttype").options[document.getElementById("requesttype").selectedIndex].value;
-	sendAjaxGet(url, afterMail);
-
-}
-
 
 
 
