@@ -422,7 +422,7 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 		//Class aclass = Class.forName(className);
 		//BaseBL basebl = (BaseBL) aclass.newInstance();
 		System.out.println("findScrFlowNode:");
-		ScrFlowNode sfn = scf.populateScrFlowNode ("newwfl", "mail-node1");
+		ScrFlowNode sfn = scf.populateScrFlowNode ("scrrfqwfl", "RRFMail");
 		String script = sfn.getEventscript();
 		Interpreter i = new Interpreter(); 
 		try {
@@ -489,14 +489,20 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 				scrflownode.setNodeType("mail-node");
 				HashMap<String,String> emailPropSet = new HashMap<String, String>();
 				node = nodelist.item(0); 
-				emailPropSet.put("template", (String)((Element)node).getAttribute("template"));
-				emailPropSet.put("sendto", (String)((Element)node).getAttribute("to"));
+				String template = ((Element)node).getAttribute("template");
+				String sendto = ((Element)node).getAttribute("to");
+				emailPropSet.put("template", (String)template);
+				emailPropSet.put("sendto", (String)sendto);
 				Element elm = (Element)node;
 			 
 					NodeList subject = elm.getElementsByTagName("subject");
-					String subjectstr = trim(subject.item(0).getTextContent());      
+					String subjectstr="";
+					if(subject.item(0) != null)
+					 subjectstr = trim(subject.item(0).getTextContent());      
+					String textstr="";
 					NodeList text = elm.getElementsByTagName("text");
-					String textstr = trim(text.item(0).getTextContent());      
+					if(text.item(0) != null)
+					textstr = trim(text.item(0).getTextContent());      
 				 
 				emailPropSet.put("subject", subjectstr);
 				emailPropSet.put("msgbody", textstr);
