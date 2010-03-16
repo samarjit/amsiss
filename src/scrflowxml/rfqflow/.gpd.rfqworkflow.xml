@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container width="686" height="434">
+<root-container width="643" height="399">
   <node name="RFQCreate" x="96" y="25" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
@@ -28,11 +28,6 @@
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="Allocate" x="493" y="312" width="132" height="36">
-    <edge>
-      <label x="5" y="-10"/>
-    </edge>
-  </node>
   <node name="RRFApproval" x="141" y="156" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
@@ -42,7 +37,7 @@
     </edge>
   </node>
   <node name="mail-node1" x="376" y="95" width="132" height="36"/>
-  <node name="end-state1" x="438" y="397" width="132" height="36"/>
-  <node name="End" x="13" y="250" width="132" height="36"/>
   <node name="mail-node2" x="177" y="362" width="132" height="36"/>
+  <node name="end-state1" x="427" y="356" width="132" height="36"/>
+  <node name="End" x="13" y="250" width="132" height="36"/>
 </root-container>

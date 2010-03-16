@@ -19,10 +19,6 @@
 	</task-node>
 
 	<task-node name="CreateDN">
-		<transition to="Allocate"></transition>
-	</task-node>
-
-	<task-node name="Allocate">
 		<transition to="end-state1"></transition>
 	</task-node>
 
