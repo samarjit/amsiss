@@ -19,7 +19,7 @@
 	</task-node>
 
 	<task-node name="CreateDN">
-		<transition to="end-state1"></transition>
+		<transition to="End"></transition>
 	</task-node>
 
 	<decision name="RRFApproval">
@@ -54,8 +54,6 @@ System.out.println(&amp;quot;This is executed from script&amp;quot;);
 
 	<mail-node name="mail-node2"></mail-node>
 
-
-	<end-state name="end-state1"></end-state>
 
 	<end-state name="End"></end-state>
 
