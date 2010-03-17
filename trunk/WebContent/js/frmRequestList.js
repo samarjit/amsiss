@@ -3,8 +3,7 @@
 function search(){
 	 
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
-	/*if(document.getElementById("sempid"))
-		url=url+'&sempid='+document.getElementById("sempid").value; */
+	
 	if(document.getElementById("sempname"))
 		url=url+'&sempname='+document.getElementById("sempname").value;
 	if(document.getElementById("srequestid"))
@@ -15,8 +14,14 @@ function search(){
 	var pagesize = jQuery('.searchdiv .pagesize').val();
 	var pageno = jQuery('.searchdiv .pageno').val();
 	var time = new Date();
+	if(roleId!='ADMIN'){
 	url=url+'&sempid='+userId+'&curTime='+time.getTime();
-
+	}
+	else{
+		if(document.getElementById("sempid"))
+		url=url+'&sempid='+document.getElementById("sempid").value+'&curTime='+time.getTime();
+	}
+	
 	if(pagesize)
 		url=url+'&pagesize='+pagesize;
 	if(pageno)
