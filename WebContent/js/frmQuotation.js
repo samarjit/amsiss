@@ -69,8 +69,8 @@ function quotationCallBack(p){
 				document.getElementById("unitprice").value='0';
 				document.getElementById("discount").value='0';
 				document.getElementById("mischarge").value='0';
-
-
+				
+		
 				continue;
 			}
 
@@ -115,6 +115,7 @@ function quotationCallBack(p){
 		document.getElementById("btnModify").disabled=true;
 		document.getElementById("btnDelete").disabled=true;
 		disable_rfq_fields();
+		document.getElementById("rfqvendorid").disabled=false;
 	}
 	else
 	{		
