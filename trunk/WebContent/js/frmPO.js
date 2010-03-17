@@ -172,11 +172,16 @@ function disable_fields(){
 		}
 	}
 	
-	if(document.getElementById("postatus").value=="SEND"){
+	if(document.getElementById("postatus").value=="DNCREATED"){
 		
 		document.getElementById("modify").disabled = true;
 
+	}
+
+if(document.getElementById("postatus").value=="SEND"){
 		
+		document.getElementById("modify").disabled = true;
+
 	}
 
 	
