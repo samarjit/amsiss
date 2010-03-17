@@ -21,8 +21,7 @@ function clearWhereClause(){
 function sendPO(){
 
 	url = url+"/scrworkflow.action?action=true&doString="+actionid+"&vendorid="+vendorid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&poid="+jQuery("#poid").text()+"&vendoraddr="+jQuery("#vendoraddr").text()+"&curdate="+jQuery("#curdate").text()+"&qid="+jQuery("#quotationid").text()+"&qref="+jQuery("#quotationref").text()+"&itemid="+jQuery("#itemid").text()+"&desc="+jQuery("#desc").text()+"&qty="+jQuery("#qty").text()+"&unitprice="+jQuery("#unitprice").text()+"&linetotal="+jQuery("#linetotal").text()+"&curtype="+jQuery("#curtype").text()+"&discount="+jQuery("#discount").text()+"&misc="+jQuery("#misc").text()+"&totalamt="+jQuery("#totalamt").text()+"&comments="+jQuery("#comments").text(); 
-	alert(url);
-	 window.close();
+	window.close();
 	opener.location=(url);
 }
 
@@ -172,6 +171,16 @@ function disable_fields(){
 
 		}
 	}
+	
+	if(document.getElementById("postatus").value=="SEND"){
+		
+		document.getElementById("modify").disabled = true;
+
+		
+	}
+
+	
+	
 }
 
 
