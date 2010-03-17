@@ -238,7 +238,7 @@ function reqSave() {
 //		   wrapper: "li",
 //		   submitHandler: function() { alert("Submitted!") }
 //		})
-		return;
+		 
 	if(screenMode == "create"){
 	document.getElementById("rfqid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";
