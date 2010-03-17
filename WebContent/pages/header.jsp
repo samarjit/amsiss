@@ -8,7 +8,8 @@
 </head>
 <body>
 <div id="logo">    
-<h1>Asset Management System</h1>
+<h1 >Asset Management System</h1>
+
 <script>
 function fnCreateActivity(ac) { 
 	var ctxpath = '<%=request.getContextPath() %>';
@@ -34,17 +35,20 @@ location.href=url;
 </script>
 <% UserDTO userDTO = (UserDTO) session.getAttribute("userSessionData"); 
 String userId = "";
+String roleId = "";
  if(userDTO==null || userDTO.getUserid() == null){
 	 String url = request.getContextPath()+"/pages/login.jsp?errormsg=Session Expired";
-	 System.out.println("url="+url);
 	 response.sendRedirect(url);
 	 
  }else{
 	 userId = userDTO.getUserid(); 
+	 roleId = userDTO.getRoleid();
  }
 %>
 <script>
 var userId =  '<%= userId %>';
+var roleId =  '<%= roleId %>';
+
 </script>
 
 Welcome ${userSessionData.username }, <%= DateFormat.getDateTimeInstance(
