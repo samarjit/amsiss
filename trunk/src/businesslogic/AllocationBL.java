@@ -140,6 +140,7 @@ public class AllocationBL implements BaseBL{
 	@Override
 	public HashMap preSubmitProcessBL(Map hm) {
 		int res = -1;
+		HashMap h = new HashMap();
 		try {
 			DBConnector db = new DBConnector();
 			String appid = getParameter(hm,"appid"); 
@@ -160,7 +161,7 @@ public class AllocationBL implements BaseBL{
 		} finally {
 			 
 		}
-		return null;
+		return h;
 	}
 
 	@Override
