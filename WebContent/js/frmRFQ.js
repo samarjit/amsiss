@@ -88,7 +88,7 @@ function requestCallBack(p){
 			}
 		}
 	}
-	
+	screenMode = "view";
 	disable_fields();
 	populateVendors();
 	
@@ -131,8 +131,8 @@ function fnAdjustTableWidth() {
 
 function disable_fields(){
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	
-	if(screenMode!= "create" ) 
+	 
+	if(screenMode!= "create" && screenMode != 'modify') 
 	for(var i =0; i<panelsTable.length;i++){
 		
 	//	alert("panels "+ panelsTable[i].id);
@@ -185,6 +185,9 @@ function disable_fields(){
 	}
 	if(screenMode== "modify" ){
 		jQuery('#btnSave').removeAttr('disabled');
+		if(jQuery.trim(jQuery('#statusFields #Status').val()) == 'S' && jQuery.trim(jQuery('#statusFields #wflactiondesc').val()) =='RFQCreate'){
+			 jQuery('#btnVendorMap').removeAttr('disabled');
+		}
 	}
 	if(screenMode == "view" && jQuery('#Status').val() =="S"){
 		updateonar = "btnModify,btnDelete".split(",");
@@ -214,6 +217,28 @@ function reqSave() {
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	//alert(screenMode);
+	if(isNumeric(jQuery.trim(jQuery('#panelFields #quantity').val()))==false){
+		showalert("Quantity should be number");
+		return;
+	}
+	if(jQuery.trim(jQuery('#panelFields #department').val())==""){
+	showalert("Department is mandatory");return;
+	}
+
+//	 jQuery("#panelFields").validate({
+//		 rules: {
+//		 department: "required",
+//		 quantity: {
+//	       required: true,
+//	       number: true
+//	     }
+//	   },
+//
+//		   errorLabelContainer: "#alertmsgdiv",
+//		   wrapper: "li",
+//		   submitHandler: function() { alert("Submitted!") }
+//		})
+		return;
 	if(screenMode == "create"){
 	document.getElementById("rfqid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";
@@ -328,7 +353,7 @@ function prepareInsertData() {
 		var k = new Object();
 		k.json = pclass
 		var myJSONText = JSON.stringify(k, replacer,"");
-		//alert(myJSONText );	
+		 
 		return myJSONText;			
 }
 
@@ -447,7 +472,7 @@ function makeWhereClause(){
 
 function submitactivity(){
 	//alert("here in submit activity")
-	alert(wflcontrollerurl);
+	//alert(wflcontrollerurl);
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=rfqid]").attr("value");
 	//alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
@@ -479,6 +504,10 @@ function populateVendors(){
 	sendAjaxGet(url, popvendorcallback);
 }
 function deleteVendor(vendorid){
+	if(jQuery.trim(jQuery('#statusFields #Status').val()) != 'S'){
+		showalert("Status should be 'S'(started mode)");
+		return;
+	}
 	var url = ctxpath+"/vendormap.action?command=delete"+"&rfqid="+document.getElementById("rfqid").value  +
 			"&vendorid="+vendorid;
 	//alert(url);
@@ -595,6 +624,10 @@ function calculateIndvStatus(url, type){
 	return url;
 }
 function enableEmail(status,vendorid){
+	if(jQuery.trim(jQuery('#statusFields #Status').val()) != 'S'){
+		showalert("Status should be 'S'(started mode)");
+		return;
+	}
 	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
 	"&vendorid="+vendorid+"&status="+status;
 	//get the hidden field's value corresponding to each row
@@ -614,6 +647,10 @@ function enableEmail(status,vendorid){
 	sendAjaxGet(url, popvendorcallback);
 }
 function enablePrint(status,vendorid){
+	if(jQuery.trim(jQuery('#statusFields #Status').val()) != 'S'){
+		showalert("Status should be 'S'(started mode)");
+		return;
+	}
 	var url = ctxpath+"/vendormap.action?command=updatetypenotify"+"&rfqid="+document.getElementById("rfqid").value  +
 	"&vendorid="+vendorid+"&status="+status;
 	//get the hidden field's value corresponding to each row
@@ -639,6 +676,10 @@ function enablePrint(status,vendorid){
 
 var childwindow;
 function sendEmail(vendorid){
+	if(jQuery.trim(jQuery('#statusFields #Status').val()) != 'S'){
+		showalert("Status should be 'S'(started mode)");
+		return;
+	}
   childwindow = window.open("rfqsendemail.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500,scrollbars=1");
 }
 function populateEmailPage(parm){
@@ -647,6 +688,10 @@ function populateEmailPage(parm){
 }
 var childwindow2;
 function sendPrint(vendorid){
+	if(jQuery.trim(jQuery('#statusFields #Status').val()) != 'S'){
+		showalert("Status should be 'S'(started mode)");
+		return;
+	}
  childwindow2 = window.open("rfqsendprint.action?vendorid="+vendorid+"&rfqid="+$F("rfqid"),"","width=800, height=500");
 }
 function populatePrintPage(parm){

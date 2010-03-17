@@ -99,6 +99,7 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
     	
     	String resultHtml = "No Data found";
     	ArrayList errorList = new ArrayList();
+    	HashMap retBL = new HashMap();
     	if(insertKeyValue != null || (!"".equals(insertKeyValue)))
 			try {
 				
@@ -107,7 +108,8 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 					errorList.add(updresult);
 				}
 				debug(5,"callin postUpdateProcessBL ");
-				HashMap retBL = postUpdateProcessBL(screenName);
+				
+				retBL = postUpdateProcessBL(screenName);
 				if(retBL.get("error")!=null){
 					errorList.add("Business Logic error occured");
 				}
@@ -130,6 +132,8 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 					jobj.put("message", "Record updated successfully");
 					resultHtml = jobj.toString();
 				}else{
+					HashMap blres =   (HashMap) retBL.get("BusinessLogicRESULT");
+					if(blres!=null)jobj.put("BusinessLogicRESULT",blres);
 					jobj.put("message", "Record updated successfully");
 					resultHtml = jobj.toString();
 				}

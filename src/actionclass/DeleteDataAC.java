@@ -30,7 +30,7 @@ import dao.CrudDAO;
  */
 public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 	private void debug(int priority, String s){
-		if(priority > 1){
+		if(priority > -1){
 			System.out.println("DeleteDataAC:"+s);
 		}
 	}
@@ -122,7 +122,9 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 				jobj.put("message", "Record deleted successfully");
 				resultHtml = jobj.toString();
 			}else{
-				jobj.put("message", "Record deleted successfully");
+				HashMap blres =   (HashMap)  retPostBL.get("BusinessLogicRESULT");
+				if(blres!=null)jobj.put("BusinessLogicRESULT",blres);
+				jobj.put("message", "Record deleted successfully ");
 				resultHtml = jobj.toString();
 			}
 		} catch (Exception e) {
@@ -150,7 +152,9 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 		Class aclass = null;
 		CrudDAO cd = new CrudDAO();
 		HashMap retBLhmtmp = new HashMap();
+		debug(0,"business logic called with screenName:"+screenName);
 		String businessLogic = cd.getBusinessLogicName(screenName);
+		debug(0,"Executing business logic:"+businessLogic);
 		try {
 			if (businessLogic != null && !"".equals(businessLogic)) {
 				aclass = Class.forName(businessLogic);
@@ -173,6 +177,7 @@ public class DeleteDataAC extends ActionSupport implements ServletRequestAware {
 				}else{
 					retBLhm.put("BusinessLogicRESULT",retBLhmtmp);
 				}
+				debug(0," Business logic returned hashmap:"+retBLhm);	
 			}
 			else{
 				retBLhm.put("message", "Business logic not defined");

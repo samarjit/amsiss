@@ -227,7 +227,7 @@ public class VendorMapDAO {
 		prepar.add(DataType.STRING, department);
 		prepar.add(DataType.STRING, rfqid);
 		
-		try {
+		try {debug(1,prepar.toString(SQLvendorid));
 			crs = 	db.executePreparedQuery(SQLvendorid, prepar );
 			while(crs.next()){
 			
@@ -246,7 +246,7 @@ public class VendorMapDAO {
 		
 		
 			
-			debug(1,prepar.toString(SQL));
+			debug(1,prepar2.toString(SQL));
 			 db.executePreparedUpdate(SQL, prepar2 );
 			
 		

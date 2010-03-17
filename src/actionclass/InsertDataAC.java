@@ -181,6 +181,8 @@ public class InsertDataAC extends ActionSupport implements ServletRequestAware{
 						jobj.put("message", "Record saved successfully");
 						resultHtml = jobj.toString();
 					}else{
+						HashMap blres =   (HashMap) retBL.get("BusinessLogicRESULT");
+						if(blres!=null)jobj.put("BusinessLogicRESULT",blres);
 						jobj.put("message", "Record saved successfully");
 						resultHtml = jobj.toString();
 					}

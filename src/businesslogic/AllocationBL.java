@@ -19,7 +19,9 @@ public class AllocationBL implements BaseBL{
 	}
 	public String getParameter(Map buslogHm, String paramName){
 		String[] tmp = (String[]) buslogHm.get(paramName);
-		String parameter = (String)(tmp[0]);
+		String parameter = "";
+		if (tmp != null)
+			parameter = (String) (tmp[0]);
 		return parameter;
 	}
 	
@@ -30,15 +32,74 @@ public class AllocationBL implements BaseBL{
 	}
 
 	@Override
-	public HashMap postDeleteProcessBL(Map buslogHm) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap postDeleteProcessBL(Map hm) {
+		int res = -1;
+		HashMap hmRes= new HashMap();
+		try {
+			DBConnector db = new DBConnector();
+			String appid = getParameter(hm,"appid"); 
+			String data2 = getParameter(hm,"allocid"); 
+			String assetid = getParameter(hm,"assetid"); 
+			debug(1,"postDeleteProcessBL appid:"+appid+"   "+data2+ "  assetid"+assetid);
+			
+			 
+			
+		String	SQL = " update AMS_ASSET set ASSET_QTY_AVAILABLE = ASSET_QTY_AVAILABLE+1 where ASSET_ID=? ";
+			PrepstmtDTOArray  prepar2 = new PrepstmtDTOArray(); 
+			prepar2.add(DataType.STRING, assetid);
+			debug(1,prepar2.toString(SQL));
+			res = db.executePreparedUpdate(SQL, prepar2);
+			
+			
+			SQL = " update AMS_ASSET set ASSET_ALLOC_STATUS='FREE' where ASSET_QTY_AVAILABLE >0 AND ASSET_ID=? ";
+			PrepstmtDTOArray  prepar3 = new PrepstmtDTOArray(); 
+			prepar3.add(DataType.STRING, assetid);
+			debug(1,prepar3.toString(SQL));
+			res = db.executePreparedUpdate(SQL, prepar3);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			 
+		}
+		hmRes.put("result", res);
+		return hmRes;
 	}
 
 	@Override
-	public HashMap postInsertProcessBL(Map buslogHm) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap postInsertProcessBL(Map hm) {
+		int res = -1;
+		HashMap hmRes= new HashMap();
+		try {
+			DBConnector db = new DBConnector();
+			String appid = getParameter(hm,"appid"); 
+			String data2 = getParameter(hm,"allocid"); 
+			String assetid = getParameter(hm,"assetid"); 
+			debug(1,"postDeleteProcessBL appid:"+appid+"   "+data2+ "  assetid"+assetid);
+			
+			 
+			
+			String	SQL = " update AMS_ASSET set ASSET_QTY_AVAILABLE = ASSET_QTY_AVAILABLE-1 where ASSET_ID=? ";
+			PrepstmtDTOArray  prepar2 = new PrepstmtDTOArray(); 
+			prepar2.add(DataType.STRING, assetid);
+			debug(1,prepar2.toString(SQL));
+			res = db.executePreparedUpdate(SQL, prepar2);
+			
+			
+			SQL = " update AMS_ASSET set ASSET_ALLOC_STATUS='NOT_FREE' where ASSET_QTY_AVAILABLE <1 AND ASSET_ID=? ";
+			PrepstmtDTOArray  prepar3 = new PrepstmtDTOArray(); 
+			prepar3.add(DataType.STRING, assetid);
+			debug(1,prepar3.toString(SQL));
+			res = db.executePreparedUpdate(SQL, prepar3);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			 
+		}
+		if(res >0)
+		hmRes.put("result", res);
+		return hmRes;
 	}
 
 	@Override
@@ -60,8 +121,7 @@ public class AllocationBL implements BaseBL{
 	}
 
 	@Override
-	public HashMap preDeleteProcessBL(Map buslogHm) {
-		// TODO Auto-generated method stub
+	public HashMap preDeleteProcessBL(Map hm) {
 		return null;
 	}
 
@@ -82,14 +142,18 @@ public class AllocationBL implements BaseBL{
 		int res = -1;
 		try {
 			DBConnector db = new DBConnector();
-			String data = getParameter(hm,"passedonvalues"); 
+			String appid = getParameter(hm,"appid"); 
 			String data2 = getParameter(hm,"allocid"); 
-			debug(1,data+"   "+data2);
+			String assetid = getParameter(hm,"assetid"); 
+			debug(1,"preSubmitProcessBL :"+appid+"   "+data2+ "  "+assetid);
+			
 			String SQL = " update AMS_REQUEST set STATUS='RESOLVED'  where reqid=? ";
 			PrepstmtDTOArray  prepar = new PrepstmtDTOArray(); 
-			prepar.add(DataType.STRING, data);
+			prepar.add(DataType.STRING, appid);
+			debug(1,prepar.toString(SQL));
+			res = db.executePreparedUpdate(SQL, prepar);
 			
-			//res = db.executePreparedUpdate(SQL, prepar);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
