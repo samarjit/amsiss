@@ -1050,7 +1050,7 @@ function fnAdjustTableWidth() {
 function submitScreenFlowactivity(){
 	//alert("here in submit activity")
 	//alert(wflcontrollerurl);
-
+alert("hi");
 	/*
 	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=getEmail&mgrid="+document.getElementById("mgrid").options[document.getElementById("mgrid").selectedIndex].value;
 	sendAjaxGet(url, beforeMail); */
@@ -1060,13 +1060,17 @@ function submitScreenFlowactivity(){
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&mgrid="+document.getElementById("mgrid").value+"&mgrname="+document.getElementById("mgrname").value+"&empname="+document.getElementById("empname").value;
+	var url = "scrworkflow.action?cancel=false&action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&mgrid="+document.getElementById("mgrid").value+"&mgrname="+document.getElementById("mgrname").value+"&empname="+document.getElementById("empname").value;
 	location.href = url;
 	}
 }
 
 function cancelReq(){
-	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=cancel&reqid="+document.getElementById("reqid").value;
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	var url = "scrworkflow.action?cancel=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&reqid="+document.getElementById("reqid").value;
+
 	sendAjaxGet(url, afterCancelclose);
 
 }
@@ -1083,6 +1087,7 @@ function closeReq(){
 
 
 function validation(){
+
 
 	if(document.getElementById("mgrid").selectedIndex==0)
 	{
@@ -1119,7 +1124,8 @@ function validation(){
 					showerror("Enter Hardware Quantity");
 					return false;
 				}
-				
+				alert("amc");
+
 				if(document.getElementById("quantitygh").length == 0 && document.getElementById("quantitygh").length == 0 ){
 					showerror("Enter Hardware Details");
 					return false;
@@ -1131,6 +1137,7 @@ function validation(){
 			showerror("Enter Quantity");
 			return false;
 		}
+	}
 	}
 
 	if(requestType==New_Software || requestType==Software_Upgrade)
@@ -1203,7 +1210,7 @@ function validation(){
 
 	return true;
 
-}
+
 
 
 }
