@@ -239,13 +239,19 @@ public String executeScrflow(){
 				
 				
 				if(hmActions != null && hmActions.size()>0){
-					ScrFlowNode sfn = wflBean.populateScreenflowNode(wflid,hmActions.get(0));
-					HashMap<String,String> emailProp = sfn.getEmail();
-					if(emailProp !=null && emailProp.size()>0){
-						sendEmail(emailProp);
-						emailsent = true;
+					ScrFlowNode sfn = null;
+					try {
+						sfn = wflBean.populateScreenflowNode(wflid, hmActions
+								.get(0));
+						HashMap<String, String> emailProp = sfn.getEmail();
+						if (emailProp != null && emailProp.size() > 0) {
+							sendEmail(emailProp);
+							emailsent = true;
+						}
+						doString = hmActions.get(0);
+					} catch (Exception e) {
+						debug(5,"ScreenFlowNode population failed"); 
 					}
-					doString = hmActions.get(0);
 				}
 				
 				//Doing another activity right away here of Sending mails.

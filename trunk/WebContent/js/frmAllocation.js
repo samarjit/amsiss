@@ -196,7 +196,7 @@ function disable_fields(){
 			var arelm = updateonar[i];
 			jQuery("#" + arelm).removeAttr('disabled');
 		}
-	}
+	} 
 }
 
 function insertData() {
