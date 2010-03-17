@@ -171,25 +171,7 @@ public class RequestBL implements BaseBL{
 
 
 			}
-			if(rpcid.equals("cancel")){
-				String[] tmp = (String[]) buslogHm.get("reqid");
-				String reqid = (String)(tmp[0]);
-				String SQL = "update ams_request set status='CANCELLED' where reqid=? ";
-
-				try {
-					DBConnector db = new DBConnector();
-					PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
-					arPrepstmt.add(DataType.STRING, reqid);			
-					debug(1,arPrepstmt.toString(SQL));
-
-					 db.executePreparedUpdate(SQL, arPrepstmt );
-				}catch (Exception e) {
-					e.printStackTrace();
-				}finally {
-					
-				}
-				
-			}
+			
 			
 			if(rpcid.equals("close")){
 				String[] tmp = (String[]) buslogHm.get("reqid");
@@ -382,12 +364,34 @@ public class RequestBL implements BaseBL{
 
 	@Override
 	public HashMap preSubmitProcessBL(Map buslogHm) {
+		
+		String[] cancel = (String[]) buslogHm.get("cancel");
+		if(cancel[0].toString().equals("true")){
+			String[] tmp = (String[]) buslogHm.get("reqid");
+			String reqid = (String)(tmp[0]);
+			String SQL = "update ams_request set status='CANCELLED' where reqid=? ";
+			try {
+				DBConnector db = new DBConnector();
+				PrepstmtDTOArray arPrepstmt = new PrepstmtDTOArray();
+				arPrepstmt.add(DataType.STRING, reqid);			
+				debug(1,arPrepstmt.toString(SQL));
+
+				 db.executePreparedUpdate(SQL, arPrepstmt );
+			}catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				buslogHm.put("nextAction", "Approve");
+
+			}
+		}
+		else{
 		String[] delquotarr = (String[]) buslogHm.get("appid");
 		if(delquotarr == null)
 			return (HashMap) buslogHm;
 		String appid = (String)(delquotarr[0]);
 		debug(1, appid);
 		String SQL = "update ams_request set status='PENDAPPROVAL' where reqid=? ";
+		System.out.println("*************************INSIDE SUBMIT");
 
 		try {
 			DBConnector db = new DBConnector();
@@ -399,7 +403,7 @@ public class RequestBL implements BaseBL{
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			
+		}
 		}
 		return (HashMap)buslogHm;
 	}
