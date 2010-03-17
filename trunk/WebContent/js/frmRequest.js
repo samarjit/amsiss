@@ -732,7 +732,6 @@ function reqSave() {
 	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
-		prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
 
 		// prompt("url",url);
@@ -748,7 +747,6 @@ function reqSave() {
 		// url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;
 
 		var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
-		prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=scrflow&activityname=CR&create=";
 		//alert(url);
 		// add key:vlaue to url
