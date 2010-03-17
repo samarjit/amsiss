@@ -1048,7 +1048,6 @@ function fnAdjustTableWidth() {
 function submitScreenFlowactivity(){
 	//alert("here in submit activity")
 	//alert(wflcontrollerurl);
-alert("hi");
 	/*
 	var url = jsrpcurlpart+"?screenName="+screenName+"&rpcid=getEmail&mgrid="+document.getElementById("mgrid").options[document.getElementById("mgrid").selectedIndex].value;
 	sendAjaxGet(url, beforeMail); */
@@ -1122,7 +1121,6 @@ function validation(){
 					showerror("Enter Hardware Quantity");
 					return false;
 				}
-				alert("amc");
 
 				if(document.getElementById("quantitygh").length == 0 && document.getElementById("quantitygh").length == 0 ){
 					showerror("Enter Hardware Details");
