@@ -666,7 +666,7 @@ function disable_fields(){
 
 	}
 
-	if(document.getElementById("status").value=="REJECTED" || document.getElementById("status").value=="CLOSED"){
+	if(document.getElementById("status").value=="REJECTED" || document.getElementById("status").value=="CLOSED" || document.getElementById("status").value=="CANCELLED"){
 
 		document.getElementById("btnmodify").disabled = true;
 		document.getElementById("btnSave").disabled = true;
