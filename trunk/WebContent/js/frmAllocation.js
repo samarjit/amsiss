@@ -220,14 +220,14 @@ function reqSave() {
 		if(document.getElementById("allocid").value == null || document.getElementById("allocid").value ==""){
 		   document.getElementById("allocid").value = "AUTOGEN_SEQUENCE_ID";
 	     }
-	
-	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAllocation";
+		var assetid = jQuery("#panelsdiv #panelFields #assetid").val();
+	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAllocation&assetid="+assetid;
 	
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=allocid]").attr("value");
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
-	prompt("url","action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid);
+	//prompt("url","action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid);
 	//workflow for create activityname=CRAST&create=true
 	//workflow for continuation &invokewfl=scrflow&action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid
 	url = url+ "&insertKeyValue="+ prepareInsertData()+"&invokewfl=false&action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
@@ -256,12 +256,14 @@ function reqSave() {
 function deleteData(){
 	
 	whereclause  = makeWhereClause();
-	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmAllocation";
+	var assetid = jQuery("#panelsdiv #panelFields #assetid").val();
+	
+	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmAllocation&assetid="+assetid;
 // 	url = prompt("url",url);	
 //	alert("in update!!!!!!! url" +url);
 	//prompt("url",url);
 	//add key:vlaue to url
-	
+	screenMode ="delete";
 
 	sendAjaxGet(url, saveCallBack);
 	
@@ -269,14 +271,17 @@ function deleteData(){
 
 function saveCallBack(val) {
 	//show success message 
-	//alert(val);
-	screenMode="view";
+	// alert(val);
+	
 	var json = JSON.parse(val);
 	
 	if(json.error !=null ){
 		showerror(json.error);
 	}else {
 		showalert(json.message);
+		if(screenMode =="delete") return;
+		
+		screenMode="view";
 		if(json.workflowurl != null){
 			location.href = json.workflowurl ;
 		}else{//extracting all fields whereclause form insert key value pair of each panel
@@ -467,7 +472,7 @@ function submitactivity(){
 	}
 
 function submitScreenFlowactivity(){
-	alert("submit screenflow activity")
+	//alert("submit screenflow activity")
 	
 	var applicationid = jQuery("#panelsdiv #panelFields  input[id=allocid]").attr("value");
 	 
@@ -477,8 +482,9 @@ function submitScreenFlowactivity(){
 	 showalert("This activity is performed out of workflow, so workflow wont be invoked");
 	 return;
 	}
+	var assetid = jQuery("#panelsdiv #panelFields #assetid").val();
 	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
-	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	var url = "scrworkflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid+"&screenName="+screenName+"&assetid="+assetid;
 	 
 	location.href = url;
 		

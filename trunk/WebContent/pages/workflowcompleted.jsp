@@ -5,6 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Workflow Completed</title>
+<%String ctxstr = request.getContextPath(); %>
+<style>
+@import "<%=ctxstr %>/css/button.css";
+@import "<%=ctxstr %>/css/header.css";
+</style>
 </head>
 <body>
 <%@ include file="header.jsp" %>

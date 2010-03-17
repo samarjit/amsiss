@@ -170,9 +170,11 @@ function viewdetails(btnname){
 		
 		if(btnname.id == 'capturequotation'){			
 			var rfqstatus = getSelectedRowData("searchdiv","rfqstatus");
-			if(rfqstatus!= "SEND"){
+			var WFLACTIONDESC = getSelectedRowData("searchdiv","WFLACTIONDESC");
+			
+			if(rfqstatus!= "SEND" || WFLACTIONDESC!='CreateRRF'){
 				 
-				showalert("RFQ Status is SEND ie. Select RFQ which has been submitted");
+				showalert("RFQ Status needs to be SEND ie. Action desc should be CreateRRF");
 				return;
 			}
 			document.getElementById("formwhere").screenName.value = "frmQuotation";	

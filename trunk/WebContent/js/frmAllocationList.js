@@ -89,7 +89,8 @@ function search3(){
 		url=url+'&username='+document.getElementById("username").value;
 	if(document.getElementById("assetip"))
 		url=url+'&assetip='+document.getElementById("assetip").value;	
-	 
+	if(document.getElementById("allocid"))
+		url=url+'&allocid='+document.getElementById("allocid").value;
 	var pagesize = jQuery('#searchdiv3 .pagesize').val();
 	var pageno = jQuery('#searchdiv3 .pageno').val();
 	
