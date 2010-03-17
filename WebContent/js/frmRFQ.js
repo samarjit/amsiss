@@ -224,7 +224,9 @@ function reqSave() {
 	if(jQuery.trim(jQuery('#panelFields #department').val())==""){
 	showalert("Department is mandatory");return;
 	}
-
+	if(jQuery("#itemtype").val().length >9){
+		showalert("Item Type should be less than 10 characters long");return;	
+	}
 //	 jQuery("#panelFields").validate({
 //		 rules: {
 //		 department: "required",

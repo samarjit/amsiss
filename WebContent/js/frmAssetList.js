@@ -16,6 +16,10 @@ function search(){
 	if(document.getElementById("allocstatus"))
 		url=url+'&allocstatus='+document.getElementById("allocstatus").value;
 	
+	if(document.getElementById("remarks"))
+		url=url+'&remarks='+document.getElementById("remarks").value;
+	
+	
 	var pagesize = jQuery('.searchdiv .pagesize').val();
 	var pageno = jQuery('.searchdiv .pageno').val();
 	

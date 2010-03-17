@@ -489,6 +489,7 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 				scrflownode.setNodeType("mail-node");
 				HashMap<String,String> emailPropSet = new HashMap<String, String>();
 				node = nodelist.item(0); 
+				if(node== null)return scrflownode;
 				String template = ((Element)node).getAttribute("template");
 				String sendto = ((Element)node).getAttribute("to");
 				emailPropSet.put("template", (String)template);
