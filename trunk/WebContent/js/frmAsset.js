@@ -13,6 +13,11 @@ function populate()
 		jQuery('#btnModify').attr('disabled','disabled');
 		jQuery('#btnDelete').attr('disabled','disabled');
 		jQuery('#btnSubmit').attr('disabled','disabled');
+		var updateonar = "assetid,qtyavailable".split(",");
+		for ( var i = 0; i < updateonar.length; i++) {
+			var arelm = updateonar[i];
+			jQuery("#"+ arelm).attr('disabled','disabled');
+		}
 	}
 }
 //var screenMode = "insert";
@@ -192,6 +197,7 @@ function reqSave() {
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmAsset"+screenName;	
 	 
 	if(screenMode == "create"){
+		document.getElementById("qtyavailable").value = document.getElementById("quantity").value		
 	document.getElementById("assetid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmAsset";
 	//prompt("url","action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid);	
@@ -362,7 +368,7 @@ function updateData(obj){
 	
 //dnid,hidspace,assetid,assetname,assettype,vendorid,make,tag,config,allocstatus,warranty,quantity,remarks,
 	//Status,wflactionid,wflactiondesc,wflid,
-var updateonar = "dnid,assetname,assettype,vendorid,make,tag,config,allocstatus,warranty,quantity,remarks,btnSave".split(",");
+var updateonar = "dnid,assetname,assettype,vendorid,make,tag,config,allocstatus,warranty,quantity,remarks,btnSave,qtyavailable".split(",");
 for ( var i = 0; i < updateonar.length; i++) {
 	var arelm = updateonar[i];
 	jQuery("#" + arelm).removeAttr('disabled');

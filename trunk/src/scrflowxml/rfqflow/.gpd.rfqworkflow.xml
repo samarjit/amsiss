@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container width="643" height="386">
-  <node name="RFQCreate" x="93" y="19" width="132" height="36">
+<root-container width="787" height="375">
+  <node name="RFQCreate" x="23" y="17" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="CreateRRF" x="120" y="78" width="132" height="36">
+  <node name="CreateRRF" x="116" y="77" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="CreatePO" x="171" y="210" width="123" height="36">
+  <node name="CreatePO" x="209" y="221" width="123" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
   </node>
-  <node name="CreateDN" x="226" y="274" width="132" height="36">
+  <node name="CreateDN" x="252" y="299" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>
     </edge>
@@ -40,4 +40,9 @@
     </edge>
   </node>
   <node name="End" x="22" y="311" width="132" height="36"/>
+  <node name="mail-node1" x="278" y="20" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
 </root-container>

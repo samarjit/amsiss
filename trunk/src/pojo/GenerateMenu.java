@@ -13,7 +13,7 @@ import dbconn.DBConnector;
  */
 public class GenerateMenu {
 	private void debug(int priority,String s){
-		if(priority > 0)
+		if(priority >-1)
 		System.out.println("GenerateMenu:"+s);
 	}
 	/**
@@ -21,7 +21,7 @@ public class GenerateMenu {
 	 * @param role
 	 * @return menu
 	 */
-	public StringBuffer retrieveMenu(String role){
+	public StringBuffer retrieveMenu(String ctxpath,String role){
 		
 		String menuName;
 		 String menuAction;
@@ -40,7 +40,7 @@ public class GenerateMenu {
 				 menuAction = crs.getString("MENU_ACTION");
 				 System.out.println("menu menu "+menuName+" aa "+menuAction);
 				 
-				 result.append("<li><a href="+menuAction+">"+menuName+"</a></li>");
+				 result.append("<li><a href="+ctxpath+"/"+menuAction+">"+menuName+"</a></li>");
 			 }
 			
 			 debug(0,result.toString());
