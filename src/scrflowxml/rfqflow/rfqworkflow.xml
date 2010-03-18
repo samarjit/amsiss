@@ -4,7 +4,7 @@
 
 
 	<start-state name="RFQCreate">
-		<transition to="CreateRRF"></transition>
+		<transition to="mail-node1"></transition>
 	</start-state>
 
 
@@ -54,6 +54,10 @@ System.out.println(&amp;quot;This is executed from script&amp;quot;);
 
 	<mail-node name="POMail" template="sendpo">
 		<transition to="CreateDN"></transition>
+	</mail-node>
+
+	<mail-node name="mail-node1" template="test">
+		<transition to="CreateRRF"></transition>
 	</mail-node>
 
 

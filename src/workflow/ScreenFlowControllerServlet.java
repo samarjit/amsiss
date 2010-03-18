@@ -90,7 +90,7 @@ public class ScreenFlowControllerServlet extends HttpServlet {
 
     				session.setAttribute("userSessionData", usrDTO);
     				GenerateMenu gen = new GenerateMenu();
-    				StringBuffer buf = gen.retrieveMenu(usrDTO.getRoleid());
+    				StringBuffer buf = gen.retrieveMenu(request.getContextPath(),usrDTO.getRoleid());
     				System.out.println("roleeeeee "+usrDTO.getRoleid());
     				String menu = buf.toString();
     				session.setAttribute("menu", menu);

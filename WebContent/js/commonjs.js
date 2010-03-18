@@ -1,7 +1,8 @@
-$(document).ready(function() { 
+if(typeof (jQuery )!= "undefined")
+jQuery(document).ready(function() { 
 	// Setup the ajax indicator
-	$("body").append('<div id="ajaxBusy"><p><img src="css/images/ajax-loader.gif"></p></div>');
-	$('#ajaxBusy').css({
+	jQuery("body").append('<div id="ajaxBusy"><p><img src="css/images/ajax-loader.gif"></p></div>');
+	jQuery('#ajaxBusy').css({
 		display:"none",
 		margin:"0px",
 		paddingLeft:"20px",
@@ -16,10 +17,10 @@ $(document).ready(function() {
  
 	// Ajax activity indicator bound 
 	// to ajax start/stop document events
-	$(document).ajaxStart(function(){ 
-		$('#ajaxBusy').show(); 
+	jQuery(document).ajaxStart(function(){ 
+		jQuery('#ajaxBusy').show(); 
 	}).ajaxStop(function(){ 
-		$('#ajaxBusy').hide();
+		jQuery('#ajaxBusy').hide();
 	});
  
 	///// Ignore this, just for demo purposes \\\\\\
