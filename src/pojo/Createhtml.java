@@ -11,6 +11,7 @@ import dbconn.DBConnector;
 
 
 
+
 /**
  * This class constructs html code based on the data defined in the database.
  *
@@ -204,7 +205,7 @@ public class Createhtml {
 				if("DROPDOWN".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType, elmStr);
-					elmStr = "<select id='"+idname+"' "+validation+" "+attributes+" class="+classname+"><option value=\"\">Select</option>";
+					elmStr = "<select id='"+idname+"' name='"+fname+"' "+validation+" "+attributes+" class="+classname+"><option value=\"\">Select</option>";
 					CachedRowSet crs1 = null;
 					if(strquery!=null){
 					try {
