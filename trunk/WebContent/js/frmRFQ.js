@@ -16,6 +16,31 @@ function populate()
 	}
 	createVendorDropdownAjax();
 	disable_fields();
+	
+	 jQuery("#form1").validate({
+		 rules: {
+		 department: {
+		 	required:true
+	 		},
+		 quantity: {
+	       required: true,
+	       number: true
+	     }
+	   },messages:{
+			   department:{
+			   	required:"department is mandatory"
+		   },
+		   		quantity: {
+			       required: "quantity is a mandatory field",
+			       number: "quantity is not number"
+		     	}
+		   },
+	   		errorElement: "div"
+	   			
+ 
+  		  , errorLabelContainer: "#alertmsgdiv",   
+		    submitHandler: function(form) { alert("Submitted!");  }
+		});
 }
 var screenMode = "insert";
 
@@ -217,6 +242,12 @@ function reqSave() {
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	//alert(screenMode);
+	
+	if(!jQuery('#form1').valid()){
+		return;
+	}
+	 
+	
 	if(isNumeric(jQuery.trim(jQuery('#panelFields #quantity').val()))==false){
 		showalert("Quantity should be number");
 		return;
@@ -227,20 +258,9 @@ function reqSave() {
 	if(jQuery("#itemtype").val().length >9){
 		showalert("Item Type should be less than 10 characters long");return;	
 	}
-//	 jQuery("#panelFields").validate({
-//		 rules: {
-//		 department: "required",
-//		 quantity: {
-//	       required: true,
-//	       number: true
-//	     }
-//	   },
-//
-//		   errorLabelContainer: "#alertmsgdiv",
-//		   wrapper: "li",
-//		   submitHandler: function() { alert("Submitted!") }
-//		})
-		 
+	
+ 	alert("force return for test");	
+	return; 
 	if(screenMode == "create"){
 	document.getElementById("rfqid").value = "AUTOGEN_SEQUENCE_ID";	
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRFQ";

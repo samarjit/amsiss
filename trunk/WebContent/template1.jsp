@@ -16,12 +16,14 @@
 @import "<%=ctxstr %>/css/button.css";
 @import "<%=ctxstr %>/css/header.css";
 </style>
+<link rel="stylesheet" href="<%=ctxstr %>/css/button.css" type="text/css" />
+<link rel="stylesheet" href="<%=ctxstr %>/css/header.css" type="text/css" />
 
-<script language="javascript" src="<%=request.getContextPath() %>/js/jquery.js"></script>
+
+<%--script language="javascript" src="<%=request.getContextPath() %>/js/jquery.js"></script>
 <script language="javascript" src="<%=request.getContextPath() %>/js/json2.js"></script>
-<script language="javascript" src="<%=request.getContextPath() %>/js/encoder.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script> 
-<script language="JavaScript" type="text/javascript" src="js/jquery.form.js"></script> 
+<script language="javascript" src="<%=request.getContextPath() %>/js/encoder.js"></script--%>
+<!-- script language="JavaScript" type="text/javascript" src="js/jquery.form.js"></script --> 
 <s:property value="jsname" escape="false"/>
 <link rel="stylesheet" href="<%=ctxstr %>/css/jquery-ui-1.7.2.custom.css" type="text/css" />
 
@@ -77,6 +79,7 @@ var ctxpath = "<%= ctxpath %>";
 <table> 
 <tr>
 <td>
+<form id="form1"   method="post" action="" onsubmit="alert('form submit event');return false;" >
 <div id="panelsdiv" > 
 <s:property value="dataPanel" escape="false"/>
  <!-- Using Iterator -->
@@ -87,6 +90,7 @@ var ctxpath = "<%= ctxpath %>";
  </s:if>
  </s:iterator>
  </div>
+ </form>
 </td>
 
 <td> <s:property value="extraFields.buttonPanel" escape="false"/>
