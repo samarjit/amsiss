@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import dbconn.DBConnector;
 
 
@@ -32,6 +35,11 @@ public class Createhtml {
 	private String htmlelm;
 	private String elem_attributes = "";
 	private String attributes = "";
+	private String dbcolsize="";
+	private String validrule ="";
+	private String validmsg = "";
+	
+	
 	private String BUTTONPANEL = "buttonPanel";
 	private int  COL1ENTRY1  = 1; 
 	private int  COL2ENTRY1  = 2; 
@@ -97,7 +105,10 @@ public class Createhtml {
 		String panelCssClassName = "";
 		HTable htable =null;
 		DBConnector db = new DBConnector();
-		
+		JSONObject rulesall =  new JSONObject();
+		JSONObject fieldmsg =  new JSONObject();
+		String tablestr = "";
+		JSONObject fieldrule = new JSONObject();
 		//1: two rows per entry for label field type, 2: for one column per entry
 		int panelType = COL2ENTRY1; 
 		
@@ -123,7 +134,7 @@ public class Createhtml {
 		
 		String SQL = 
 			"SELECT scr_Name, panel_name, lblname, fname, idname, datatype," +
-					" dbcol, validation, strquery , nrow, ncol,classname,htmlelm,elem_attrib FROM  panel_fields where scr_name='"+screenName+"' AND panel_name='"+panelName+"' order by orderNo";
+					" dbcol, validation, strquery , nrow, ncol,classname,htmlelm,elem_attrib,DBCOL_SIZ,VALID_RULE,VALID_MSG FROM  panel_fields where scr_name='"+screenName+"' AND panel_name='"+panelName+"' order by orderNo";
 		//System.out.println(SQL);
 		
 		try {
@@ -173,7 +184,9 @@ public class Createhtml {
 				htmlelm = crs.getString("htmlelm");
 				strquery = crs.getString("strquery");
 				elem_attributes = crs.getString("elem_attrib");
-				
+				dbcolsize = crs.getString("DBCOL_SIZ");
+				validrule = crs.getString("VALID_RULE");
+				validmsg = crs.getString("VALID_MSG");
 				if(elem_attributes==null){
 					elem_attributes = "";
 				}
@@ -271,14 +284,66 @@ public class Createhtml {
 					else column=0;
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)* panelType +column, elmStr);
 				}
+				
+				JSONObject rule = new JSONObject();
+					try {
+						if(dbcolsize != null)rule.put("maxlength", dbcolsize);
+						
+						if(datatype!=null){
+							if("NUMBER".equalsIgnoreCase(datatype))
+								rule.put("number", "true");
+							else if("INTEGER".equalsIgnoreCase(datatype))
+								rule.put("number", "true");
+							else if("INT".equalsIgnoreCase(datatype))
+								rule.put("number", "true");
+							else if("FLOAT".equalsIgnoreCase(datatype))
+								rule.put("numberDE", "true");
+							else if("DATE".equalsIgnoreCase(datatype))
+								rule.put("date", "true");
+						}
+						String rl = rule.toString();
+						if(rl.length() > 2 && validrule!= null ){
+							rl = rl.replace("}", ","+validrule+"}");
+						}else if(rl.indexOf("}") >-1 && validrule!= null ){
+							rl = rl.replace("}", validrule+"}");
+						}
+						
+						JSONObject fieldruleset = new JSONObject(rl);
+						if(fname !=null ){
+							fieldrule.put(fname, fieldruleset);
+							
+						}
+						
+						JSONObject messages = null;
+						 if(validmsg!=null && fname !=null && validmsg.contains("}")){
+							 messages = new JSONObject(validmsg);
+							 fieldmsg.put(fname, messages);
+						 }else if(validmsg!=null && fname !=null){
+							 messages = new JSONObject();
+							 fieldmsg.put(fname, validmsg);
+						 }
+						 debug(5,"rule:"+rl+ "  :"+validrule+" msg:"+fieldmsg.toString()); 
+						
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
 			
 			}
-			 debug(1,htable.toString());
+			try {
+				rulesall.put("rule",fieldrule);
+				rulesall.put("message",fieldmsg);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			tablestr = (String)htable.toString();
+			tablestr  += "<div id=\"rule\">"+rulesall.toString()+"</div>";
+			 debug(1,tablestr);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-return (String)htable.toString();
+		
+return  tablestr;
 	} 
 	
 	
