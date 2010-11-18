@@ -23,18 +23,19 @@ Asset Management System (AMS) is an implementation of dynamic screen generation 
 A little insight about the invoation points can be seen from the base interface that much be implemented by all callbacks.
 {{{
 public interface BaseBL extends Serializable {
- HashMap jsrpcProcessBL(java.util.Map buslogHm, java.lang.String rpcid) ; // This is invoked in JavaScriptRPCAC class from javascript directly 
- HashMap postDeleteProcessBL(Map buslogHm) ;                             // This is invoked in DeleteDataAC class after processing 
- HashMap postInsertProcessBL(Map buslogHm) ;                             // This is invoked in InsertDataAC class after processing 
- HashMap postRetreiveProcessBL(Map buslogHm) ;                           // This is invoked in RetrieveDetailsAC class after processing 
- HashMap postSubmitProcessBL(Map hm) ;                                   // This is invoked in WorkflowAC class after processing 
- HashMap postUpdateProcessBL(Map buslogHm) ;                             // This is invoked in UpdateDataAC class after processing 
- HashMap preDeleteProcessBL(Map buslogHm) ;                              // This is invoked in DeleteDataAC class before processing 
- HashMap preInsertProcessBL(Map buslogHm) ;                              // This is invoked in InsertDataAC class before processing 
- HashMap preRetreiveProcessBL(Map buslogHm) ;                            // This is invoked in RetrieveDetailsAC class before processing 
- HashMap preSubmitProcessBL(Map hm) ;                                    // This is invoked in WorkflowAC class before processing 
- HashMap preUpdateProcessBL(Map buslogHm) ;                              // This is invoked in UpdateDataAC class before processing 
- HashMap processRequest(Map buslogHm) ;                                  // This is invoked in screenFlowControllerServlet class while login 
+ HashMap jsrpcProcessBL(java.util.Map buslogHm, java.lang.String rpcid) ;//invoked by JavaScriptRPCAC 
+ //class from javascript directly 
+ HashMap postDeleteProcessBL(Map buslogHm) ;   //invoked by DeleteDataAC class after processing 
+ HashMap postInsertProcessBL(Map buslogHm) ;   //invoked by InsertDataAC class after processing 
+ HashMap postRetreiveProcessBL(Map buslogHm) ; //invoked by RetrieveDetailsAC class after processing 
+ HashMap postSubmitProcessBL(Map hm) ;         //invoked by WorkflowAC class after processing 
+ HashMap postUpdateProcessBL(Map buslogHm) ;   //invoked by UpdateDataAC class after processing 
+ HashMap preDeleteProcessBL(Map buslogHm) ;    //invoked by DeleteDataAC class before processing 
+ HashMap preInsertProcessBL(Map buslogHm) ;    //invoked by InsertDataAC class before processing 
+ HashMap preRetreiveProcessBL(Map buslogHm) ;  //invoked by RetrieveDetailsAC class before processing 
+ HashMap preSubmitProcessBL(Map hm) ;          //invoked by WorkflowAC class before processing 
+ HashMap preUpdateProcessBL(Map buslogHm) ;    //invoked by UpdateDataAC class before processing 
+ HashMap processRequest(Map buslogHm) ;        //invoked by screenFlowControllerServlet class while login 
 }
 }}}
 
