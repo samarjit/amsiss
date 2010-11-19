@@ -39,7 +39,7 @@ public interface BaseBL extends Serializable {
 }
 }}}
 
-The current implementation uses *Struts 2.8.1* and *Oracle 10g express edition* as database. It does not use hibernate so portability out of box is a question. But previously it was using *MySQL* so I believe it is still in some form portable with some changes in code like replacing oracle function of `TO_DATE()` and `TO_CHAR()`. We did make use of only one sequence but I believe workarounds are possible.
+The current implementation uses *Struts 2.1.8* and *Oracle 10g express edition* as database. It does not use hibernate so portability out of box is a question. But previously it was using *MySQL* so I believe it is still in some form portable with some changes in code like replacing oracle function of `TO_DATE()` and `TO_CHAR()`. We did make use of only one sequence but I believe workarounds are possible.
 ----
 If anyone wants to use it please feel free to contact us.(for now me :), until we have a supporting group or my old team is willing to extend some help). I am available at samarjit dot samanta at gmail dot com
 ----
